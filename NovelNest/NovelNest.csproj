@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NovelNest.Core\NovelNest.Core.csproj" />
+  </ItemGroup>
+
 </Project>
