@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovelNest", "NovelNest\NovelNest.csproj", "{B3C3F835-2FAB-4432-BE2B-10F25909AC0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3C3F835-2FAB-4432-BE2B-10F25909AC0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C3F835-2FAB-4432-BE2B-10F25909AC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C3F835-2FAB-4432-BE2B-10F25909AC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C3F835-2FAB-4432-BE2B-10F25909AC0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {213DFBB6-1A26-4293-9F89-B2BAE84453E0}
+	EndGlobalSection
+EndGlobal
