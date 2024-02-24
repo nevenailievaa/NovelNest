@@ -11,9 +11,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Models\" />
-    <Folder Include="Data\Constants\" />
-  </ItemGroup>
-
 </Project>
