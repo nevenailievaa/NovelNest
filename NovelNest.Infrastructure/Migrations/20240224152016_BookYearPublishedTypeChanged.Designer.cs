@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240224152016_BookYearPublishedTypeChanged")]
+    partial class BookYearPublishedTypeChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,8 +279,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasComment("The current Book's Description");
 
                     b.Property<int>("GenreId")
@@ -308,8 +310,10 @@ namespace NovelNest.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasComment("The current Book's Title");
 
-                    b.Property<int>("YearPublished")
-                        .HasColumnType("int")
+                    b.Property<string>("YearPublished")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)")
                         .HasComment("The date on which the cuurent Book was published");
 
                     b.HasKey("Id");

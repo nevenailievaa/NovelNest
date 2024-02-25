@@ -2,7 +2,7 @@
 {
     public static class DataConstants
     {
-        public const string DateTimeFormat = "dd/MM/yyyy HH:mm";
+        public const string DateTimeDefaultFormat = "dd/MM/yyyy";
         public static class BookConstants
         {
             //Title
@@ -13,8 +13,8 @@
             public const int BookAuthorMaxLength = 70;
 
             //Description
-            public const int BookDescriptionMinLength = 50;
-            public const int BookDescriptionMaxLength = 500;
+            public const int BookDescriptionMinLength = 200;
+            public const int BookDescriptionMaxLength = 5000;
 
             //Price
             public const double BookPriceMinValue = 0;
@@ -22,6 +22,9 @@
 
             //PublishingHouse
             public const int BookPublishingHouseMaxLength = 70;
+
+            //YearPublished
+            public const int BookYearPublishedMinRange = 1;
 
             //ImageUrl
             public const int BookImageUrlMinLength = 5;
@@ -54,6 +57,8 @@
 
         public static class EventConstants
         {
+            public const string DateTimeEventFormat = "dd/MM/yyyy HH:mm";
+
             //Topic
             public const int EventTopicMinLength = 10;
             public const int EventTopicMaxLength = 100;

@@ -42,8 +42,8 @@
         public string PublishingHouse { get; set; } = null!;
 
         [Required]
-        [Comment("The date on which the cuurent Book was published")]
-        public DateTime DatePublished { get; set; }
+        [Comment("The date on which the curent Book was published")]
+        public int YearPublished { get; set; }
 
         [Required]
         [Comment("The current Book's Price")]
