@@ -21,7 +21,6 @@
         [Comment("The current Book's Author")]
         public string Author { get; set; } = null!;
 
-
         [Required]
         [Comment("The current Book's Genre's Identifier")]
         public int GenreId { get; set; }
@@ -30,11 +29,14 @@
         [Comment("The current Book's Genre")]
         public Genre Genre { get; set; } = null!;
 
-
         [Required]
         [MaxLength(BookDescriptionMaxLength)]
         [Comment("The current Book's Description")]
         public string Description { get; set; } = null!;
+
+        [Required]
+        [Comment("The current Book's Pages Count")]
+        public int Pages { get; set; }
 
         [Required]
         [MaxLength(BookPublishingHouseMaxLength)]

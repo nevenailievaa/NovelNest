@@ -20,6 +20,10 @@
             public const double BookPriceMinValue = 0;
             public const double BookPriceMaxValue = 10000;
 
+            //Page
+            public const double BookPageMinValue = 1;
+            public const double BookPageMaxValue = 10000;
+
             //PublishingHouse
             public const int BookPublishingHouseMaxLength = 70;
 
