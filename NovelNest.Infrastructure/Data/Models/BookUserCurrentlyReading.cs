@@ -21,9 +21,10 @@
         public string UserId { get; set; } = null!;
 
         [ForeignKey(nameof(UserId))]
-        [Comment("The current BookStore")]
+        [Comment("The current User")]
         public IdentityUser User { get; set; } = null!;
 
+        [Required]
         public int CurrentPage { get; set; }
     }
 }

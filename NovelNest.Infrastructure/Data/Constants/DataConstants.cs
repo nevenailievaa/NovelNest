@@ -42,6 +42,18 @@
             public const int GenreNameMaxLength = 40;
         }
 
+        public static class CoverConstants
+        {
+            //Name
+            public const string CoverNameRegex = @"^(?i)(hard|soft)$";
+        }
+
+        public static class BookCurrentlyReadingConstants
+        {
+            //Current Page
+            public const int BookCurrentPageMinRange = 1;
+        }
+
         public static class BookStoreConstants
         {
             //Name

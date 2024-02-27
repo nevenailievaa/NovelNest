@@ -48,6 +48,14 @@
         public int YearPublished { get; set; }
 
         [Required]
+        [Comment("The current Book's CoverType's Identifier")]
+        public int CoverTypeId { get; set; }
+
+        [ForeignKey(nameof(CoverTypeId))]
+        [Comment("The current Book's CoverType")]
+        public CoverType CoverType { get; set; } = null!;
+
+        [Required]
         [Comment("The current Book's Price")]
         public decimal Price { get; set; }
 
