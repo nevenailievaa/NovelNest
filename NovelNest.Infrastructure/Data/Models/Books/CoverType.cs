@@ -1,6 +1,7 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.Books
 {
     using System.ComponentModel.DataAnnotations;
+
     public class CoverType
     {
         [Key]

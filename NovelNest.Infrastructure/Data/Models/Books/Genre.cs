@@ -1,4 +1,4 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.Books
 {
     using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;

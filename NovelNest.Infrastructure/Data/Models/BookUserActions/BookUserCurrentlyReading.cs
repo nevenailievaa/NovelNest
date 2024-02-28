@@ -1,7 +1,8 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.BookUserActions
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data.Models.Books;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 

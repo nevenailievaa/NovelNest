@@ -2,8 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NovelNest.Infrastructure.Data.Models.Events;
 
-namespace NovelNest.Infrastructure.Data.Models
+namespace NovelNest.Infrastructure.Data.Models.Mappings
 {
     public class EventParticipant
     {

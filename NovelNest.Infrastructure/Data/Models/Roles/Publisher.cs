@@ -1,20 +1,15 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.Roles
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class BookUserRead
+    public class Publisher
     {
-        [Required]
-        [Comment("The current Book's Identifier")]
-        public int BookId { get; set; }
-
-        [ForeignKey(nameof(BookId))]
-        [Comment("The current Book")]
-        public Book Book { get; set; } = null!;
-
+        [Key]
+        [Comment("The current Publisher's Identifier")]
+        public int Id { get; set; }
 
         [Required]
         [Comment("The current User's Identifier")]

@@ -1,11 +1,12 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.BookUserActions
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data.Models.Books;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
-    public class BookUserWantToRead
+    public class BookUserRead
     {
         [Required]
         [Comment("The current Book's Identifier")]

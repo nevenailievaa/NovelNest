@@ -1,6 +1,7 @@
-﻿namespace NovelNest.Infrastructure.Data.Models
+﻿namespace NovelNest.Infrastructure.Data.Models.Events
 {
     using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.ComponentModel.DataAnnotations;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
 
