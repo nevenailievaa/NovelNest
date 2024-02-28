@@ -74,6 +74,8 @@
 
         public static class BookStoreConstants
         {
+            public const string DateTimeBookStoreFormat = "HH:mm";
+
             //Name
             public const int BookStoreNameMaxLength = 100;
 

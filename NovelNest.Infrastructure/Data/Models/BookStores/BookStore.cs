@@ -26,6 +26,14 @@
         public string Contact { get; set; } = null!;
 
         [Required]
+        [Comment("The current BookStore's Opening Time")]
+        public DateTime OpeningTime { get; set; }
+
+        [Required]
+        [Comment("The current BookStore's Closing Time")]
+        public DateTime ClosingTime { get; set; }
+
+        [Required]
         [MaxLength(BookStoreImageUrlMaxLength)]
         [Comment("The current BookStore's Image Url")]
         public string ImageUrl { get; set; } = null!;
