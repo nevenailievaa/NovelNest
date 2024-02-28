@@ -66,5 +66,6 @@
         public string ImageUrl { get; set; } = null!;
 
         public ICollection<BookBookStore> BooksBookStores { get; set; } = new HashSet<BookBookStore>();
+        public ICollection<BookReview> Reviews { get; set; } = new HashSet<BookReview>();
     }
 }

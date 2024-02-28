@@ -2,7 +2,13 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using NovelNest.Infrastructure.Data.Models;
+    using NovelNest.Infrastructure.Data.Models.Articles;
+    using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookStores;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
+    using NovelNest.Infrastructure.Data.Models.Events;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
+    using NovelNest.Infrastructure.Data.Models.Roles;
 
     public class NovelNestDbContext : IdentityDbContext
     {
@@ -10,6 +16,7 @@
             : base(options) { }
 
         public DbSet<Book> Books { get; set; } = null!;
+        public DbSet<BookReview> BookReviews { get; set; } = null!;
         public DbSet<BookUserWantToRead> BooksUsersWantToRead { get; set; } = null!;
         public DbSet<BookUserCurrentlyReading> BooksUsersCurrentlyReading { get; set; } = null!;
         public DbSet<BookUserRead> BooksUsersRead { get; set; } = null!;

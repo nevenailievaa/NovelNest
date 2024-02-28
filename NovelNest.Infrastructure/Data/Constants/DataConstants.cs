@@ -3,9 +3,11 @@
     public static class DataConstants
     {
         public const string DateTimeDefaultFormat = "dd/MM/yyyy";
+
         public static class BookConstants
         {
             //Title
+            public const int BookTitleMinLength = 1;
             public const int BookTitleMaxLength = 100;
 
             //Author
@@ -25,6 +27,7 @@
             public const double BookPageMaxValue = 10000;
 
             //PublishingHouse
+            public const int BookPublishingHouseMinLength = 1;
             public const int BookPublishingHouseMaxLength = 70;
 
             //YearPublished
@@ -46,6 +49,21 @@
         {
             //Name
             public const string CoverNameRegex = @"^(?i)(hard|soft)$";
+        }
+
+        public static class BookReviewConstants
+        {
+            //Title
+            public const int BookReviewTitleMinLength = 1;
+            public const int BookReviewTitleMaxLength = 50;
+
+            //Description
+            public const int BookReviewDescriptionMinLength = 15;
+            public const int BookReviewDescriptionMaxLength = 8000;
+
+            //Description
+            public const int BookReviewRateMinRange = 1;
+            public const int BookReviewRateMaxRange = 10;
         }
 
         public static class BookCurrentlyReadingConstants
