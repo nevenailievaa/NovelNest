@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using NovelNest.Infrastructure.Data;
-
-namespace Microsoft.Extensions.DependencyInjection
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data;
+
     public static class ServiceCollectionExtension
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection service)

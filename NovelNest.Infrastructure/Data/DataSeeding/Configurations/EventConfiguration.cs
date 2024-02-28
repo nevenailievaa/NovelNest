@@ -1,15 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using NovelNest.Infrastructure.Data.Models.Articles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NovelNest.Infrastructure.Data.Models.Events;
-
-namespace NovelNest.Infrastructure.Data.DataSeeding.Configurations
+﻿namespace NovelNest.Infrastructure.Data.DataSeeding.Configurations
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using NovelNest.Infrastructure.Data.Models.Events;
+
     internal class EventConfiguration : IEntityTypeConfiguration<Event>
     {
         public void Configure(EntityTypeBuilder<Event> builder)

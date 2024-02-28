@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using NovelNest.Infrastructure.Data.Models.Events;
-
-namespace NovelNest.Infrastructure.Data.Models.Mappings
+﻿namespace NovelNest.Infrastructure.Data.Models.Mappings
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data.Models.Events;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class EventParticipant
     {
         [Required]

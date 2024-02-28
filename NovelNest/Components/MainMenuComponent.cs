@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
-
-namespace NovelNest.Components
+﻿namespace NovelNest.Components
 {
+    using Microsoft.AspNetCore.Mvc;
+
     public class MainMenuComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
