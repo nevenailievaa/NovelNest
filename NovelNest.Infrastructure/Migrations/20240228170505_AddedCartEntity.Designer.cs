@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240228170505_AddedCartEntity")]
+    partial class AddedCartEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,8 +237,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)")
                         .HasComment("The current Article's Content");
 
                     b.Property<DateTime>("DatePublished")
@@ -245,8 +247,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasComment("The current Article's Image Url");
 
                     b.Property<string>("Title")
@@ -254,10 +256,6 @@ namespace NovelNest.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasComment("The current Article's Title");
-
-                    b.Property<int>("ViewsCount")
-                        .HasColumnType("int")
-                        .HasComment("The current Article's Views Count");
 
                     b.HasKey("Id");
 
@@ -427,8 +425,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasComment("The current BookStore's Image Url");
 
                     b.Property<string>("Location")
@@ -533,8 +531,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasComment("The current Event's Description");
 
                     b.Property<DateTime>("EndDate")
@@ -543,8 +541,8 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasComment("The current Event's Image Url");
 
                     b.Property<string>("Location")

@@ -6,6 +6,7 @@
     using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
+    using NovelNest.Infrastructure.Data.Models.Carts;
     using NovelNest.Infrastructure.Data.Models.Events;
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using NovelNest.Infrastructure.Data.Models.Roles;
@@ -27,6 +28,8 @@
         public DbSet<Event> Events { get; set; } = null!;
         public DbSet<EventParticipant> EventsParticipants { get; set; } = null!;
         public DbSet<Article> Articles { get; set; } = null!;
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<BookCart> BooksCarts { get; set; } = null!;
         public DbSet<Publisher> Publishers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -45,6 +48,9 @@
 
             builder.Entity<BookUserRead>()
                 .HasKey(bur => new { bur.BookId, bur.UserId });
+
+            builder.Entity<BookCart>()
+                .HasKey(bc => new { bc.BookId, bc.CartId });
 
             builder.Entity<Book>()
                 .Property(b => b.Price)

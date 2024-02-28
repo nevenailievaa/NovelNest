@@ -28,5 +28,9 @@
         [MaxLength(ArticleImageUrlMaxLength)]
         [Comment("The current Article's Image Url")]
         public string ImageUrl { get; set; } = null!;
+
+        [Required]
+        [Comment("The current Article's Views Count")]
+        public int ViewsCount { get; set; }
     }
 }

@@ -67,5 +67,6 @@
 
         public ICollection<BookBookStore> BooksBookStores { get; set; } = new HashSet<BookBookStore>();
         public ICollection<BookReview> Reviews { get; set; } = new HashSet<BookReview>();
+        public ICollection<BookCart> BooksCarts { get; set; } = new HashSet<BookCart>();
     }
 }

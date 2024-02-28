@@ -86,7 +86,7 @@
 
             //ImageUrl
             public const int BookStoreImageUrlMinLength = 5;
-            public const int BookStoreImageUrlMaxLength = 200;
+            public const int BookStoreImageUrlMaxLength = 500;
         }
 
         public static class EventConstants
@@ -99,7 +99,7 @@
 
             //Description
             public const int EventDescriptionMinLength = 50;
-            public const int EventDescriptionMaxLength = 500;
+            public const int EventDescriptionMaxLength = 1000;
 
             //Location
             public const int EventLocationMinLength = 10;
@@ -107,22 +107,28 @@
 
             //ImageUrl
             public const int EventImageUrlMinLength = 5;
-            public const int EventImageUrlMaxLength = 200;
+            public const int EventImageUrlMaxLength = 500;
         }
 
         public static class ArticleConstants
         {
+            public const string DateTimeArticleFormat = "dd/MM/yyyy HH:mm";
+
             //Title
             public const int ArticleTitleMinLength = 5;
             public const int ArticleTitleMaxLength = 100;
 
             //Content
             public const int ArticleContentMinLength = 100;
-            public const int ArticleContentMaxLength = 2000;
+            public const int ArticleContentMaxLength = 10000;
 
             //ImageUrl
             public const int ArticleImageUrlMinLength = 5;
-            public const int ArticleImageUrlMaxLength = 200;
+            public const int ArticleImageUrlMaxLength = 500;
+
+            //ViewsCount
+            public const int ArticleViewsCountMinRange = 0;
+            public const int ArticleViewsCountMaxLength = int.MaxValue;
         }
     }
 }
