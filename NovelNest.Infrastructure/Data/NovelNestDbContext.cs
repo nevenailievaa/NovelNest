@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using NovelNest.Infrastructure.Data.DataSeeding.Configurations;
     using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.BookStores;
@@ -55,6 +56,16 @@
             builder.Entity<Book>()
                 .Property(b => b.Price)
                 .HasPrecision(18,2);
+
+            //Configuration (Data Seeding)
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new PublisherConfiguration());
+            builder.ApplyConfiguration(new GenreConfiguration());
+            builder.ApplyConfiguration(new CoverTypeConfiguration());
+            builder.ApplyConfiguration(new BookConfiguration());
+            builder.ApplyConfiguration(new BookStoreConfiguration());
+            builder.ApplyConfiguration(new ArticleConfiguration());
+            builder.ApplyConfiguration(new EventConfiguration());
 
             base.OnModelCreating(builder);
         }
