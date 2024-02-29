@@ -3,6 +3,8 @@
     public static class DataConstants
     {
         public const string DateTimeDefaultFormat = "dd/MM/yyyy";
+        public const string LengthErrorMessage = "The {0} must be between {2} and {1} characters long!";
+        public const string RangeErrorMessage = "The {0} must be a number between {1} and {2}!";
 
         public static class BookConstants
         {

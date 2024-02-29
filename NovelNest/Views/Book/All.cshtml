@@ -1,0 +1,34 @@
+﻿@using NovelNest.Core.ViewModels.Book
+@model IEnumerable<BookAllViewModel>
+
+@{
+    ViewBag.Title = "Всички Книги";
+}
+
+<div class="container">
+    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+    <hr />
+
+    <div class="row justify-content-center">
+        @foreach (var book in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>@book.Title</strong></h4>
+                        <p class="card-text"><strong>Автор:</strong> @book.Author</p>
+                        <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning fw-bold">Виж Повече</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
