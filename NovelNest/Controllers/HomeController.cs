@@ -1,8 +1,8 @@
 ﻿namespace NovelNest.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using NovelNest.Core.Contracts.BookStore;
-    using NovelNest.Core.Services.BookStore;
+    using NovelNest.Core.Contracts;
+    using NovelNest.Core.Services;
     using NovelNest.Models;
     using System.Diagnostics;
 

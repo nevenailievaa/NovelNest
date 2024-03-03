@@ -3,17 +3,18 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using NovelNest.Core.Contracts;
     using NovelNest.Core.ViewModels.Book;
     using NovelNest.Infrastructure.Data;
 
     [Authorize]
     public class BookController : Controller
     {
-        private NovelNestDbContext dbContext;
+        private IBookService bookService;
 
-        public BookController(NovelNestDbContext dbContext)
+        public BookController(IBookService bookService)
         {
-            this.dbContext = dbContext;
+            this.bookService = bookService;
         }
 
         [AllowAnonymous]
@@ -21,17 +22,7 @@
         public async Task<IActionResult> All()
         {
             //Getting all of the books from the database
-            var allBooks = await dbContext.Books
-                .AsNoTracking()
-                .Select(b => new BookAllViewModel()
-                {
-                    Id = b.Id,
-                    ImageUrl = b.ImageUrl,
-                    Title = b.Title,
-                    Author = b.Author,
-                    Price = b.Price,
-                })
-                .ToListAsync();
+            var allBooks = await bookService.All();
 
             //Returning all of the books to the view
             return View(allBooks);

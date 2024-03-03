@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NovelNest.Core.Contracts.BookStore;
+using NovelNest.Core.Contracts;
 
 namespace NovelNest.Controllers
 {

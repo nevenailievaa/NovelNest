@@ -1,7 +1,7 @@
-﻿namespace NovelNest.Core.Services.BookStore
+﻿namespace NovelNest.Core.Services
 {
     using Microsoft.EntityFrameworkCore;
-    using NovelNest.Core.Contracts.BookStore;
+    using NovelNest.Core.Contracts;
     using NovelNest.Core.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.BookStores;

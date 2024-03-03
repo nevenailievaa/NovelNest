@@ -2,8 +2,8 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using NovelNest.Core.Contracts.BookStore;
-    using NovelNest.Core.Services.BookStore;
+    using NovelNest.Core.Contracts;
+    using NovelNest.Core.Services;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data;
 
@@ -12,6 +12,8 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IBookStoreService, BookStoreService>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IPublisherService, PublisherService>();
             return services;
         }
 
