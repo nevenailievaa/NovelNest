@@ -22,8 +22,8 @@
                         <p class="card-text"><strong>Затваря:</strong> @bookstore.ClosingTime.ToString("HH:mm")</p>
                         <p class="card-text">
                             <strong>В момента:</strong>
-                            @if (DateTime.Now.Hour >= bookstore.OpeningTime.Hour && DateTime.Now.Minute >= bookstore.OpeningTime.Minute
-                           && DateTime.Now.Hour <= bookstore.ClosingTime.Hour && DateTime.Now.Minute <= bookstore.ClosingTime.Minute)
+                            @if (DateTime.UtcNow.Hour >= bookstore.OpeningTime.Hour && DateTime.UtcNow.Minute >= bookstore.OpeningTime.Minute
+                           && DateTime.UtcNow.Hour <= bookstore.ClosingTime.Hour && DateTime.UtcNow.Minute <= bookstore.ClosingTime.Minute)
                             {
                                 <span class="text-success">Отворено</span>
                             }
