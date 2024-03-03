@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
-    using NovelNest.Core.Services;
 
     public class BookStoreController : BaseController
     {

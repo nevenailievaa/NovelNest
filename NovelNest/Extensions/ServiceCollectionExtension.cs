@@ -14,6 +14,7 @@
             services.AddScoped<IBookStoreService, BookStoreService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IPublisherService, PublisherService>();
             return services;
         }
