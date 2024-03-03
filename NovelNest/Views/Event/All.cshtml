@@ -1,0 +1,43 @@
+﻿@using NovelNest.Core.ViewModels.Event
+@model IEnumerable<EventAllViewModel>
+
+@{
+    ViewBag.Title = "Всички събития";
+    System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+<div class="container">
+    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+    <hr />
+
+    <div class="text-center">
+        @foreach (var currentEvent in Model)
+        {
+            <div class="card mb-4">
+                <img class="card-img-top" src="@currentEvent.ImageUrl" alt="Event Image">
+                <div class="card-body">
+                    <h4 class="card-title"><strong>@currentEvent.Topic</strong></h4>
+                    <p class="card-text"><strong>Локация:</strong> @currentEvent.Location</p>
+                    <p class="card-text">
+                        <strong>Начало:</strong> @currentEvent.StartDate.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+                    <p class="card-text">
+                        <strong>Край:</strong> @currentEvent.EndDate.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="Event" asp-action="Details" asp-route-id="@currentEvent.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж повече</a>
+
+                    @if (DateTime.Now < currentEvent.StartDate)
+                    {
+                        <a asp-controller="Event" asp-action="GetTicket" asp-route-id="@currentEvent.Id" class="btn btn-success mb-2 w-100 p-3 fw-bold">Вземи билет</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

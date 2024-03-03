@@ -13,6 +13,7 @@
         {
             services.AddScoped<IBookStoreService, BookStoreService>();
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IEventService, EventService>();
             services.AddScoped<IPublisherService, PublisherService>();
             return services;
         }
