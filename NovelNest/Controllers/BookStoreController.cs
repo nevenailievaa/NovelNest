@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NovelNest.Core.Contracts;
-
-namespace NovelNest.Controllers
+﻿namespace NovelNest.Controllers
 {
-    public class BookStoreController : Controller
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using NovelNest.Core.Contracts;
+
+    public class BookStoreController : BaseController
     {
-        private IBookStoreService bookStoreService;
+        private readonly IBookStoreService bookStoreService;
 
         public BookStoreController(IBookStoreService bookStoreService)
         {

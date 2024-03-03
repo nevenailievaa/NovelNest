@@ -2,15 +2,11 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
-    using NovelNest.Core.ViewModels.Book;
-    using NovelNest.Infrastructure.Data;
 
-    [Authorize]
-    public class BookController : Controller
+    public class BookController : BaseController
     {
-        private IBookService bookService;
+        private readonly IBookService bookService;
 
         public BookController(IBookService bookService)
         {
