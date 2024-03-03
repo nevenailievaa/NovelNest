@@ -1,21 +1,26 @@
 ﻿namespace NovelNest.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using NovelNest.Core.Contracts.BookStore;
+    using NovelNest.Core.Services.BookStore;
     using NovelNest.Models;
     using System.Diagnostics;
 
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
+        private IBookStoreService bookStoreService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBookStoreService bookStoreService)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.bookStoreService = bookStoreService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var bookStoreModel = await bookStoreService.LastTenBookStores();
+            return View(bookStoreModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
