@@ -3,7 +3,7 @@
 @model IEnumerable<BookStoreAllViewModel>
 
 @{
-    ViewBag.Title = "All Bookstores";
+    ViewBag.Title = "Всички книжарници";
 }
 
 <div class="container">
@@ -34,10 +34,9 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning fw-bold">Виж повече</a>
-                    </div>
-                    <div class="card-footer">
-                        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning fw-bold">Виж всички налични книги</a>
+                        <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж повече</a>
+
+                        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж всички налични книги</a>
                     </div>
                 </div>
             </div>
