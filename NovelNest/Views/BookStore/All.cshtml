@@ -1,0 +1,46 @@
+﻿@using NovelNest.Core.ViewModels.BookStore
+@model IEnumerable<BookStoreAllViewModel>
+
+@{
+    ViewBag.Title = "All Bookstores";
+}
+
+<div class="container">
+    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+    <hr />
+
+    <div class="row justify-content-center">
+        @foreach (var bookstore in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <img class="card-img-top" src="@bookstore.ImageUrl" alt="Bookstore Image">
+                    <div class="card-body">
+                        <h3 class="card-title"><strong>@bookstore.Name</strong></h3>
+                        <p class="card-text"><strong>Локация:</strong> @bookstore.Location</p>
+                        <p class="card-text"><strong>Отваря:</strong> @bookstore.OpeningTime.ToString("HH:mm")</p>
+                        <p class="card-text"><strong>Затваря:</strong> @bookstore.ClosingTime.ToString("HH:mm")</p>
+                        <p class="card-text">
+                            <strong>В момента:</strong>
+                            @if (DateTime.Now.Hour >= bookstore.OpeningTime.Hour && DateTime.Now.Minute >= bookstore.OpeningTime.Minute
+                           && DateTime.Now.Hour <= bookstore.ClosingTime.Hour && DateTime.Now.Minute <= bookstore.ClosingTime.Minute)
+                            {
+                                <span class="text-success">Отворено</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Затворено</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning fw-bold">Виж повече</a>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning fw-bold">Виж всички налични книги</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

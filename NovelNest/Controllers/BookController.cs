@@ -17,10 +17,7 @@
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            //Getting all of the books from the database
             var allBooks = await bookService.AllAsync();
-
-            //Returning all of the books to the view
             return View(allBooks);
         }
     }
