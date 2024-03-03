@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Infrastructure.Data;
+    using System.Threading.Tasks;
 
     public class Repository : IRepository
     {
@@ -10,6 +11,11 @@
         public Repository(NovelNestDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        private DbSet<T> DbSet<T>() where T : class
+        {
+            return dbContext.Set<T>();
         }
 
         public IQueryable<T> All<T>() where T : class
@@ -22,9 +28,14 @@
             return DbSet<T>().AsNoTracking();
         }
 
-        private DbSet<T> DbSet<T>() where T : class
+        public async Task AddAsync<T>(T entity) where T : class
         {
-            return dbContext.Set<T>();
+            await DbSet<T>().AddAsync(entity);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await dbContext.SaveChangesAsync();
         }
     }
 }
