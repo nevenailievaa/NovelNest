@@ -49,6 +49,11 @@
     {
         var now = DateTime.Now;
 
+        if (now.Hour < openingTime.Hour || now.Hour > closingTime.Hour)
+        {
+            return false;
+        }
+
         if (now.Hour > openingTime.Hour && now.Hour < closingTime.Hour)
         {
             return true;
