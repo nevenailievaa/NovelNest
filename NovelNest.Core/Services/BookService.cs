@@ -3,11 +3,8 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.ViewModels.Book;
-    using NovelNest.Core.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
-    using NovelNest.Infrastructure.Data.Models.BookStores;
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -20,7 +17,7 @@
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<BookAllViewModel>> All()
+        public async Task<IEnumerable<BookAllViewModel>> AllAsync()
         {
             return await repository
                 .AllAsReadOnly<Book>()

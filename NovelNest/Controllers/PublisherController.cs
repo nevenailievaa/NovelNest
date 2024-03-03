@@ -1,7 +1,5 @@
 ﻿namespace NovelNest.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
 
     public class PublisherController : BaseController
@@ -12,10 +10,5 @@
         {
             this.publisherService = publisherService;
         }
-
-        //public async Task<bool> ExistsById()
-        //{
-        //    return await publisherService
-        //}
     }
 }

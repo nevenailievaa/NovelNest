@@ -4,6 +4,6 @@
 
     public interface IBookStoreService
     {
-        Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStores();
+        Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStoresAsync();
     }
 }

@@ -4,6 +4,6 @@
 
     public interface IBookService
     {
-        Task<IEnumerable<BookAllViewModel>> All();
+        Task<IEnumerable<BookAllViewModel>> AllAsync();
     }
 }

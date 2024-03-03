@@ -15,7 +15,7 @@
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStores()
+        public async Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStoresAsync()
         {
             return await repository
                 .AllAsReadOnly<BookStore>()

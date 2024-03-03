@@ -20,7 +20,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var bookStoreModel = await bookStoreService.LastTenBookStores();
+            var bookStoreModel = await bookStoreService.LastTenBookStoresAsync();
             return View(bookStoreModel);
         }
 
