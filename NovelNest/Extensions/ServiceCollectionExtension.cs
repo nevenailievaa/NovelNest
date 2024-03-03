@@ -2,14 +2,19 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using NovelNest.Core.Contracts.BookStore;
+    using NovelNest.Core.Services.BookStore;
+    using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data;
 
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection service)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            return service;
+            services.AddScoped<IBookStoreService, BookStoreService>();
+            return services;
         }
+
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config.GetConnectionString("DefaultConnection");
@@ -17,10 +22,13 @@
             services.AddDbContext<NovelNestDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services.AddScoped<IRepository, Repository>();
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             return services;
         }
+
         public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
         {
             services.AddDefaultIdentity<IdentityUser>(options =>
