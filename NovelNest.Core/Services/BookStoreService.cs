@@ -17,7 +17,7 @@
 
         public async Task<IEnumerable<BookStoreAllViewModel>> AllAsync()
         {
-            return await repository.AllAsReadOnly<BookStore>()
+            return await repository.All<BookStore>()
                 .Select(bs => new BookStoreAllViewModel()
                 {
                     Id = bs.Id,

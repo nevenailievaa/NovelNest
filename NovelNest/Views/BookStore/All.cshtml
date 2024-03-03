@@ -1,4 +1,5 @@
 ﻿@using NovelNest.Core.ViewModels.BookStore
+@using System.Globalization
 @model IEnumerable<BookStoreAllViewModel>
 
 @{
@@ -22,14 +23,13 @@
                         <p class="card-text"><strong>Затваря:</strong> @bookstore.ClosingTime.ToString("HH:mm")</p>
                         <p class="card-text">
                             <strong>В момента:</strong>
-                            @if (DateTime.UtcNow.Hour >= bookstore.OpeningTime.Hour && DateTime.UtcNow.Minute >= bookstore.OpeningTime.Minute
-                           && DateTime.UtcNow.Hour <= bookstore.ClosingTime.Hour && DateTime.UtcNow.Minute <= bookstore.ClosingTime.Minute)
+                            @if (IsBookstoreOpen(bookstore.OpeningTime, bookstore.ClosingTime))
                             {
-                                <span class="text-success">Отворено</span>
+                                <span class="text-success"><strong>Отворено</strong></span>
                             }
                             else
                             {
-                                <span class="text-danger">Затворено</span>
+                                <span class="text-danger"><strong>Затворено</strong></span>
                             }
                         </p>
                     </div>
@@ -44,3 +44,38 @@
         }
     </div>
 </div>
+
+@functions {
+    bool IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
+    {
+        var now = DateTime.Now;
+
+        if (now.Hour > openingTime.Hour && now.Hour < closingTime.Hour)
+        {
+            return true;
+        }
+
+        if (now.Hour == openingTime.Hour)
+        {
+            if (now.Minute >= openingTime.Minute)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (now.Minute <= closingTime.Minute)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
