@@ -1,23 +1,14 @@
 ﻿<ul class="navbar-nav flex-grow-1">
-    @if (this.User?.Identity?.IsAuthenticated ?? false)
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="All">Книги</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="BookStore" asp-action="All">Книжарници</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="All">Статии</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="All">Събития</a>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Начална Страница</a>
-        </li>
-    }
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="All">Книги</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="BookStore" asp-action="All">Книжарници</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="All">Статии</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="All">Събития</a>
+    </li>
 </ul>

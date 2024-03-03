@@ -12,9 +12,9 @@ namespace NovelNest.Controllers
             this.bookStoreService = bookStoreService;
         }
 
-        public async Task<IActionResult> All()
-        {
-            return View();
-        }
+        //public async Task<IActionResult> All()
+        //{
+        //    return View();
+        //}
     }
 }
