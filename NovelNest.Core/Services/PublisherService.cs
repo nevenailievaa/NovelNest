@@ -15,31 +15,11 @@
             this.repository = repository;
         }
 
-        public async Task<bool> ExistsByIdAsync(int userId)
+        public async Task<bool> ExistsByIdAsync(string userId)
         {
             return await repository
                 .AllAsReadOnly<Publisher>()
-                .AnyAsync(p => p.Id == userId);
-        }
-
-        public Task CreateArticleAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateBookAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateBookStoreAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateEventAsync(int userId)
-        {
-            throw new NotImplementedException();
+                .AnyAsync(p => p.UserId == userId);
         }
     }
 }
