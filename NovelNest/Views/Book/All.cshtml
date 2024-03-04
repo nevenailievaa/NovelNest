@@ -7,6 +7,18 @@
 
 <div class="container">
     <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+
+    @*@if (User.IsInRole("Publisher"))
+    {
+        <div class="text-center mb-4">
+            <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+        </div>
+    }*@
+
+    <div class="text-center mb-4">
+        <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+    </div>
+
     <hr />
 
     <div class="row justify-content-center">
@@ -21,8 +33,17 @@
                         <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
                     </div>
                     <div class="card-footer">
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning fw-bold">Виж Повече</a>
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning fw-bold mb-2">Виж Повече</a>
                     </div>
+                    <div class="card-footer">
+                        <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-primary fw-bold">Редактирай</a>
+                    </div>
+                    @*@if (User.IsInRole("Publisher"))
+                    {
+                        <div class="card-footer">
+                            <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-primary fw-bold">Редактирай</a>
+                        </div>
+                    }*@
                 </div>
             </div>
         }

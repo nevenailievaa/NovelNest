@@ -21,5 +21,13 @@
                 .AllAsReadOnly<Publisher>()
                 .AnyAsync(p => p.UserId == userId);
         }
+
+        public async Task<int?> GetPublisherIdAsync(string userId)
+        {
+            //Returns the Id or null
+            return (await repository
+                .AllAsReadOnly<Publisher>()
+                .FirstOrDefaultAsync(p => p.UserId == userId))?.Id;
+        }
     }
 }
