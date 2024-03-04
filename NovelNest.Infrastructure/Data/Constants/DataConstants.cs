@@ -3,8 +3,8 @@
     public static class DataConstants
     {
         public const string DateTimeDefaultFormat = "dd/MM/yyyy";
-        public const string LengthErrorMessage = "The {0} must be between {2} and {1} characters long!";
-        public const string RangeErrorMessage = "The {0} must be a number between {1} and {2}!";
+        public const string LengthErrorMessage = "{0} must be between {2} and {1} characters long!";
+        public const string RangeErrorMessage = "{0} must be a number between {1} and {2}!";
 
         public static class BookConstants
         {
@@ -21,8 +21,8 @@
             public const int BookDescriptionMaxLength = 5000;
 
             //Price
-            public const double BookPriceMinValue = 0;
-            public const double BookPriceMaxValue = 10000;
+            public const string BookPriceMinValue = "0.10";
+            public const string BookPriceMaxValue = "10000";
 
             //Page
             public const double BookPageMinValue = 1;
@@ -34,6 +34,7 @@
 
             //YearPublished
             public const int BookYearPublishedMinRange = 1;
+            public const int BookYearPublishedMaxRange = 2024;
 
             //ImageUrl
             public const int BookImageUrlMinLength = 5;
