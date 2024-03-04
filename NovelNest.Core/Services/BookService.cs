@@ -34,5 +34,27 @@
                 })
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync()
+        {
+            return await repository.AllAsReadOnly<CoverType>()
+                .Select(ct => new CoverTypeViewModel()
+                {
+                    Id = ct.Id,
+                    Name = ct.Name
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<GenreViewModel>> AllGenresAsync()
+        {
+            return await repository.AllAsReadOnly<Genre>()
+                .Select(ct => new GenreViewModel()
+                {
+                    Id = ct.Id,
+                    Name = ct.Name
+                })
+                .ToListAsync();
+        }
     }
 }

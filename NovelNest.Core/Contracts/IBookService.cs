@@ -5,5 +5,7 @@
     public interface IBookService
     {
         Task<IEnumerable<BookAllViewModel>> AllAsync();
+        Task<IEnumerable<GenreViewModel>> AllGenresAsync();
+        Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
     }
 }
