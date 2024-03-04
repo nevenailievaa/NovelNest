@@ -21,7 +21,7 @@
             public const int BookDescriptionMaxLength = 5000;
 
             //Price
-            public const string BookPriceMinValue = "0.10";
+            public const string BookPriceMinValue = "1";
             public const string BookPriceMaxValue = "10000";
 
             //Page

@@ -32,7 +32,8 @@
         public int YearPublished { get; set; }
 
         [Required]
-        [Range(typeof(decimal), BookPriceMinValue, BookPriceMaxValue, ErrorMessage = RangeErrorMessage)]
+        [Range(typeof(decimal), BookPriceMinValue, BookPriceMaxValue, ErrorMessage = RangeErrorMessage,
+            ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
         [Required]
