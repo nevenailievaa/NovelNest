@@ -56,5 +56,39 @@
                 })
                 .ToListAsync();
         }
+
+        public async Task<bool> GenreExistsAsync(int genreId)
+        {
+            return await repository.AllAsReadOnly<Genre>()
+                .AnyAsync(g => g.Id == genreId);
+        }
+
+        public async Task<bool> CoverTypeExistsAsync(int coverTypeId)
+        {
+            return await repository.AllAsReadOnly<CoverType>()
+                .AnyAsync(ct => ct.Id == coverTypeId);
+        }
+
+        public async Task<int> AddAsync(BookAddViewModel bookForm)
+        {
+            Book book = new Book()
+            {
+                Title = bookForm.Title,
+                Author = bookForm.Author,
+                Description = bookForm.Description,
+                Pages = bookForm.Pages,
+                PublishingHouse = bookForm.PublishingHouse,
+                YearPublished = bookForm.YearPublished,
+                Price = bookForm.Price,
+                ImageUrl = bookForm.ImageUrl,
+                CoverTypeId = bookForm.CoverTypeId,
+                GenreId = bookForm.GenreId
+            };
+
+            await repository.AddAsync(book);
+            await repository.SaveChangesAsync();
+
+            return book.Id;
+        }
     }
 }

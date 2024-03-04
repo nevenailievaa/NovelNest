@@ -7,5 +7,8 @@
         Task<IEnumerable<BookAllViewModel>> AllAsync();
         Task<IEnumerable<GenreViewModel>> AllGenresAsync();
         Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
+        Task<bool> GenreExistsAsync(int genreId);
+        Task<bool> CoverTypeExistsAsync(int coverTypeId);
+        Task<int> AddAsync(BookAddViewModel bookForm);
     }
 }
