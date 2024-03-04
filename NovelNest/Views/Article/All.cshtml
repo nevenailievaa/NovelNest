@@ -20,9 +20,7 @@
                         <p class="card-text"><strong>Публикувана:</strong> @article.DatePublished.ToString("dd/MM/yyyy")</p>
                         <p class="card-text"><strong>Прочитания:</strong> @article.ViewsCount</p>
                     </div>
-                    <div class="card-footer">
-                        <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Прочети повече</a>
-                    </div>
+                     <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Прочети повече</a>
                 </div>
             </div>
         }

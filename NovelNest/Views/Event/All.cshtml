@@ -25,14 +25,12 @@
                         <strong>Край:</strong> @currentEvent.EndDate.ToString("dd/MM/yyyy HH:mm")
                     </p>
                 </div>
-                <div class="card-footer">
-                    <a asp-controller="Event" asp-action="Details" asp-route-id="@currentEvent.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж повече</a>
+                <a asp-controller="Event" asp-action="Details" asp-route-id="@currentEvent.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
 
-                    @if (DateTime.Now < currentEvent.StartDate)
-                    {
-                        <a asp-controller="Event" asp-action="GetTicket" asp-route-id="@currentEvent.Id" class="btn btn-success mb-2 w-100 p-3 fw-bold">Вземи билет</a>
-                    }
-                </div>
+                @if (DateTime.Now < currentEvent.StartDate)
+                {
+                    <a asp-controller="Event" asp-action="GetTicket" asp-route-id="@currentEvent.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Вземи билет</a>
+                }
             </div>
         }
     </div>

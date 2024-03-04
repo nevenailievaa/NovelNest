@@ -33,11 +33,9 @@
                             }
                         </p>
                     </div>
-                    <div class="card-footer">
-                        <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж повече</a>
+                    <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
 
-                        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Виж всички налични книги</a>
-                    </div>
+                    <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж всички налични книги</a>
                 </div>
             </div>
         }
