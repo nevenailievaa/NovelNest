@@ -28,6 +28,20 @@
 
         [AllowAnonymous]
         [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentBook = await bookService.DetailsAsync(id);
+
+            return View(currentBook);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> Search(string input)
         {
             if (input == null)

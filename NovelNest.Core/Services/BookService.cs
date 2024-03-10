@@ -58,6 +58,12 @@
                 .ToListAsync();
         }
 
+        public async Task<bool> BookExistsAsync(int bookId)
+        {
+            return await repository.AllAsReadOnly<Book>()
+                .AnyAsync(b => b.Id == bookId);
+        }
+
         public async Task<bool> GenreExistsAsync(int genreId)
         {
             return await repository.AllAsReadOnly<Genre>()
@@ -121,6 +127,35 @@
                 .ToListAsync();
 
             return searchedBooks;
+        }
+
+        public async Task<BookViewModel> DetailsAsync(int bookId)
+        {
+            Book? currentBook = await repository.AllAsReadOnly<Book>()
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+
+            Genre? currentGenre = await repository.AllAsReadOnly<Genre>()
+                .FirstOrDefaultAsync(g => g.Id == currentBook.GenreId);
+
+            CoverType? currentCoverType = await repository.AllAsReadOnly<CoverType>()
+                .FirstOrDefaultAsync(ct => ct.Id == currentBook.CoverTypeId);
+
+            var currentBookDetails = new BookViewModel()
+            {
+                Id = currentBook.Id,
+                Title = currentBook.Title,
+                Author = currentBook.Author,
+                Genre = currentGenre.Name,
+                Description = currentBook.Description,
+                Pages = currentBook.Pages,
+                PublishingHouse = currentBook.PublishingHouse,
+                YearPublished = currentBook.YearPublished,
+                CoverType = currentCoverType.Name,
+                Price = currentBook.Price,
+                ImageUrl = currentBook.ImageUrl
+            };
+
+            return currentBookDetails;
         }
     }
 }
