@@ -1,34 +1,9 @@
 ﻿@model BookViewModel
 
 @{
-    ViewBag.Title = "Book Details";
+    ViewBag.Title = "Детайли";
 }
+<h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+<hr />
 
-<div class="container">
-    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-
-    <div class="row justify-content-center">
-        <div class="col-md-4 text-center">
-            <img src="@Model.ImageUrl" class="img-fluid" alt="Book Image" style="max-width: 100%;" />
-        </div>
-        <div class="col-md-8">
-            <h4>@Model.Title</h4>
-            <p><strong>Автор:</strong> @Model.Author</p>
-            <p><strong>Жанр:</strong> @Model.Genre</p>
-            <p><strong>Резюме:</strong> @Model.Description</p>
-            <p><strong>Брой Страници:</strong> @Model.Pages</p>
-            <p><strong>Издател:</strong> @Model.PublishingHouse</p>
-            <p><strong>Година на Публикуване:</strong> @Model.YearPublished</p>
-            <p><strong>Вид Корица:</strong> @Model.CoverType</p>
-            <p><strong>Цена:</strong> @Model.Price лв.</p>
-        </div>
-    </div>
-
-    <div class="text-center mt-3">
-        <a asp-controller="Book" asp-action="All" class="btn btn-success mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
-        <a asp-controller="Book" asp-action="AddWantToRead" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Добави в "Искам да Прочета"</a>
-        <a asp-controller="Book" asp-action="AddCurrentlyReading" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Добави във "В Момента Чета"</a>
-        <a asp-controller="Book" asp-action="AddRead" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Добави в "Прочетени"</a>
-        <a asp-controller="Book" asp-action="AddToCart" class="btn btn-primary mb-1 w-100 p-3 fw-bold">Добави в Количката</a>
-    </div>
-</div>
+<partial name="_BookDetailsPartial" model="@Model" />
