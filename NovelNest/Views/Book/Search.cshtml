@@ -2,13 +2,13 @@
 @model IEnumerable<BookAllViewModel>
 
 @{
-    ViewBag.Title = "Всички Книги";
+    ViewBag.Title = "Търсени Книги";
 }
 
 <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
 <hr />
 
-<partial name="_BookAllPartial" model="@Model" />
+<partial name="_BookSearchPartial" model="@Model" />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

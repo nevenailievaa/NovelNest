@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BookAllViewModel>
+
+<div class="container">
+
+    <div class="text-center mb-4">
+        <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+    </div>
+
+    <partial name="_BookSearchFormPartial" />
+
+    <div class="row justify-content-center">
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var book in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 text-center">
+                        <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@book.Title</strong></h4>
+                            <p class="card-text"><strong>Автор:</strong> @book.Author</p>
+                            <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
+                        </div>
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
+
+                        <a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-primary mb-1 w-100 p-3 fw-bold">Редактирай</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h2 class ="text-center mb-4">Няма намерени резултати!</h2>
+        }
+    </div>
+</div>

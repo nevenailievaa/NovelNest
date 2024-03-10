@@ -10,5 +10,6 @@
         Task<bool> GenreExistsAsync(int genreId);
         Task<bool> CoverTypeExistsAsync(int coverTypeId);
         Task<int> AddAsync(BookAddViewModel bookForm);
+        Task<IEnumerable<BookAllViewModel>> SearchAsync(string input);
     }
 }

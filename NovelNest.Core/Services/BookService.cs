@@ -6,6 +6,7 @@
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class BookService : IBookService
@@ -89,6 +90,37 @@
             await repository.SaveChangesAsync();
 
             return book.Id;
+        }
+
+        public async Task<IEnumerable<BookAllViewModel>> SearchAsync(string input)
+        {
+            var searchedBooks = await repository
+                .AllAsReadOnly<Book>()
+                .Where(b => input.ToLower().Contains(b.Title.ToLower())
+                || input.ToLower().Contains(b.Author.ToLower())
+                || input.ToLower().Contains(b.PublishingHouse.ToLower())
+                || input.ToLower().Contains(b.Genre.Name.ToLower())
+                || input.ToLower().Contains(b.CoverType.Name.ToLower())
+
+                || b.Title.ToLower().Contains(input.ToLower())
+                || b.Author.ToLower().Contains(input.ToLower())
+                || b.PublishingHouse.ToLower().Contains(input.ToLower())
+                || b.Genre.Name.ToLower().Contains(input.ToLower())
+                || b.CoverType.Name.ToLower().Contains(input.ToLower()))
+                .Select(b => new BookAllViewModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    Price = b.Price,
+                    ImageUrl = b.ImageUrl,
+                    Pages = b.Pages,
+                    PublishingHouse = b.PublishingHouse,
+                    YearPublished = b.YearPublished
+                })
+                .ToListAsync();
+
+            return searchedBooks;
         }
     }
 }
