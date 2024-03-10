@@ -7,16 +7,29 @@
 
 <div class="container">
     <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-
     @*@if (User.IsInRole("Publisher"))
     {
-        <div class="text-center mb-4">
-            <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
-        </div>
+    <div class="text-center mb-4">
+    <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+    </div>
     }*@
 
     <div class="text-center mb-4">
         <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <form asp-controller="Book" asp-action="Search" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Търсене..." value="@ViewBag.CurrentFilter" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-warning"><strong>Търсене</strong></button>
+                        <a asp-controller="Book" asp-action="All" class="btn btn-secondary"><strong>Изчисти</strong></a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <hr />
