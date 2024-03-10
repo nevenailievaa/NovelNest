@@ -100,5 +100,39 @@
             int newBookId = await bookService.AddAsync(bookForm);
             return RedirectToAction(nameof(All));
         }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var bookForm = await bookService.EditGetAsync(id);
+            return View(bookForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(BookEditViewModel bookForm)
+        {
+            if (bookForm == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                bookForm.Genres = await bookService.AllGenresAsync();
+                bookForm.CoverTypes = await bookService.AllCoverTypesAsync();
+
+                return View(bookForm);
+            }
+
+            await bookService.EditPostAsync(bookForm);
+            return RedirectToAction(nameof(All));
+        }
     }
 }

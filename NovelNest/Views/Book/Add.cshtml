@@ -1,11 +1,13 @@
-﻿@{
+﻿@model BookAddViewModel
+
+@{
     ViewBag.Title = "Добави Книга";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<partial name="_BookFormPartial" model = "@Model"/>
+<partial name="_BookAddFormPartial" model = "@Model"/>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -98,6 +98,54 @@
             return book.Id;
         }
 
+        public async Task<BookEditViewModel> EditGetAsync(int bookId)
+        {
+            var currentBook = await repository.All<Book>()
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+
+            var bookForm = new BookEditViewModel()
+            {
+                Id = currentBook.Id,
+                Title = currentBook.Title,
+                Author  = currentBook.Author,
+                Description= currentBook.Description,
+                Pages= currentBook.Pages,
+                PublishingHouse = currentBook.PublishingHouse,
+                YearPublished = currentBook.YearPublished,
+                Price = currentBook.Price,
+                ImageUrl = currentBook.ImageUrl,
+                CoverTypeId = currentBook.CoverTypeId,
+                GenreId = currentBook.GenreId
+            };
+
+            bookForm.CoverTypes = await AllCoverTypesAsync();
+            bookForm.Genres = await AllGenresAsync();
+
+            return bookForm;
+        }
+
+        public async Task<int> EditPostAsync(BookEditViewModel bookForm)
+        {
+            var book = await repository.All<Book>()
+                .Where(b => b.Id == bookForm.Id)
+                .FirstOrDefaultAsync();
+
+            book.Title = bookForm.Title;
+            book.Author = bookForm.Author;
+            book.Description = bookForm.Description;
+            book.Pages = bookForm.Pages;
+            book.PublishingHouse = bookForm.PublishingHouse;
+            book.YearPublished = bookForm.YearPublished;
+            book.Price = bookForm.Price;
+            book.ImageUrl = bookForm.ImageUrl;
+            book.CoverTypeId = bookForm.CoverTypeId;
+            book.GenreId = bookForm.GenreId;
+
+            await repository.SaveChangesAsync();
+
+            return book.Id;
+        }
+
         public async Task<IEnumerable<BookAllViewModel>> SearchAsync(string input)
         {
             var searchedBooks = await repository
