@@ -5,5 +5,7 @@
     public interface IArticleService
     {
         Task<IEnumerable<ArticleAllViewModel>> AllAsync();
+        Task<bool> ArticleExistsAsync(int articleId);
+        Task<ArticleViewModel> DetailsAsync(int articleId);
     }
 }

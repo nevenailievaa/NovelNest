@@ -1,0 +1,24 @@
+﻿@using System.Globalization
+@model ArticleViewModel
+
+@{
+    ViewBag.Title = "Articles";
+    CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+<div class="container text-center mt-5">
+    <div class="card">
+        <div class="card-body">
+            <img src="@Model.ImageUrl" alt="Article Image" class="img-fluid mb-3" />
+            <h2 class="card-title">@Model.Title</h2>
+            <p class="card-text"><strong>Публикувана:</strong> @Model.DatePublished.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="card-text"><strong>Прочитания:</strong> @Model.ViewsCount</p>
+
+            <div class="container-sm">
+                <p>@Html.DisplayFor(model => model.Content)</p>
+            </div>
+
+            <a asp-controller="Article" asp-action="All" class="btn btn-warning mt-3 w-100 p-3 fw-bold">Обратно към Всички Сататии</a>
+        </div>
+    </div>
+</div>

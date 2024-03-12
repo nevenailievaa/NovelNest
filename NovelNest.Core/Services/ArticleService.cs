@@ -5,6 +5,7 @@
     using NovelNest.Core.ViewModels.Article;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
+    using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
 
     public class ArticleService : IArticleService
     {
@@ -28,6 +29,34 @@
                     ViewsCount = a.ViewsCount,
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> ArticleExistsAsync(int articleId)
+        {
+            return await repository.AllAsReadOnly<Article>()
+                .AnyAsync(a => a.Id == articleId);
+        }
+
+        public async Task<ArticleViewModel> DetailsAsync(int articleId)
+        {
+            Article? currentArticle = await repository.All<Article>()
+                .FirstOrDefaultAsync(a => a.Id == articleId);
+
+            currentArticle.ViewsCount++;
+
+            await repository.SaveChangesAsync();
+
+            var currentArticleDetails = new ArticleViewModel()
+            {
+                Id = currentArticle.Id,
+                Title= currentArticle.Title,
+                DatePublished = currentArticle.DatePublished,
+                Content = currentArticle.Content,
+                ViewsCount = currentArticle.ViewsCount,
+                ImageUrl = currentArticle.ImageUrl
+            };
+
+            return currentArticleDetails;
         }
     }
 }

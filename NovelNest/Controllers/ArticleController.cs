@@ -3,8 +3,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Services;
 
-    public class ArticleController : Controller
+    public class ArticleController : BaseController
     {
         private readonly IArticleService articleService;
 
@@ -19,6 +20,19 @@
         {
             var allArticles = await articleService.AllAsync();
             return View(allArticles);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentArticle = await articleService.DetailsAsync(id);
+            return View(currentArticle);
         }
     }
 }

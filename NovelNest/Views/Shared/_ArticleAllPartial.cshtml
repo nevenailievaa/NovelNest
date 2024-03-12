@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ArticleAllViewModel>
+
+<div class="container">
+    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+    <hr />
+
+    <div class="row justify-content-center">
+        @foreach (var article in Model)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card h-100 text-center">
+                    <img class="card-img-top" src="@article.ImageUrl" alt="Article Image">
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>@article.Title</strong></h4>
+                        <p class="card-text"><strong>Публикувана:</strong> @article.DatePublished.ToString("dd/MM/yyyy")</p>
+                        <p class="card-text"><strong>Прочитания:</strong> @article.ViewsCount</p>
+                    </div>
+                    <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Прочети повече</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
