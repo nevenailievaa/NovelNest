@@ -15,5 +15,7 @@
         Task<int> EditPostAsync(BookEditViewModel bookForm);
         Task<IEnumerable<BookAllViewModel>> SearchAsync(string input);
         Task<BookViewModel> DetailsAsync(int bookId);
+        Task<BookDeleteViewModel> DeleteAsync(int bookId);
+        Task<int> DeleteConfirmedAsync(int bookId);
     }
 }

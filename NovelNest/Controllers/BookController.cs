@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.ViewModels.Book;
@@ -36,7 +37,6 @@
             }
 
             var currentBook = await bookService.DetailsAsync(id);
-
             return View(currentBook);
         }
 
@@ -132,6 +132,34 @@
             }
 
             await bookService.EditPostAsync(bookForm);
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedBook = await bookService.DeleteAsync(id);
+
+            return View(searchedBook);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await bookService.DeleteConfirmedAsync(id);
+
             return RedirectToAction(nameof(All));
         }
     }

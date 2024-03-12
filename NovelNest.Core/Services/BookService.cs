@@ -5,6 +5,8 @@
     using NovelNest.Core.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -204,6 +206,84 @@
             };
 
             return currentBookDetails;
+        }
+
+        public async Task<BookDeleteViewModel> DeleteAsync(int bookId)
+        {
+            var book = await repository
+                .AllAsReadOnly<Book>().Where(b => b.Id == bookId)
+                .FirstOrDefaultAsync();
+
+            var deleteForm = new BookDeleteViewModel()
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Author = book.Author,
+                ImageUrl = book.ImageUrl,
+            };
+
+            return deleteForm;
+        }
+
+        public async Task<int> DeleteConfirmedAsync(int bookId)
+        {
+            var book = await repository
+                .AllAsReadOnly<Book>().Where(b => b.Id == bookId)
+                .FirstOrDefaultAsync();
+
+            var bookBookStores = await repository.All<BookBookStore>()
+                .Where(bbs => bbs.BookId == bookId)
+                .ToListAsync();
+
+            var bookCarts = await repository.All<BookCart>()
+                .Where(bc => bc.BookId == bookId)
+                .ToListAsync();
+
+            var bookWantToReads = await repository.All<BookUserWantToRead>()
+                .Where(buwtr => buwtr.BookId == bookId)
+                .ToListAsync();
+
+            var bookCurrentlyReadings = await repository.All<BookUserCurrentlyReading>()
+                .Where(bucr => bucr.BookId == bookId)
+                .ToListAsync();
+
+            var bookReads = await repository.All<BookUserRead>()
+                .Where(bur => bur.BookId == bookId)
+                .ToListAsync();
+
+            var bookReviews = await repository.All<BookReview>()
+                .Where(br => br.BookId == bookId)
+                .ToListAsync();
+
+            if (bookBookStores != null && bookBookStores.Any())
+            {
+                await repository.RemoveRangeAsync(bookBookStores);
+            }
+            if (bookCarts != null && bookCarts.Any())
+            {
+                await repository.RemoveRangeAsync(bookCarts);
+            }
+            if (bookWantToReads != null && bookWantToReads.Any())
+            {
+                await repository.RemoveRangeAsync(bookWantToReads);
+            }
+            if (bookCurrentlyReadings != null && bookCurrentlyReadings.Any())
+            {
+                await repository.RemoveRangeAsync(bookCurrentlyReadings);
+            }
+            if (bookReads != null && bookReads.Any())
+            {
+                await repository.RemoveRangeAsync(bookReads);
+            }
+            if (bookReviews != null && bookReviews.Any())
+            {
+                await repository.RemoveRangeAsync(bookReviews);
+            }
+
+            await repository.RemoveAsync(book);
+            await repository.SaveChangesAsync();
+
+            return book.Id;
         }
     }
 }
