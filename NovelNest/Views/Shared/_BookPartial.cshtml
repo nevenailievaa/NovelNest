@@ -1,45 +1,13 @@
 ﻿@model BookServiceModel
 
-@*<div class="col-md-4">
-    <div class="card mb-3">
-        <img class="card-img-top" src="@Model.ImageUrl" alt="House Image">
-        <div class="card-body text-center">
-            <h4>@Model.Title</h4>
-            <h6>Address: <b>@Model.Author</b></h6>
-            <h6>
-                Price Per Month:
-                <b>@String.Format("{0:f2}", Model.Price) лв.</b>
-            </h6>
-            <br />
-            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Id"
-               class="btn btn-success">Виж Повече</a>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <a asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id"
-               class="btn btn-warning">Редактирай</a>
-                <a asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id"
-               class="btn btn-danger">Изтрий</a>
-            }
+<div class="col mb-4">
+    <div class="card h-100 text-center">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="Book Image">
+        <div class="card-body">
+            <h4 class="card-title"><strong>@Model.Title</strong></h4>
+            <p class="card-text"><strong>Автор:</strong> @Model.Author</p>
+            <p class="card-text"><strong>Цена:</strong> @Model.Price лв.</p>
         </div>
-    </div>
-</div>*@
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card h-100 text-center">
-                <img class="card-img-top" src="@Model.ImageUrl" alt="Book Image">
-                <div class="card-body">
-                    <h4 class="card-title"><strong>@Model.Title</strong></h4>
-                    <p class="card-text"><strong>Автор:</strong> @Model.Author</p>
-                    <p class="card-text"><strong>Цена:</strong> @Model.Price лв.</p>
-                </div>
-                <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
-            </div>
-        </div>
+        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

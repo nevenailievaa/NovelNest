@@ -10,4 +10,10 @@
     <ProjectReference Include="..\NovelNest.Infrastructure\NovelNest.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\QueryModels\Article\" />
+    <Folder Include="Models\QueryModels\BookStore\" />
+    <Folder Include="Models\QueryModels\Event\" />
+  </ItemGroup>
+
 </Project>

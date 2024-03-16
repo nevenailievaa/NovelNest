@@ -2,7 +2,9 @@
 {
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
-    using NovelNest.Core.ViewModels.Book;
+    using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
@@ -20,22 +22,91 @@
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<BookAllViewModel>> AllAsync()
+        //public async Task<IEnumerable<BookAllViewModel>> AllAsync()
+        //{
+        //    return await repository
+        //        .AllAsReadOnly<Book>()
+        //        .Select(b => new BookAllViewModel()
+        //        {
+        //            Id = b.Id,
+        //            Title = b.Title,
+        //            Author = b.Author,
+        //            Price = b.Price,
+        //            ImageUrl = b.ImageUrl,
+        //            Pages = b.Pages,
+        //            PublishingHouse = b.PublishingHouse,
+        //            YearPublished = b.YearPublished
+        //        })
+        //        .ToListAsync();
+        //}
+
+        public async Task<BookQueryServiceModel> AllAsync(string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4)
         {
-            return await repository
-                .AllAsReadOnly<Book>()
-                .Select(b => new BookAllViewModel()
+            var booksToShow = repository.AllAsReadOnly<Book>();
+
+            if (genre != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Genre.Name.ToLower() == genre.ToLower());
+            }
+
+            if (coverType != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.CoverType.Name.ToLower() == coverType.ToLower());
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                booksToShow = booksToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Title.ToLower())
+                || normalizedSearchTerm.Contains(b.Author.ToLower())
+                || normalizedSearchTerm.Contains(b.PublishingHouse.ToLower())
+                || normalizedSearchTerm.Contains(b.Genre.Name.ToLower())
+                || normalizedSearchTerm.Contains(b.CoverType.Name.ToLower())
+
+                || b.Title.ToLower().Contains(normalizedSearchTerm)
+                || b.Author.ToLower().Contains(normalizedSearchTerm)
+                || b.PublishingHouse.ToLower().Contains(normalizedSearchTerm)
+                || b.Genre.Name.ToLower().Contains(normalizedSearchTerm)
+                || b.CoverType.Name.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            booksToShow = sorting switch
+            {
+                BookSorting.Title => booksToShow.OrderBy(b => b.Title).ThenByDescending(b => b.Id),
+                BookSorting.Author => booksToShow.OrderBy(b => b.Author).ThenByDescending(b => b.Id),
+                BookSorting.Price => booksToShow.OrderBy(b => b.Price).ThenByDescending(b => b.Id),
+                _ => booksToShow.OrderByDescending(b => b.Id),
+            };
+
+            var books = await booksToShow
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage)
+                .Select(b => new BookServiceModel()
                 {
                     Id = b.Id,
                     Title = b.Title,
                     Author = b.Author,
-                    Price = b.Price,
                     ImageUrl = b.ImageUrl,
-                    Pages = b.Pages,
-                    PublishingHouse = b.PublishingHouse,
-                    YearPublished = b.YearPublished
+                    Price = b.Price
                 })
                 .ToListAsync();
+
+            int totalBooks = await booksToShow.CountAsync();
+
+            return new BookQueryServiceModel()
+            {
+                Books = books,
+                TotalBooksCount = totalBooks
+            };
         }
 
         public async Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync()
@@ -48,6 +119,12 @@
                 })
                 .ToListAsync();
         }
+        public async Task<IEnumerable<string>> AllCoverTypesNamesAsync()
+        {
+            return await repository.AllAsReadOnly<CoverType>()
+                .Select(ct => ct.Name)
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<GenreViewModel>> AllGenresAsync()
         {
@@ -57,6 +134,12 @@
                     Id = ct.Id,
                     Name = ct.Name
                 })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<string>> AllGenresNamesAsync()
+        {
+            return await repository.AllAsReadOnly<Genre>()
+                .Select(g => g.Name)
                 .ToListAsync();
         }
 
@@ -148,36 +231,36 @@
             return book.Id;
         }
 
-        public async Task<IEnumerable<BookAllViewModel>> SearchAsync(string input)
-        {
-            var searchedBooks = await repository
-                .AllAsReadOnly<Book>()
-                .Where(b => input.ToLower().Contains(b.Title.ToLower())
-                || input.ToLower().Contains(b.Author.ToLower())
-                || input.ToLower().Contains(b.PublishingHouse.ToLower())
-                || input.ToLower().Contains(b.Genre.Name.ToLower())
-                || input.ToLower().Contains(b.CoverType.Name.ToLower())
+        //public async Task<IEnumerable<BookAllViewModel>> SearchAsync(string input)
+        //{
+        //    var searchedBooks = await repository
+        //        .AllAsReadOnly<Book>()
+        //        .Where(b => input.ToLower().Contains(b.Title.ToLower())
+        //        || input.ToLower().Contains(b.Author.ToLower())
+        //        || input.ToLower().Contains(b.PublishingHouse.ToLower())
+        //        || input.ToLower().Contains(b.Genre.Name.ToLower())
+        //        || input.ToLower().Contains(b.CoverType.Name.ToLower())
 
-                || b.Title.ToLower().Contains(input.ToLower())
-                || b.Author.ToLower().Contains(input.ToLower())
-                || b.PublishingHouse.ToLower().Contains(input.ToLower())
-                || b.Genre.Name.ToLower().Contains(input.ToLower())
-                || b.CoverType.Name.ToLower().Contains(input.ToLower()))
-                .Select(b => new BookAllViewModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    Price = b.Price,
-                    ImageUrl = b.ImageUrl,
-                    Pages = b.Pages,
-                    PublishingHouse = b.PublishingHouse,
-                    YearPublished = b.YearPublished
-                })
-                .ToListAsync();
+        //        || b.Title.ToLower().Contains(input.ToLower())
+        //        || b.Author.ToLower().Contains(input.ToLower())
+        //        || b.PublishingHouse.ToLower().Contains(input.ToLower())
+        //        || b.Genre.Name.ToLower().Contains(input.ToLower())
+        //        || b.CoverType.Name.ToLower().Contains(input.ToLower()))
+        //        .Select(b => new BookAllViewModel()
+        //        {
+        //            Id = b.Id,
+        //            Title = b.Title,
+        //            Author = b.Author,
+        //            Price = b.Price,
+        //            ImageUrl = b.ImageUrl,
+        //            Pages = b.Pages,
+        //            PublishingHouse = b.PublishingHouse,
+        //            YearPublished = b.YearPublished
+        //        })
+        //        .ToListAsync();
 
-            return searchedBooks;
-        }
+        //    return searchedBooks;
+        //}
 
         public async Task<BookViewModel> DetailsAsync(int bookId)
         {

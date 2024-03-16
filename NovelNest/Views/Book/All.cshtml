@@ -13,43 +13,49 @@
 
 <form method="get">
     <div class="row">
-        <div class="form-group col-md-3 d-flex justify-content-between">
-            <div class="form-group">
-                <label asp-for="Genre"></label>
-                <select asp-for="Genre" class="form-control">
-                    <option value="">Всички</option>
-                    @foreach (var genre in Model.Genres)
-                    {
-                        <option value="@genre">@genre</option>
-                    }
-                </select>
-            </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Genre"></label>
+            <select asp-for="Genre" class="form-control">
+                <option value="">Всички</option>
+                @foreach (var genre in Model.Genres)
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </select>
         </div>
 
         <div class="form-group col-md-3">
-            <label asp-for="SearchItem"></label>
-            <input asp-for="SearchItem" class="form-control" placeholder="Търси...">
+            <label asp-for="CoverType"></label>
+            <select asp-for="CoverType" class="form-control">
+                <option value="">Всички</option>
+                @foreach (var coverType in Model.CoverTypes)
+                {
+                    <option value="@coverType">@coverType</option>
+                }
+            </select>
         </div>
 
         <div class="form-group col-md-3">
-            <div class="form-group">
-                <label asp-for="Sorting"></label>
-                <select asp-for="Sorting" class="form-control">
-                    <option value="0">Най-скоро добавени</option>
-                    <option value="1">По Заглавие</option>
-                    <option value="2">По Автор</option>
-                    <option value="3">По Цена</option>
-                </select>
-            </div>
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
         </div>
 
-        <div class="col-md-3">
-            <div class="form-group mt-4 p-2">
-                <input type="submit" value="Search" class="btn btn-primary" />
-            </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Sorting"></label>
+            <select asp-for="Sorting" class="form-control">
+                <option value="0">Най-скоро добавени</option>
+                <option value="1">По Заглавие</option>
+                <option value="2">По Автор</option>
+                <option value="3">По Цена</option>
+            </select>
+        </div>
+
+        <div class="col-md-1 d-flex align-items-end">
+            <input type="submit" value="Search" class="btn btn-primary w-100" />
         </div>
     </div>
 </form>
+
 
 
 @{
@@ -69,85 +75,40 @@
            asp-controller="Book"
            asp-action="All"
            asp-route-currentPage="@previousPage"
-           asp-route-category="@Model.Genre"
-           asp-route-searchTerm="@Model.SearchItem"
+           asp-route-genre="@Model.Genre"
+           asp-route-coverType="@Model.CoverType"
+           asp-route-searchTerm="@Model.SearchTerm"
            asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
 
-    @{
-        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
-        !Model.Books.Any();
-    }
-
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
-        <a class="btn btn-primary
-           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
-           asp-controller="House"
+        @{
+            var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Books.Any();
+        }
+
+        <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="Book"
            asp-action="All"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-category="@Model.Genre"
-           asp-route-searchTerm="@Model.SearchItem"
+           asp-route-genre="@Model.Genre"
+           asp-route-coverType="@Model.CoverType"
+           asp-route-searchTerm="@Model.SearchTerm"
            asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
+
+
 
 @if (!Model.Books.Any())
 {
     <h2 class="text-center">Няма намерени книги!</h2>
 }
-
-<div class="row">
-    @foreach (var house in Model.Books)
-    {
-        <partial name="_BookPartial" model="@house" />
-    }
-</div>
-
-
-@*@using NovelNest.Core.ViewModels.Book
-@model IEnumerable<BookAllViewModel>
-
-@{
-    ViewBag.Title = "Всички Книги";
-}
-
-<h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-<hr />
-
-<div class="container">
-
-    <div class="text-center mb-4">
-        <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
-    </div>
-
-    <partial name="_BookSearchFormPartial" />
-
-    <div class="row justify-content-center">
-        @if (Model != null && Model.Count() > 0)
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+        @foreach (var book in Model.Books)
         {
-            @foreach (var book in Model)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100 text-center">
-                        <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
-                        <div class="card-body">
-                            <h4 class="card-title"><strong>@book.Title</strong></h4>
-                            <p class="card-text"><strong>Автор:</strong> @book.Author</p>
-                            <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
-                        </div>
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <h2 class ="text-center mb-4">Няма намерени резултати!</h2>
+            <partial name="_BookPartial" model="@book" />
         }
     </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 }
-*@

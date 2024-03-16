@@ -5,7 +5,8 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
-    using NovelNest.Core.ViewModels.Book;
+    using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.ViewModels.Book;
     using System.Security.Claims;
 
     public class BookController : BaseController
@@ -21,10 +22,22 @@
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]AllBooksQueryModel model)
         {
-            var allBooks = await bookService.AllAsync();
-            return View(allBooks);
+            var allBooks = await bookService.AllAsync(
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
+
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -38,25 +51,6 @@
 
             var currentBook = await bookService.DetailsAsync(id);
             return View(currentBook);
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Search(string input)
-        {
-            if (input == null)
-            {
-                return RedirectToAction(nameof(All));
-            }
-
-            var searchedBooks = await bookService.SearchAsync(input);
-
-            if (searchedBooks == null)
-            {
-                return RedirectToAction(nameof(All));
-            }
-
-            return View(searchedBooks);
         }
 
         [HttpGet]
