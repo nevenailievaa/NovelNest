@@ -1,0 +1,40 @@
+﻿@model AllBooksQueryModel
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalBooksCount /
+        Model.BooksPerPage);
+}
+
+@{
+    var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Books.Any();
+}
+
+<div class="row justify-content-center mt-2">
+    <div class="col-md-6 d-flex justify-content-between">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Book"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-genre="@Model.Genre"
+           asp-route-coverType="@Model.CoverType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+
+        <p class="align-self-center">Страница @Model.CurrentPage от @maxPage</p>
+
+        <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="Book"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-genre="@Model.Genre"
+           asp-route-coverType="@Model.CoverType"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
+    </div>
+</div>
