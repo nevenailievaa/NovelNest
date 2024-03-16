@@ -81,9 +81,13 @@
 
             booksToShow = sorting switch
             {
-                BookSorting.Title => booksToShow.OrderBy(b => b.Title).ThenByDescending(b => b.Id),
-                BookSorting.Author => booksToShow.OrderBy(b => b.Author).ThenByDescending(b => b.Id),
-                BookSorting.Price => booksToShow.OrderBy(b => b.Price).ThenByDescending(b => b.Id),
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.Id),
+                BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Price).ThenByDescending(b => b.Id),
+                BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Price).ThenByDescending(b => b.Id),
+                BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Title).ThenByDescending(b => b.Id),
+                BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Title).ThenByDescending(b => b.Id),
+                BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Author).ThenByDescending(b => b.Id),
+                BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Author).ThenByDescending(b => b.Id),
                 _ => booksToShow.OrderByDescending(b => b.Id),
             };
 

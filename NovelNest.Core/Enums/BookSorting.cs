@@ -3,8 +3,12 @@
     public enum BookSorting
     {
         Newest = 0,
-        Title = 1,
-        Author = 2,
-        Price = 3
+        Oldest = 1,
+        PriceAscending = 2,
+        PriceDescending = 3,
+        TitleAscending = 4,
+        TitleDescending = 5,
+        AuthorAscending = 6,
+        AuthorDescending = 7,
     }
 }
