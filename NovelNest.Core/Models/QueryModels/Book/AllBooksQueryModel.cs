@@ -5,7 +5,7 @@
 
     public class AllBooksQueryModel
     {
-        public int BooksPerPage { get; } = 4;
+        public int BooksPerPage { get; } = 8;
 
         [Display(Name = "Търсене")]
         public string SearchTerm { get; set; } = null!;

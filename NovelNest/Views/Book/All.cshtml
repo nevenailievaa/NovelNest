@@ -14,6 +14,25 @@
 <form method="get">
     <div class="row">
         <div class="form-group col-md-3">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
+        </div>
+
+        <div class="form-group col-md-2">
+            <label asp-for="Sorting"></label>
+            <select asp-for="Sorting" class="form-control">
+                <option value="0">Най-скоро добавени</option>
+                <option value="1">Най-късно добавени</option>
+                <option value="2">Цена (Възходяща)</option>
+                <option value="3">Цена (Низходяща)</option>
+                <option value="4">Заглавие (Възходящо)</option>
+                <option value="5">Заглавие (Низходящо)</option>
+                <option value="6">Автор (Възходящ)</option>
+                <option value="7">Автор (Низходящ)</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
             <label asp-for="Genre"></label>
             <select asp-for="Genre" class="form-control">
                 <option value="">Всички</option>
@@ -35,27 +54,8 @@
             </select>
         </div>
 
-        <div class="form-group col-md-3">
-            <label asp-for="SearchTerm"></label>
-            <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
-        </div>
-
-        <div class="form-group col-md-2">
-            <label asp-for="Sorting"></label>
-            <select asp-for="Sorting" class="form-control">
-                <option value="0">Най-скоро добавени</option>
-                <option value="1">Най-късно добавени</option>
-                <option value="2">Цена (Възходяща)</option>
-                <option value="3">Цена (Низходяща)</option>
-                <option value="4">Заглавие (Възходящо)</option>
-                <option value="5">Заглавие (Низходящо)</option>
-                <option value="6">Автор (Възходящ)</option>
-                <option value="7">Автор (Низходящ)</option>
-            </select>
-        </div>
-
         <div class="col-md-1 d-flex align-items-end">
-            <input type="submit" value="Search" class="btn btn-primary w-100" />
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
         </div>
     </div>
 </form>
