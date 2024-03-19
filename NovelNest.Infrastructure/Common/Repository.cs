@@ -47,5 +47,10 @@
         {
             return await dbContext.SaveChangesAsync();
         }
+
+        public async Task<T?> GetById<T>(object id) where T : class
+        {
+            return await DbSet<T>().FindAsync(id);
+        }
     }
 }

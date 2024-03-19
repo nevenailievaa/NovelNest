@@ -8,5 +8,6 @@
         Task RemoveAsync<T>(T entity) where T : class;
         Task RemoveRangeAsync<T>(T entity) where T : class;
         Task<int> SaveChangesAsync();
+        Task<T?> GetById<T>(object id) where T : class;
     }
 }
