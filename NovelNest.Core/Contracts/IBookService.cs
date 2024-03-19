@@ -31,8 +31,14 @@
         Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId);
         Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId);
         Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId);
+        Task<bool> BookIsNotCurrentlyReadingAsync(int bookId, string userId);
+        Task<bool> BookIsNotWantToReadAsync(int bookId, string userId);
+        Task<bool> BookIsNotReadAsync(int bookId, string userId);
         Task<int> AddWantToReadBookAsync(int bookId, string userId);
         Task<int> AddCurrentlyReadingBookAsync(int bookId, string userId);
         Task<int> AddReadBookAsync(int bookId, string userId);
+        Task<int> RemoveWantToReadBookAsync(int bookId, string userId);
+        Task<int> RemoveCurrentlyReadingBookAsync(int bookId, string userId);
+        Task<int> RemoveReadBookAsync(int bookId, string userId);
     }
 }

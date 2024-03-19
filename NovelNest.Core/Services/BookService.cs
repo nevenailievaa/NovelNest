@@ -419,13 +419,44 @@
 
         }
 
+        public async Task<bool> BookIsNotCurrentlyReadingAsync(int bookId, string userId)
+        {
+            var currentlyReadingBook = await repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
+
+            if (currentlyReadingBook == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> BookIsNotWantToReadAsync(int bookId, string userId)
+        {
+            var wantToReadBook = await repository.AllAsReadOnly<BookUserWantToRead>()
+                .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
+
+            if (wantToReadBook == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> BookIsNotReadAsync(int bookId, string userId)
+        {
+            var readBook = await repository.AllAsReadOnly<BookUserRead>()
+                .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
+
+            if (readBook == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<int> AddWantToReadBookAsync(int bookId, string userId)
         {
-            if (await BookIsInAnotherCollectionAsync(bookId, userId))
-            {
-                await RemoveBookFromAllCollectionsAsync(bookId, userId);
-            }
-
             var bookUser = new BookUserWantToRead()
             {
                 UserId = userId,
@@ -469,6 +500,39 @@
             };
 
             await repository.AddAsync<BookUserRead>(bookUser);
+            await repository.SaveChangesAsync();
+            return bookId;
+        }
+
+        public async Task<int> RemoveWantToReadBookAsync(int bookId, string userId)
+        {
+            var currentUserBook = repository.AllAsReadOnly<BookUserWantToRead>()
+                .Where(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId)
+                .FirstOrDefault();
+
+            await repository.RemoveAsync(currentUserBook);
+            await repository.SaveChangesAsync();
+            return bookId;
+        }
+
+        public async Task<int> RemoveCurrentlyReadingBookAsync(int bookId, string userId)
+        {
+            var currentUserBook = repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .Where(bucr => bucr.UserId == userId && bucr.BookId == bookId)
+                .FirstOrDefault();
+
+            await repository.RemoveAsync(currentUserBook);
+            await repository.SaveChangesAsync();
+            return bookId;
+        }
+
+        public async Task<int> RemoveReadBookAsync(int bookId, string userId)
+        {
+            var currentUserBook = repository.AllAsReadOnly<BookUserRead>()
+                .Where(bur => bur.UserId == userId && bur.BookId == bookId)
+                .FirstOrDefault();
+
+            await repository.RemoveAsync(currentUserBook);
             await repository.SaveChangesAsync();
             return bookId;
         }

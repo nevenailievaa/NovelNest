@@ -218,5 +218,101 @@
             var readBooks = await bookService.AllReadBooksIdsByUserIdAsync(userId);
             return View(readBooks);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddWantToRead(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+            if (await bookService.BookIsInAnotherCollectionAsync(id, userId))
+            {
+                await bookService.RemoveBookFromAllCollectionsAsync(id, userId);
+            }
+
+            await bookService.AddWantToReadBookAsync(id, userId);
+            return RedirectToAction(nameof(WantToRead));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddCurrentlyReading(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+            if (await bookService.BookIsInAnotherCollectionAsync(id, userId))
+            {
+                await bookService.RemoveBookFromAllCollectionsAsync(id, userId);
+            }
+
+            await bookService.AddCurrentlyReadingBookAsync(id, userId);
+            return RedirectToAction(nameof(CurrentlyReading));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddRead(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+            if (await bookService.BookIsInAnotherCollectionAsync(id, userId))
+            {
+                await bookService.RemoveBookFromAllCollectionsAsync(id, userId);
+            }
+
+            await bookService.AddReadBookAsync(id, userId);
+            return RedirectToAction(nameof(Read));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveWantToRead(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotWantToReadAsync(id, userId))
+            {
+                return BadRequest();
+            }
+
+            await bookService.RemoveWantToReadBookAsync(id, userId);
+            return RedirectToAction(nameof(WantToRead));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveCurrentlyReading(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotCurrentlyReadingAsync(id, userId))
+            {
+                return BadRequest();
+            }
+
+            await bookService.RemoveCurrentlyReadingBookAsync(id, userId);
+            return RedirectToAction(nameof(CurrentlyReading));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveRead(int id)
+        {
+            string userId = User.Id();
+
+            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotReadAsync(id, userId))
+            {
+                return BadRequest();
+            }
+
+            await bookService.RemoveReadBookAsync(id, userId);
+            return RedirectToAction(nameof(Read));
+        }
     }
 }
