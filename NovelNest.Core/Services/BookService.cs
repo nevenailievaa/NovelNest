@@ -76,14 +76,7 @@
             var books = await booksToShow
                 .Skip((currentPage - 1) * booksPerPage)
                 .Take(booksPerPage)
-                .Select(b => new BookServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    ImageUrl = b.ImageUrl,
-                    Price = b.Price
-                })
+                .ProjectToBookServiceModel()
                 .ToListAsync();
 
             int totalBooks = await booksToShow.CountAsync();
@@ -322,6 +315,162 @@
             await repository.SaveChangesAsync();
 
             return book.Id;
+        }
+
+        public async Task<IEnumerable<BookServiceModel>> AllWantToReadBooksIdsByUserIdAsync(string userId)
+        {
+            return await repository.AllAsReadOnly<BookUserWantToRead>()
+                .Where(buwtr => buwtr.UserId == userId)
+                .Select(buwtr => new BookServiceModel()
+                {
+                    Id = buwtr.BookId,
+                    Title = buwtr.Book.Title,
+                    Author = buwtr.Book.Author,
+                    Price = buwtr.Book.Price,
+                    ImageUrl = buwtr.Book.ImageUrl
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<BookServiceModel>> AllCurrentlyReadingBooksIdsByUserIdAsync(string userId)
+        {
+            return await repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .Where(buwtr => buwtr.UserId == userId)
+                .Select(buwtr => new BookServiceModel()
+                {
+                    Id = buwtr.BookId,
+                    Title = buwtr.Book.Title,
+                    Author = buwtr.Book.Author,
+                    Price = buwtr.Book.Price,
+                    ImageUrl = buwtr.Book.ImageUrl
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId)
+        {
+            return await repository.AllAsReadOnly<BookUserRead>()
+                .Where(buwtr => buwtr.UserId == userId)
+                .Select(buwtr => new BookServiceModel()
+                {
+                    Id = buwtr.BookId,
+                    Title = buwtr.Book.Title,
+                    Author = buwtr.Book.Author,
+                    Price = buwtr.Book.Price,
+                    ImageUrl = buwtr.Book.ImageUrl
+                })
+                .ToListAsync();
+        }
+
+        public async Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId)
+        {
+            bool bookIsInAnotherCollection = false;
+
+            var wantToReadBook = await repository.AllAsReadOnly<BookUserWantToRead>()
+                .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
+
+            var currentlyReadingBook = await repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .FirstOrDefaultAsync(bucr => bucr.UserId == userId && bucr.BookId == bookId);
+
+            var readBook = await repository.AllAsReadOnly<BookUserRead>()
+                .FirstOrDefaultAsync(bur => bur.UserId == userId && bur.BookId == bookId);
+
+            if (wantToReadBook != null)
+            {
+                bookIsInAnotherCollection = true;
+            }
+            else if (currentlyReadingBook != null)
+            {
+                bookIsInAnotherCollection = true;
+            }
+            else if (readBook != null)
+            {
+                bookIsInAnotherCollection = true;
+            }
+
+            return bookIsInAnotherCollection;
+        }
+
+        public async Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId)
+        {
+            var wantToReadBook = await repository.AllAsReadOnly<BookUserWantToRead>()
+                .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
+
+            var currentlyReadingBook = await repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .FirstOrDefaultAsync(bucr => bucr.UserId == userId && bucr.BookId == bookId);
+
+            var readBook = await repository.AllAsReadOnly<BookUserRead>()
+                .FirstOrDefaultAsync(bur => bur.UserId == userId && bur.BookId == bookId);
+
+            if (wantToReadBook != null)
+            {
+                await repository.RemoveAsync(wantToReadBook);
+            }
+            else if (currentlyReadingBook != null)
+            {
+                await repository.RemoveAsync(currentlyReadingBook);
+            }
+            else if (readBook != null)
+            {
+                await repository.RemoveAsync(readBook);
+            }
+
+            return await repository.SaveChangesAsync();
+
+        }
+
+        public async Task<int> AddWantToReadBookAsync(int bookId, string userId)
+        {
+            if (await BookIsInAnotherCollectionAsync(bookId, userId))
+            {
+                await RemoveBookFromAllCollectionsAsync(bookId, userId);
+            }
+
+            var bookUser = new BookUserWantToRead()
+            {
+                UserId = userId,
+                BookId = bookId
+            };
+
+            await repository.AddAsync<BookUserWantToRead>(bookUser);
+            await repository.SaveChangesAsync();
+            return bookId;
+        }
+
+        public async Task<int> AddCurrentlyReadingBookAsync(int bookId, string userId)
+        {
+            if (await BookIsInAnotherCollectionAsync(bookId, userId))
+            {
+                await RemoveBookFromAllCollectionsAsync(bookId, userId);
+            }
+
+            var bookUser = new BookUserCurrentlyReading()
+            {
+                UserId = userId,
+                BookId = bookId
+            };
+
+            await repository.AddAsync<BookUserCurrentlyReading>(bookUser);
+            await repository.SaveChangesAsync();
+            return bookId;
+        }
+
+        public async Task<int> AddReadBookAsync(int bookId, string userId)
+        {
+            if (await BookIsInAnotherCollectionAsync(bookId, userId))
+            {
+                await RemoveBookFromAllCollectionsAsync(bookId, userId);
+            }
+
+            var bookUser = new BookUserRead()
+            {
+                UserId = userId,
+                BookId = bookId
+            };
+
+            await repository.AddAsync<BookUserRead>(bookUser);
+            await repository.SaveChangesAsync();
+            return bookId;
         }
     }
 }

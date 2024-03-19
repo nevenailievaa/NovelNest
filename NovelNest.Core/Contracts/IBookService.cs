@@ -13,8 +13,6 @@
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
             int booksPerPage = 4);
-
-        //Task<IEnumerable<BookAllViewModel>> AllAsync();
         Task<IEnumerable<GenreViewModel>> AllGenresAsync();
         Task<IEnumerable<string>> AllGenresNamesAsync();
         Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
@@ -25,10 +23,16 @@
         Task<int> AddAsync(BookAddViewModel bookForm);
         Task<BookEditViewModel> EditGetAsync(int bookId);
         Task<int> EditPostAsync(BookEditViewModel bookForm);
-
-        //Task<IEnumerable<BookAllViewModel>> SearchAsync(string input);
         Task<BookViewModel> DetailsAsync(int bookId);
         Task<BookDeleteViewModel> DeleteAsync(int bookId);
         Task<int> DeleteConfirmedAsync(int bookId);
+        Task<IEnumerable<BookServiceModel>> AllWantToReadBooksIdsByUserIdAsync(string userId);
+        Task<IEnumerable<BookServiceModel>> AllCurrentlyReadingBooksIdsByUserIdAsync(string userId);
+        Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId);
+        Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId);
+        Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId);
+        Task<int> AddWantToReadBookAsync(int bookId, string userId);
+        Task<int> AddCurrentlyReadingBookAsync(int bookId, string userId);
+        Task<int> AddReadBookAsync(int bookId, string userId);
     }
 }

@@ -1,0 +1,33 @@
+﻿@model AllBookCollectionsModel
+
+@{
+    ViewBag.Title = "Моите Книги";
+}
+<h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
+<hr />
+
+<div class="col mb-4">
+    @if (!Model.booksUserCurrentlyReading.Any() || Model.booksUserCurrentlyReading == null)
+    {
+        <h2 class="text-center">Все още не сте добавили книги, които искате да прочетете.</h2>
+    }
+    else
+    {
+        <h2 class="text-center mt-4 mb-3">Книги, които искам да прочета:</h2>
+        @foreach (var book in Model.booksUserCurrentlyReading.OrderByDescending(m => m.Id).Take(3))
+        {
+            <div class="card h-100 text-center">
+                <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
+                <div class="card-body">
+                    <h4 class="card-title"><strong>@book.Title</strong></h4>
+                    <p class="card-text"><strong>Автор:</strong> @book.Author</p>
+                    <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
+                </div>
+            </div>
+        }
+
+        <div class="text-center">
+            <a asp-controller="Book" asp-action="WantToRead" class="btn btn-primary">Виж Всички</a>
+        </div>
+    }
+</div>

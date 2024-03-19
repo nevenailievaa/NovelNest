@@ -156,5 +156,67 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Mine(string id)
+        {
+            var userId = User.Id();
+
+            if (userId != id)
+            {
+                return Unauthorized();
+            }
+
+            var bookCollections = new AllBookCollectionsModel()
+            {
+                booksUserWantsToRead = await bookService.AllWantToReadBooksIdsByUserIdAsync(userId),
+                booksUserCurrentlyReading = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(userId),
+                booksUserRead = await bookService.AllReadBooksIdsByUserIdAsync(userId)
+            };
+
+            return View(bookCollections);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> WantToRead(string id)
+        {
+            var userId = User.Id();
+
+            if (userId != id)
+            {
+                return Unauthorized();
+            }
+
+            var wantToReadBooks = await bookService.AllWantToReadBooksIdsByUserIdAsync(userId);
+            return View(wantToReadBooks);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CurrentlyReading(string id)
+        {
+            var userId = User.Id();
+
+            if (userId != id)
+            {
+                return Unauthorized();
+            }
+
+            var wantCurrentlyReadingBooks = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(userId);
+            return View(wantCurrentlyReadingBooks);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Read(string id)
+        {
+            var userId = User.Id();
+
+            if (userId != id)
+            {
+                return Unauthorized();
+            }
+
+            var readBooks = await bookService.AllReadBooksIdsByUserIdAsync(userId);
+            return View(readBooks);
+        }
     }
 }
