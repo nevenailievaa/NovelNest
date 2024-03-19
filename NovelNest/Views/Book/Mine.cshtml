@@ -7,27 +7,128 @@
 <hr />
 
 <div class="col mb-4">
-    @if (!Model.booksUserCurrentlyReading.Any() || Model.booksUserCurrentlyReading == null)
+    @if (!Model.booksUserWantsToRead.Any() || Model.booksUserWantsToRead == null)
     {
-        <h2 class="text-center">Все още не сте добавили книги, които искате да прочетете.</h2>
+        <h4 class="text-center">Все още не сте добавили книги, които искате да прочетете.</h4>
     }
     else
     {
         <h2 class="text-center mt-4 mb-3">Книги, които искам да прочета:</h2>
-        @foreach (var book in Model.booksUserCurrentlyReading.OrderByDescending(m => m.Id).Take(3))
-        {
-            <div class="card h-100 text-center">
-                <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
-                <div class="card-body">
-                    <h4 class="card-title"><strong>@book.Title</strong></h4>
-                    <p class="card-text"><strong>Автор:</strong> @book.Author</p>
-                    <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
+            @foreach (var book in Model.booksUserWantsToRead.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            {
+                <div class="col mb-4
+                    @if (book.Index == 3)
+                    {
+                        <text>overlay-white</text>
+                    }">
+                    <div class="card h-100 text-center">
+                        <img class="card-img-top" src="@book.Value.ImageUrl" alt="Book Image">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
+                            <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
+                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
+                        </div>
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
 
         <div class="text-center">
-            <a asp-controller="Book" asp-action="WantToRead" class="btn btn-primary">Виж Всички</a>
+            <a asp-controller="Book" asp-action="WantToRead" class="btn btn-primary btn-lg">Виж Всички</a>
         </div>
     }
 </div>
+
+<hr />
+
+<div class="col mb-4">
+    @if (!Model.booksUserCurrentlyReading.Any() || Model.booksUserCurrentlyReading == null)
+    {
+        <h4 class="text-center">Все още не сте добавили книги, които в момента четете.</h4>
+    }
+    else
+    {
+        <h2 class="text-center mt-4 mb-3">В момента чета:</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
+            @foreach (var book in Model.booksUserCurrentlyReading.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            {
+                <div class="col mb-4
+                    @if (book.Index == 3)
+                    {
+                        <text>overlay-white</text>
+                    }">
+                    <div class="card h-100 text-center">
+                        <img class="card-img-top" src="@book.Value.ImageUrl" alt="Book Image">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
+                            <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
+                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
+                        </div>
+                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center">
+            <a asp-controller="Book" asp-action="CurrentlyReading" class="btn btn-primary btn-lg">Виж Всички</a>
+        </div>
+    }
+</div>
+
+<hr />
+
+<div class="col mb-4">
+    @if (!Model.booksUserRead.Any() || Model.booksUserRead == null)
+    {
+        <h4 class="text-center">Все още не сте добавили книги, които сте прочели.</h4>
+    }
+    else
+    {
+        <h2 class="text-center mt-4 mb-3">Прочетени книги:</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
+            @foreach (var book in Model.booksUserRead.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            {
+                <div class="col mb-4
+                    @if (book.Index == 3)
+                    {
+                        <text>overlay-white</text>
+                    }">
+                    <div class="card h-100 text-center">
+                        <img class="card-img-top" src="@book.Value.ImageUrl" alt="Book Image">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
+                            <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
+                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
+                        </div>
+                         <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center">
+            <a asp-controller="Book" asp-action="Read" class="btn btn-primary btn-lg">Виж Всички</a>
+        </div>
+    }
+</div>
+
+<style>
+    .overlay-white {
+        position: relative;
+    }
+
+        .overlay-white::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white; /* Set the desired background color */
+            opacity: 0.7; /* Set the desired opacity */
+            z-index: 1;
+        }
+</style>
