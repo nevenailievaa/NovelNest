@@ -3,7 +3,7 @@
     public class AllBookCollectionsModel
     {
         public BookQueryServiceModel booksUserWantsToRead { get; set; } = null!;
-        public IEnumerable<BookServiceModel> booksUserCurrentlyReading { get; set; } = null!;
-        public IEnumerable<BookServiceModel> booksUserRead { get; set; } = null!;
+        public BookQueryServiceModel booksUserCurrentlyReading { get; set; } = null!;
+        public BookQueryServiceModel booksUserRead { get; set; } = null!;
     }
 }

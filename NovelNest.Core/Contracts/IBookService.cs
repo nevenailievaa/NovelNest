@@ -26,20 +26,34 @@
         Task<BookViewModel> DetailsAsync(int bookId);
         Task<BookDeleteViewModel> DeleteAsync(int bookId);
         Task<int> DeleteConfirmedAsync(int bookId);
-        Task<BookQueryServiceModel> AllWantToReadBooksIdsByUserIdAsync(string userId,
+        Task<BookQueryServiceModel> AllWantToReadBooksIdsByUserIdAsync(
+            string userId,
             string? genre = null,
             string? coverType = null,
             string? searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
             int booksPerPage = 4);
-        Task<IEnumerable<BookServiceModel>> AllCurrentlyReadingBooksIdsByUserIdAsync(string userId);
-        Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId);
+        Task<BookQueryServiceModel> AllCurrentlyReadingBooksIdsByUserIdAsync(
+            string userId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4);
+        Task<BookQueryServiceModel> AllReadBooksIdsByUserIdAsync(string userId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4);
         Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId);
         Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId);
-        Task<bool> BookIsNotCurrentlyReadingAsync(int bookId, string userId);
-        Task<bool> BookIsNotWantToReadAsync(int bookId, string userId);
-        Task<bool> BookIsNotReadAsync(int bookId, string userId);
+        Task<bool> BookIsCurrentlyReadingAsync(int bookId, string userId);
+        Task<bool> BookIsWantToReadAsync(int bookId, string userId);
+        Task<bool> BookIsReadAsync(int bookId, string userId);
         Task<int> AddWantToReadBookAsync(int bookId, string userId);
         Task<int> AddCurrentlyReadingBookAsync(int bookId, string userId);
         Task<int> AddReadBookAsync(int bookId, string userId);

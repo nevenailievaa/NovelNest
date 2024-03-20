@@ -1,25 +1,79 @@
-﻿@model IEnumerable<BookServiceModel>
+﻿@inject UserManager<IdentityUser> UserManager
+
+@model AllBooksQueryModel
 
 @{
-    ViewBag.Title = "Искам да Прочета";
+    ViewBag.Title = "Прочетени";
 }
-<h2 class="text-center">Книги, които искам да прочета</h2>
+
+<h2 class="text-center">Прочетени Книги</h2>
 <hr />
 
-
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
-    @foreach (var book in Model)
-    {
-        <div class="col mb-4">
-            <div class="card h-100 text-center">
-                <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
-                <div class="card-body">
-                    <h4 class="card-title"><strong>@book.Title</strong></h4>
-                    <p class="card-text"><strong>Автор:</strong> @book.Author</p>
-                    <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
-                </div>
-                <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
-            </div>
-        </div>
-    }
+<div class="text-center mb-4">
+    <a asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-primary btn-lg">Обратно Към Моите Книги</a>
 </div>
+
+<form method="get">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
+        </div>
+
+        <div class="form-group col-md-2">
+            <label asp-for="Sorting"></label>
+            <select asp-for="Sorting" class="form-control">
+                <option value="0">Най-скоро добавени</option>
+                <option value="1">Най-късно добавени</option>
+                <option value="2">Цена (Възходяща)</option>
+                <option value="3">Цена (Низходяща)</option>
+                <option value="4">Заглавие (Възходящо)</option>
+                <option value="5">Заглавие (Низходящо)</option>
+                <option value="6">Автор (Възходящ)</option>
+                <option value="7">Автор (Низходящ)</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label asp-for="Genre"></label>
+            <select asp-for="Genre" class="form-control">
+                <option value="">Всички</option>
+                @foreach (var genre in Model.Genres)
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label asp-for="CoverType"></label>
+            <select asp-for="CoverType" class="form-control">
+                <option value="">Всички</option>
+                @foreach (var coverType in Model.CoverTypes)
+                {
+                    <option value="@coverType">@coverType</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-1 d-flex align-items-end">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.Books.Any())
+{
+    <h2></h2>
+    <h2 class="text-center">Няма намерени книги!</h2>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
+        @foreach (var book in Model.Books)
+        {
+            <partial name="_BookPartial" model="@book" />
+        }
+    </div>
+    <partial name="_BookPagesPartial" model="@Model" />
+}

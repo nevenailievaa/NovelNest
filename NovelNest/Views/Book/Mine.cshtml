@@ -43,7 +43,7 @@
 <hr />
 
 <div class="col mb-4">
-    @if (!Model.booksUserCurrentlyReading.Any() || Model.booksUserCurrentlyReading == null)
+    @if (!Model.booksUserCurrentlyReading.Books.Any() || Model.booksUserCurrentlyReading == null)
     {
         <h4 class="text-center">Все още не сте добавили книги, които в момента четете.</h4>
     }
@@ -51,7 +51,7 @@
     {
         <h2 class="text-center mt-4 mb-3">В момента чета:</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
-            @foreach (var book in Model.booksUserCurrentlyReading.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            @foreach (var book in Model.booksUserCurrentlyReading.Books.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
             {
                 <div class="col mb-4
                     @if (book.Index == 3)
@@ -79,7 +79,7 @@
 <hr />
 
 <div class="col mb-4">
-    @if (!Model.booksUserRead.Any() || Model.booksUserRead == null)
+    @if (!Model.booksUserRead.Books.Any() || Model.booksUserRead == null)
     {
         <h4 class="text-center">Все още не сте добавили книги, които сте прочели.</h4>
     }
@@ -87,7 +87,7 @@
     {
         <h2 class="text-center mt-4 mb-3">Прочетени книги:</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
-            @foreach (var book in Model.booksUserRead.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            @foreach (var book in Model.booksUserRead.Books.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
             {
                 <div class="col mb-4
                     @if (book.Index == 3)

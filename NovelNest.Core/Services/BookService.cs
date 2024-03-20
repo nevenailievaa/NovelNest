@@ -317,7 +317,8 @@
             return book.Id;
         }
 
-        public async Task<BookQueryServiceModel> AllWantToReadBooksIdsByUserIdAsync(string userId,
+        public async Task<BookQueryServiceModel> AllWantToReadBooksIdsByUserIdAsync(
+            string userId,
             string? genre = null,
             string? coverType = null,
             string? searchTerm = null,
@@ -392,34 +393,156 @@
             };
         }
 
-        public async Task<IEnumerable<BookServiceModel>> AllCurrentlyReadingBooksIdsByUserIdAsync(string userId)
+        public async Task<BookQueryServiceModel> AllCurrentlyReadingBooksIdsByUserIdAsync(
+            string userId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 8)
         {
-            return await repository.AllAsReadOnly<BookUserCurrentlyReading>()
-                .Where(buwtr => buwtr.UserId == userId)
-                .Select(buwtr => new BookServiceModel()
+            var booksToShow = repository.AllAsReadOnly<BookUserCurrentlyReading>()
+                .Where(buwtr => buwtr.UserId == userId);
+
+            if (genre != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Book.Genre.Name.ToLower() == genre.ToLower());
+            }
+
+            if (coverType != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Book.CoverType.Name.ToLower() == coverType.ToLower());
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                booksToShow = booksToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Book.Title.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.Author.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.PublishingHouse.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.Genre.Name.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.CoverType.Name.ToLower())
+
+                || b.Book.Title.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.Author.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.PublishingHouse.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.Genre.Name.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.CoverType.Name.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            booksToShow = sorting switch
+            {
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.Book.Id),
+                BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
+                BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
+                BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
+                BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
+                BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
+                BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
+                _ => booksToShow.OrderByDescending(b => b.Book.Id),
+            };
+
+            var books = await booksToShow
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage)
+                .Select(bts => new BookServiceModel()
                 {
-                    Id = buwtr.BookId,
-                    Title = buwtr.Book.Title,
-                    Author = buwtr.Book.Author,
-                    Price = buwtr.Book.Price,
-                    ImageUrl = buwtr.Book.ImageUrl
+                    Id = bts.Book.Id,
+                    Title = bts.Book.Title,
+                    Author = bts.Book.Author,
+                    Price = bts.Book.Price,
+                    ImageUrl = bts.Book.ImageUrl
                 })
                 .ToListAsync();
+
+            int totalBooks = await booksToShow.CountAsync();
+
+            return new BookQueryServiceModel()
+            {
+                Books = books,
+                TotalBooksCount = totalBooks
+            };
         }
 
-        public async Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId)
+        public async Task<BookQueryServiceModel> AllReadBooksIdsByUserIdAsync(
+            string userId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 8)
         {
-            return await repository.AllAsReadOnly<BookUserRead>()
-                .Where(buwtr => buwtr.UserId == userId)
-                .Select(buwtr => new BookServiceModel()
+            var booksToShow = repository.AllAsReadOnly<BookUserRead>()
+                .Where(buwtr => buwtr.UserId == userId);
+
+            if (genre != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Book.Genre.Name.ToLower() == genre.ToLower());
+            }
+
+            if (coverType != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Book.CoverType.Name.ToLower() == coverType.ToLower());
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                booksToShow = booksToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Book.Title.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.Author.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.PublishingHouse.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.Genre.Name.ToLower())
+                || normalizedSearchTerm.Contains(b.Book.CoverType.Name.ToLower())
+
+                || b.Book.Title.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.Author.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.PublishingHouse.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.Genre.Name.ToLower().Contains(normalizedSearchTerm)
+                || b.Book.CoverType.Name.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            booksToShow = sorting switch
+            {
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.Book.Id),
+                BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
+                BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
+                BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
+                BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
+                BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
+                BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
+                _ => booksToShow.OrderByDescending(b => b.Book.Id),
+            };
+
+            var books = await booksToShow
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage)
+                .Select(bts => new BookServiceModel()
                 {
-                    Id = buwtr.BookId,
-                    Title = buwtr.Book.Title,
-                    Author = buwtr.Book.Author,
-                    Price = buwtr.Book.Price,
-                    ImageUrl = buwtr.Book.ImageUrl
+                    Id = bts.Book.Id,
+                    Title = bts.Book.Title,
+                    Author = bts.Book.Author,
+                    Price = bts.Book.Price,
+                    ImageUrl = bts.Book.ImageUrl
                 })
                 .ToListAsync();
+
+            int totalBooks = await booksToShow.CountAsync();
+
+            return new BookQueryServiceModel()
+            {
+                Books = books,
+                TotalBooksCount = totalBooks
+            };
         }
 
         public async Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId)
@@ -479,40 +602,40 @@
 
         }
 
-        public async Task<bool> BookIsNotCurrentlyReadingAsync(int bookId, string userId)
+        public async Task<bool> BookIsCurrentlyReadingAsync(int bookId, string userId)
         {
             var currentlyReadingBook = await repository.AllAsReadOnly<BookUserCurrentlyReading>()
                 .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
 
             if (currentlyReadingBook == null)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
-        public async Task<bool> BookIsNotWantToReadAsync(int bookId, string userId)
+        public async Task<bool> BookIsWantToReadAsync(int bookId, string userId)
         {
             var wantToReadBook = await repository.AllAsReadOnly<BookUserWantToRead>()
                 .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
 
             if (wantToReadBook == null)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
-        public async Task<bool> BookIsNotReadAsync(int bookId, string userId)
+        public async Task<bool> BookIsReadAsync(int bookId, string userId)
         {
             var readBook = await repository.AllAsReadOnly<BookUserRead>()
                 .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
 
             if (readBook == null)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         public async Task<int> AddWantToReadBookAsync(int bookId, string userId)

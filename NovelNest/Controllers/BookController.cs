@@ -7,6 +7,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
     using System.Security.Claims;
 
     public class BookController : BaseController
@@ -170,15 +171,13 @@
             var bookCollections = new AllBookCollectionsModel()
             {
                 booksUserWantsToRead = await bookService.AllWantToReadBooksIdsByUserIdAsync(
-                userId,
-                model.Genre,
-                model.CoverType,
-                model.SearchTerm,
-                model.Sorting,
-                model.CurrentPage,
-                model.BooksPerPage),
-                booksUserCurrentlyReading = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(userId),
-                booksUserRead = await bookService.AllReadBooksIdsByUserIdAsync(userId)
+                userId, model.Genre, model.CoverType, model.SearchTerm, model.Sorting, model.CurrentPage, model.BooksPerPage),
+
+                booksUserCurrentlyReading = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(
+                    userId, model.Genre, model.CoverType, model.SearchTerm, model.Sorting, model.CurrentPage, model.BooksPerPage),
+
+                booksUserRead = await bookService.AllReadBooksIdsByUserIdAsync(
+                    userId, model.Genre, model.CoverType, model.SearchTerm, model.Sorting, model.CurrentPage, model.BooksPerPage)
             };
 
             return View(bookCollections);
@@ -219,31 +218,47 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> CurrentlyReading(string id)
+        public async Task<IActionResult> CurrentlyReading([FromQuery] AllBooksQueryModel model)
         {
             var userId = User.Id();
 
-            if (userId != id)
-            {
-                return Unauthorized();
-            }
+            var allBooks = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(
+                userId,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
 
-            var wantCurrentlyReadingBooks = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(userId);
-            return View(wantCurrentlyReadingBooks);
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Read(string id)
+        public async Task<IActionResult> Read([FromQuery] AllBooksQueryModel model)
         {
             var userId = User.Id();
 
-            if (userId != id)
-            {
-                return Unauthorized();
-            }
+            var allBooks = await bookService.AllReadBooksIdsByUserIdAsync(
+                userId,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
 
-            var readBooks = await bookService.AllReadBooksIdsByUserIdAsync(userId);
-            return View(readBooks);
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
         }
 
         [HttpGet]
@@ -305,7 +320,7 @@
         {
             string userId = User.Id();
 
-            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotWantToReadAsync(id, userId))
+            if (!await bookService.BookExistsAsync(id) || !await bookService.BookIsWantToReadAsync(id, userId))
             {
                 return BadRequest();
             }
@@ -319,7 +334,7 @@
         {
             string userId = User.Id();
 
-            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotCurrentlyReadingAsync(id, userId))
+            if (!await bookService.BookExistsAsync(id) || !await bookService.BookIsCurrentlyReadingAsync(id, userId))
             {
                 return BadRequest();
             }
@@ -333,7 +348,7 @@
         {
             string userId = User.Id();
 
-            if (!await bookService.BookExistsAsync(id) || await bookService.BookIsNotReadAsync(id, userId))
+            if (!await bookService.BookExistsAsync(id) || !await bookService.BookIsReadAsync(id, userId))
             {
                 return BadRequest();
             }

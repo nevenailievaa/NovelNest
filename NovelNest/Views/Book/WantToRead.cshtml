@@ -1,12 +1,17 @@
-﻿@model AllBooksQueryModel
+﻿@inject UserManager<IdentityUser> UserManager
+
+@model AllBooksQueryModel
 
 @{
     ViewBag.Title = "За Четене";
 }
 
-<h2 class="text-center">Книги, които искам да прочета</h2>
+<h2 class="text-center">Искам да прочета</h2>
 <hr />
 
+<div class="text-center mb-4">
+    <a asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-primary btn-lg">Обратно Към Моите Книги</a>
+</div>
 
 <form method="get">
     <div class="row">

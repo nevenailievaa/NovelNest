@@ -1,12 +1,17 @@
-﻿@*@model AllBooksQueryModel
+﻿@inject UserManager<IdentityUser> UserManager
+
+@model AllBooksQueryModel
 
 @{
-    ViewBag.Title = "В момента чета";
+    ViewBag.Title = "В Момента Чета";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
+<div class="text-center mb-4">
+    <a asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-primary btn-lg">Обратно Към Моите Книги</a>
+</div>
 
 <form method="get">
     <div class="row">
@@ -59,6 +64,7 @@
 
 @if (!Model.Books.Any())
 {
+    <h2></h2>
     <h2 class="text-center">Няма намерени книги!</h2>
 }
 else
@@ -69,6 +75,5 @@ else
             <partial name="_BookPartial" model="@book" />
         }
     </div>
+    <partial name="_BookPagesPartial" model="@Model" />
 }
-
-<partial name="_BookPagesPartial" model="@Model" />*@
