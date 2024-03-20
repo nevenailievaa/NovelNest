@@ -14,11 +14,11 @@
 
         [MaxLength(BookReviewTitleMaxLength)]
         [Comment("The current Book Review's Title")]
-        public string? Title { get; set; } = null!;
+        public string Title { get; set; } = null!;
 
-        [MaxLength(BookReviewTitleMaxLength)]
+        [MaxLength(BookReviewDescriptionMaxLength)]
         [Comment("The current Book Review's Description")]
-        public string? Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [Required]
         [Comment("The current Book Review's Rate")]

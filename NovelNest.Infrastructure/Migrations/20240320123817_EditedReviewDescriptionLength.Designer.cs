@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240320123817_EditedReviewDescriptionLength")]
+    partial class EditedReviewDescriptionLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,15 +145,15 @@ namespace NovelNest.Infrastructure.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d001a6e8-6eb4-444d-a9bb-fbaba38acc2f",
+                            ConcurrencyStamp = "39dcc597-d053-432f-ba02-a9ee0ca240c8",
                             Email = "guest@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@gmail.com",
                             NormalizedUserName = "guest",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJz+O01eP6F+jM8gCEYA966VB1soDEoChLMXD6uJtHDQJoxGLA9SxdHr0YriuPs09g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECStrDchWt9S9Xz9O8D7FtPrO9+csBMkm+dYoJwaJq0Cq3DvUsmi51MO58N7zmCKiA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1bdfd1e1-6b91-4821-9c1e-1f26d70b84f3",
+                            SecurityStamp = "44c49be2-fe4b-4fef-8f8d-f42f8b6f434b",
                             TwoFactorEnabled = false,
                             UserName = "Guest"
                         },
@@ -159,15 +161,15 @@ namespace NovelNest.Infrastructure.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "20949a3c-9333-42c2-badc-6fae1b101162",
+                            ConcurrencyStamp = "3376c37d-4757-4b5a-897d-06c3d00d7ba3",
                             Email = "publisher@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "publisher@gmail.com",
                             NormalizedUserName = "publisher",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB3l0FT/LKW4F8pFyHXE+6bYc95zvf4eTmdOG+JU6el2eqPmVdaxZLFA6hBCMKhU1w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENMFj8rClCDtdA+9L/tTWgDm0eWHl4TLuaddxAI010nd8haqCxlRRbE6Kauo22RFnw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c597ac2b-d95a-48af-b85a-0f1bbbcbaa1f",
+                            SecurityStamp = "e17d8341-5f89-4ce3-aac3-7c48b1b247d8",
                             TwoFactorEnabled = false,
                             UserName = "Publisher"
                         });
@@ -482,7 +484,6 @@ namespace NovelNest.Infrastructure.Migrations
                         .HasComment("The current Book's Identifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(8000)
                         .HasColumnType("nvarchar(max)")
                         .HasComment("The current Book Review's Description");
@@ -492,7 +493,6 @@ namespace NovelNest.Infrastructure.Migrations
                         .HasComment("The current Book Review's Rate");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasComment("The current Book Review's Title");
