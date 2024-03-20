@@ -720,5 +720,22 @@
             await repository.SaveChangesAsync();
             return bookId;
         }
+
+        public async Task<int> AddBookReviewAsync(BookReviewAddViewModel reviewForm, string userId, int bookId)
+        {
+            var bookReview = new BookReview()
+            { 
+                UserId = userId,
+                BookId = bookId,
+                Title = reviewForm.Title,
+                Description = reviewForm.Description,
+                Rate = reviewForm.Rate
+            };
+
+            await repository.AddAsync<BookReview>(bookReview);
+            await repository.SaveChangesAsync();
+
+            return bookReview.Id;
+        }
     }
 }

@@ -60,5 +60,6 @@
         Task<int> RemoveWantToReadBookAsync(int bookId, string userId);
         Task<int> RemoveCurrentlyReadingBookAsync(int bookId, string userId);
         Task<int> RemoveReadBookAsync(int bookId, string userId);
+        Task<int> AddBookReviewAsync(BookReviewAddViewModel reviewForm, string userId, int bookId);
     }
 }

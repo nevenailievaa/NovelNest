@@ -219,7 +219,6 @@
             return View(currentBook);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> WantToRead([FromQuery] AllBooksQueryModel model)
         {
@@ -380,6 +379,38 @@
 
             await bookService.RemoveReadBookAsync(id, userId);
             return RedirectToAction(nameof(Read));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReviewConfirm(int id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddReview(int id)
+        {
+            string userId = User.Id();
+
+            var bookReviewForm = new BookReviewAddViewModel()
+            {
+                BookId = id,
+                UserId = userId
+            };
+
+            return View(bookReviewForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview(BookReviewAddViewModel bookReviewForm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(bookReviewForm);
+            }
+
+            int newBookId = await bookService.AddBookReviewAsync(bookReviewForm, bookReviewForm.UserId, bookReviewForm.BookId);
+            return RedirectToAction(nameof(All));
         }
     }
 }
