@@ -1,0 +1,14 @@
+﻿@model BookReviewServiceModel
+
+<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <div>
+         <strong>Оценка: </strong>
+         @for (int i = 1; i <= Model.Rate; i++)
+         {
+            <span style="color: gold; font-size: 15px;">⭐</span>
+         }
+         (@Model.Rate от 10)
+    </div>
+    <div><strong>Заглавие:</strong> @Model.Title</div>
+    <div><strong>Описание:</strong> @(Model.Description?.Length < 300 ? Model.Description : Model.Description.Substring(0, 300) + (Model.Description.Length > 300 ? "..." : ""))</div>
+</div>

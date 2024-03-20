@@ -9,6 +9,6 @@
         TitleAscending = 4,
         TitleDescending = 5,
         AuthorAscending = 6,
-        AuthorDescending = 7,
+        AuthorDescending = 7
     }
 }

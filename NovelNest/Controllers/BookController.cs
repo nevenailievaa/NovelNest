@@ -1,13 +1,16 @@
-﻿namespace NovelNest.Controllers
+﻿using NovelNest.Core.Enums;
+using NovelNest.Core.Models.QueryModels.Book;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+
+namespace NovelNest.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
-    using NovelNest.Infrastructure.Data.Models.BookUserActions;
     using System.Security.Claims;
 
     public class BookController : BaseController
@@ -411,6 +414,22 @@
 
             int newBookId = await bookService.AddBookReviewAsync(bookReviewForm, bookReviewForm.UserId, bookReviewForm.BookId);
             return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AllReviews(int id, [FromQuery] AllBookReviewsQueryModel model)
+        {
+            var allBooks = await bookService.AllBookReviewsAsync(
+                id,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.ReviewsPerPage);
+
+            model.TotalBookReviewsCount = allBooks.TotalReviewsCount;
+            model.BookReviews = allBooks.BookReviews;
+
+            return View(model);
         }
     }
 }

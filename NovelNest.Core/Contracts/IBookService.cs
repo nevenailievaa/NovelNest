@@ -61,5 +61,11 @@
         Task<int> RemoveCurrentlyReadingBookAsync(int bookId, string userId);
         Task<int> RemoveReadBookAsync(int bookId, string userId);
         Task<int> AddBookReviewAsync(BookReviewAddViewModel reviewForm, string userId, int bookId);
+        Task<BookReviewQueryServiceModel> AllBookReviewsAsync(
+            int bookId,
+            string? searchTerm = null,
+            BookReviewSorting sorting = BookReviewSorting.Newest,
+            int currentPage = 1,
+            int reviewsPerPage = 4);
     }
 }

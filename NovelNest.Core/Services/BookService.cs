@@ -737,5 +737,54 @@
 
             return bookReview.Id;
         }
+
+        public async Task<BookReviewQueryServiceModel> AllBookReviewsAsync(
+            int bookId,
+            string? searchTerm = null,
+            BookReviewSorting sorting = BookReviewSorting.Newest,
+            int currentPage = 1,
+            int reviewsPerPage = 4)
+        {
+            var reviewsToShow = repository.AllAsReadOnly<BookReview>()
+                .Where(br => br.BookId == bookId);
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                reviewsToShow = reviewsToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Title.ToLower()) || b.Title.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            reviewsToShow = sorting switch
+            {
+                BookReviewSorting.Oldest => reviewsToShow.OrderBy(b => b.Id),
+                BookReviewSorting.RateAscending => reviewsToShow.OrderBy(b => b.Rate).ThenByDescending(b => b.Id),
+                BookReviewSorting.RateDescending => reviewsToShow.OrderByDescending(b => b.Rate).ThenByDescending(b => b.Id),
+                _ => reviewsToShow.OrderByDescending(b => b.Id),
+            };
+
+            var reviews = await reviewsToShow
+                .Skip((currentPage - 1) * reviewsPerPage)
+                .Take(reviewsPerPage)
+                .Select(r => new BookReviewServiceModel()
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Description = r.Description,
+                    Rate = r.Rate,
+                    BookId = r.BookId,
+                    UserId = r.UserId
+                })
+                .ToListAsync();
+
+            int totalReviews = await reviewsToShow.CountAsync();
+
+            return new BookReviewQueryServiceModel()
+            {
+                BookReviews = reviews,
+                TotalReviewsCount = totalReviews
+            };
+        }
     }
 }
