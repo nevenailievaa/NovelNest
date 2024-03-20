@@ -196,6 +196,31 @@
         }
 
         [HttpGet]
+        public async Task<IActionResult> DetailsCurrentlyReading(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentBook = await bookService.DetailsAsync(id);
+            return View(currentBook);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsRead(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentBook = await bookService.DetailsAsync(id);
+            return View(currentBook);
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> WantToRead([FromQuery] AllBooksQueryModel model)
         {
             var userId = User.Id();

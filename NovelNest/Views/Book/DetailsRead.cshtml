@@ -27,10 +27,10 @@
 
     <div class="text-center mt-3">
         <a asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Обратно към Моите Книги</a>
-        <a asp-controller="Book" asp-action="WantToRead" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Обратно към "Искам да Прочета"</a>
+        <a asp-controller="Book" asp-action="Read" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Обратно към "Прочетени"</a>
         <a asp-controller="Book" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Добави в Количката</a>
+        <a asp-controller="Book" asp-action="AddWantToRead" asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Премести в "Искам да Прочета"</a>
         <a asp-controller="Book" asp-action="AddCurrentlyReading" asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Премести във "В Момента Чета"</a>
-        <a asp-controller="Book" asp-action="AddRead" asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Добави в "Премести в Прочетени"</a>
-        <a asp-controller="Book" asp-action="RemoveWantToRead" asp-route-id="@Model.Id" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни</a>
+        <a asp-controller="Book" asp-action="RemoveRead" asp-route-id="@Model.Id" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни</a>
     </div>
 </div>
