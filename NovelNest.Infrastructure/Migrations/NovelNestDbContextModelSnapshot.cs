@@ -143,15 +143,15 @@ namespace NovelNest.Infrastructure.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dc2ee1c8-08ba-4cee-ab96-f3fd31b92f26",
+                            ConcurrencyStamp = "47e76325-6e99-448e-8b9b-e9d419c36ff4",
                             Email = "guest@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@gmail.com",
                             NormalizedUserName = "guest",
-                            PasswordHash = "AQAAAAEAACcQAAAAEArgaSzYtJby/ssOFCJFmngnlhZDBGCEA5gb292HFY5jaFbTP+SZ5ad+JTyoR1L16A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPpmcOiXHjUm1zUvOStwxXCdOgOLRI2n7hmrbQm19KYYBt7p2qD1ihsdHh96P21FPA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "32623ef4-f4eb-4f49-925e-cd8ccdeaefb5",
+                            SecurityStamp = "a3b3d52c-85aa-485f-a5c9-6b87e8dd7dcf",
                             TwoFactorEnabled = false,
                             UserName = "Guest"
                         },
@@ -159,15 +159,15 @@ namespace NovelNest.Infrastructure.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "905ec126-2454-4525-a736-fcbf30b58fbb",
+                            ConcurrencyStamp = "e2ea31e1-057a-4bc2-9423-e1d60f4bedec",
                             Email = "publisher@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "publisher@gmail.com",
                             NormalizedUserName = "publisher",
-                            PasswordHash = "AQAAAAEAACcQAAAAELVymQ4edba/3BztPoPaxesLoNY+DOpT0WugTv5HV21YMp/UucSFYcDXQLHgT8lREw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDppcqFRlfP+caSHmcmTtjxRmywLLHbSToP8mYxdKpAme2Ex+cU5yODS3tYIOc5RLg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a6798ad7-317e-4b30-bc33-2ca4379a2839",
+                            SecurityStamp = "f04aa454-e819-4307-8f10-e84b3746d291",
                             TwoFactorEnabled = false,
                             UserName = "Publisher"
                         });
@@ -668,32 +668,32 @@ namespace NovelNest.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            ClosingTime = new DateTime(2024, 3, 16, 21, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClosingTime = new DateTime(2024, 2, 28, 21, 0, 0, 0, DateTimeKind.Unspecified),
                             Contact = "0876536843",
                             ImageUrl = "https://adandcity.files.wordpress.com/2015/05/926.jpg",
                             Location = "София център, бул. „Витоша“ 60, 1463 София",
                             Name = "Ciela - Витоша",
-                            OpeningTime = new DateTime(2024, 3, 16, 9, 0, 0, 0, DateTimeKind.Unspecified)
+                            OpeningTime = new DateTime(2024, 2, 28, 9, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ClosingTime = new DateTime(2024, 3, 16, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClosingTime = new DateTime(2024, 2, 28, 19, 30, 0, 0, DateTimeKind.Unspecified),
                             Contact = "0896236457",
                             ImageUrl = "https://i.helikon.bg/content/601/202304270903201726.jpg",
                             Location = "Пазарджик Център, ул. „Професор Асен Златаров“ 23, 4400 Пазарджик",
                             Name = "Helikon - Пазарджик",
-                            OpeningTime = new DateTime(2024, 3, 16, 9, 0, 0, 0, DateTimeKind.Unspecified)
+                            OpeningTime = new DateTime(2024, 2, 28, 9, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ClosingTime = new DateTime(2024, 3, 16, 22, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClosingTime = new DateTime(2024, 2, 28, 22, 0, 0, 0, DateTimeKind.Unspecified),
                             Contact = "0892414935",
                             ImageUrl = "https://www.orangecenter.bg/media/extensa_shop/image/grand-mall-varna_1.jpg",
                             Location = "м. Къро, бул. „Цариградско шосе“ 115, 1000 София",
                             Name = "Orange - The Mall",
-                            OpeningTime = new DateTime(2024, 3, 16, 10, 0, 0, 0, DateTimeKind.Unspecified)
+                            OpeningTime = new DateTime(2024, 2, 28, 10, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

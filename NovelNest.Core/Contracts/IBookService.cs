@@ -26,7 +26,13 @@
         Task<BookViewModel> DetailsAsync(int bookId);
         Task<BookDeleteViewModel> DeleteAsync(int bookId);
         Task<int> DeleteConfirmedAsync(int bookId);
-        Task<IEnumerable<BookServiceModel>> AllWantToReadBooksIdsByUserIdAsync(string userId);
+        Task<BookQueryServiceModel> AllWantToReadBooksIdsByUserIdAsync(string userId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4);
         Task<IEnumerable<BookServiceModel>> AllCurrentlyReadingBooksIdsByUserIdAsync(string userId);
         Task<IEnumerable<BookServiceModel>> AllReadBooksIdsByUserIdAsync(string userId);
         Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId);

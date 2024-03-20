@@ -7,7 +7,7 @@
 <hr />
 
 <div class="col mb-4">
-    @if (!Model.booksUserWantsToRead.Any() || Model.booksUserWantsToRead == null)
+    @if (!Model.booksUserWantsToRead.Books.Any() || Model.booksUserWantsToRead == null)
     {
         <h4 class="text-center">Все още не сте добавили книги, които искате да прочетете.</h4>
     }
@@ -15,7 +15,7 @@
     {
         <h2 class="text-center mt-4 mb-3">Книги, които искам да прочета:</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
-            @foreach (var book in Model.booksUserWantsToRead.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            @foreach (var book in Model.booksUserWantsToRead.Books.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
             {
                 <div class="col mb-4
                     @if (book.Index == 3)
@@ -27,9 +27,8 @@
                         <div class="card-body">
                             <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
                             <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
-                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
                         </div>
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                        <a asp-controller="Book" asp-action="DetailsWantToRead" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
                     </div>
                 </div>
             }
@@ -64,9 +63,8 @@
                         <div class="card-body">
                             <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
                             <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
-                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
                         </div>
-                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                        <a asp-controller="Book" asp-action="DetailsCurrentlyReading" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
                     </div>
                 </div>
             }
@@ -101,9 +99,8 @@
                         <div class="card-body">
                             <h4 class="card-title"><strong>@book.Value.Title</strong></h4>
                             <p class="card-text"><strong>Автор:</strong> @book.Value.Author</p>
-                            <p class="card-text"><strong>Цена:</strong> @book.Value.Price лв.</p>
                         </div>
-                         <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                         <a asp-controller="Book" asp-action="DetailsRead" asp-route-id="@book.Value.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
                     </div>
                 </div>
             }

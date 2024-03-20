@@ -1,4 +1,8 @@
-﻿<ul class="navbar-nav flex-grow-1">
+﻿@using NovelNest.Components
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav flex-grow-1">
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="All">Книги</a>
     </li>
@@ -10,5 +14,8 @@
     </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="All">Събития</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)">Моите Книги</a>
     </li>
 </ul>

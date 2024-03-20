@@ -158,7 +158,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Mine(string id)
+        public async Task<IActionResult> Mine(string id, [FromQuery] AllBooksQueryModel model)
         {
             var userId = User.Id();
 
@@ -169,7 +169,14 @@
 
             var bookCollections = new AllBookCollectionsModel()
             {
-                booksUserWantsToRead = await bookService.AllWantToReadBooksIdsByUserIdAsync(userId),
+                booksUserWantsToRead = await bookService.AllWantToReadBooksIdsByUserIdAsync(
+                userId,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage),
                 booksUserCurrentlyReading = await bookService.AllCurrentlyReadingBooksIdsByUserIdAsync(userId),
                 booksUserRead = await bookService.AllReadBooksIdsByUserIdAsync(userId)
             };
@@ -178,17 +185,37 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> WantToRead(string id)
+        public async Task<IActionResult> DetailsWantToRead(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentBook = await bookService.DetailsAsync(id);
+            return View(currentBook);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> WantToRead([FromQuery] AllBooksQueryModel model)
         {
             var userId = User.Id();
 
-            if (userId != id)
-            {
-                return Unauthorized();
-            }
+            var allBooks = await bookService.AllWantToReadBooksIdsByUserIdAsync(
+                userId,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
 
-            var wantToReadBooks = await bookService.AllWantToReadBooksIdsByUserIdAsync(userId);
-            return View(wantToReadBooks);
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
         }
 
         [HttpGet]
