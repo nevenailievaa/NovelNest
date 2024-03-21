@@ -5,56 +5,74 @@
     ViewBag.Title = "Всички Ревюта";
 }
 
-<div class="text-center mb-4">
-    <a asp-controller="Book" asp-action="AddReview" class="btn btn-primary btn-lg">Добави Ревю</a>
-</div>
+@{
+    var review = Model.BookReviews.FirstOrDefault(r => r.UserId == UserManager.GetUserId(User));
+}
 
-<form method="get">
-        <div class="row justify-content-center">
-        <div class="form-group col-md-3">
-            <label asp-for="SearchTerm"></label>
-            <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
-        </div>
-
-        <div class="form-group col-md-2">
-            <label asp-for="Sorting"></label>
-            <select asp-for="Sorting" class="form-control">
-                <option value="0">Най-скоро добавени</option>
-                <option value="1">Най-късно добавени</option>
-                <option value="2">Оценка (Възходяща)</option>
-                <option value="3">Оценка (Низходяща)</option>
-            </select>
-        </div>
-
-        <div class="col-md-1 d-flex align-items-end">
-            <input type="submit" value="Търси" class="btn btn-success w-100" />
-        </div>
+@if (!Model.BookReviews.Any())
+{
+    <h2 class="text-center">Няма намерени ревюта за тази книга!</h2>
+    <div class="text-center mb-4 mt-4">
+        <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Добави Ревю</a>
     </div>
+}
+else
+{
+    <h3 class="text-center">Средна оценка: @Model.BookReviews.Average(br => br.Rate)</h3>
+
+    <form method="get">
+        <div class="row justify-content-center">
+            <div class="form-group col-md-3">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
+            </div>
+
+            <div class="form-group col-md-2">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0">Най-скоро добавени</option>
+                    <option value="1">Най-късно добавени</option>
+                    <option value="2">Оценка (Възходяща)</option>
+                    <option value="3">Оценка (Низходяща)</option>
+                </select>
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
+                <input type="submit" value="Търси" class="btn btn-success w-100" />
+            </div>
+        </div>
     </form>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-1 mt-5">
-    @if (!Model.BookReviews.Any())
+    @if (review == null)
     {
-                <h2 class="text-center">Няма намерени ревюта за тази книга!</h2>
+        <h2 class="text-center">Моето Ревю</h2>
+        <div class="text-center mb-4 mt-4">
+            <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Добави Ревю</a>
+        </div>
     }
     else
     {
-        var review = Model.BookReviews.FirstOrDefault(r => r.UserId == UserManager.GetUserId(User));
+        <h2 class="text-center">Моето Ревю</h2>
+        <partial name="_BookReviewPartial" model="@review" />
 
-        @if (review != null)
+        if (Model.BookReviews.Count() == 1)
         {
-                        <h2 class="text-center">Моето Ревю</h2>
-                        <partial name="_BookReviewPartial" model="@review" />
+             <h4 class="text-center">За момента никой друг не е добавял ревю за тази книга!</h4>
         }
-        @foreach (var currentReview in Model.BookReviews)
+        else
         {
-            @if (currentReview.UserId == UserManager.GetUserId(User))
+            @foreach (var currentReview in Model.BookReviews)
             {
-                continue;
+                @if (currentReview.UserId == UserManager.GetUserId(User))
+                {
+                    continue;
+                }
+                <h2 class="text-center">@ViewBag.Title</h2>
+                <partial name="_BookReviewPartial" model="@currentReview" />
             }
-                        <h2 class="text-center">@ViewBag.Title</h2>
-                        <partial name="_BookReviewPartial" model="@currentReview" />
+            <partial name="_BookReviewPagesPartial" model="@Model" />
         }
-                <partial name="_BookReviewPagesPartial" model="@Model" />
     }
     </div>
+}

@@ -221,6 +221,10 @@
             CoverType? currentCoverType = await repository.AllAsReadOnly<CoverType>()
                 .FirstOrDefaultAsync(ct => ct.Id == currentBook.CoverTypeId);
 
+            var bookReviews = await repository.AllAsReadOnly<BookReview>()
+                .Where(br => br.BookId == bookId)
+                .ToListAsync();
+
             var currentBookDetails = new BookViewModel()
             {
                 Id = currentBook.Id,
@@ -233,7 +237,8 @@
                 YearPublished = currentBook.YearPublished,
                 CoverType = currentCoverType.Name,
                 Price = currentBook.Price,
-                ImageUrl = currentBook.ImageUrl
+                ImageUrl = currentBook.ImageUrl,
+                Reviews = bookReviews
             };
 
             return currentBookDetails;

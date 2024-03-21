@@ -412,7 +412,7 @@ namespace NovelNest.Controllers
                 return View(bookReviewForm);
             }
 
-            int newBookId = await bookService.AddBookReviewAsync(bookReviewForm, bookReviewForm.UserId, bookReviewForm.BookId);
+            int newBookReviewId = await bookService.AddBookReviewAsync(bookReviewForm, bookReviewForm.UserId, bookReviewForm.BookId);
             return RedirectToAction(nameof(All));
         }
 
@@ -428,6 +428,7 @@ namespace NovelNest.Controllers
 
             model.TotalBookReviewsCount = allBooks.TotalReviewsCount;
             model.BookReviews = allBooks.BookReviews;
+            model.BookId = id;
 
             return View(model);
         }

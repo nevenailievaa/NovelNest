@@ -1,4 +1,6 @@
-﻿namespace NovelNest.Core.Models.ViewModels.Book
+﻿using NovelNest.Infrastructure.Data.Models.Books;
+
+namespace NovelNest.Core.Models.ViewModels.Book
 {
     public class BookViewModel
     {
@@ -23,5 +25,7 @@
         public decimal Price { get; set; }
 
         public string ImageUrl { get; set; } = null!;
+
+        public List<BookReview> Reviews = new List<BookReview>();
     }
 }

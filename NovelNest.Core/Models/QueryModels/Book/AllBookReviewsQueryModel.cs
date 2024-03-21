@@ -5,6 +5,7 @@
 
     public class AllBookReviewsQueryModel
     {
+        public int BookId { get; set; }
         public int ReviewsPerPage { get; } = 8;
 
         [Display(Name = "Търсене")]
