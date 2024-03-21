@@ -72,7 +72,17 @@ else
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
         @foreach (var book in Model.Books)
         {
-            <partial name="_BookPartial" model="@book" />
+            <div class="col mb-4">
+                <div class="card h-100 text-center">
+                    <img class="card-img-top" src="@book.ImageUrl" alt="Book Image">
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>@book.Title</strong></h4>
+                        <p class="card-text"><strong>Автор:</strong> @book.Author</p>
+                        <p class="card-text"><strong>Цена:</strong> @book.Price лв.</p>
+                    </div>
+                    <a asp-controller="Book" asp-action="DetailsWantToRead" asp-route-id="@book.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+                </div>
+            </div>
         }
     </div>
     <partial name="_BookPagesPartial" model="@Model" />
