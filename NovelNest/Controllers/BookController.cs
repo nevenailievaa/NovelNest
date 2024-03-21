@@ -385,9 +385,41 @@ namespace NovelNest.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReviewConfirm(int id)
+        public async Task<IActionResult> DeleteBookReview(int id)
         {
-            return View();
+            var bookReview = await bookService.FindBookReviewAsync(id);
+
+            if (bookReview == null)
+            {
+                return BadRequest();
+            }
+            if (bookReview.UserId != User.Id())
+            {
+                return Unauthorized();
+            }
+
+            var searchedBookReview = await bookService.DeleteBookReviewAsync(id);
+
+            return View(searchedBookReview);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteBookReviewConfirmed(int id)
+        {
+            var bookReview = await bookService.FindBookReviewAsync(id);
+
+            if (bookReview == null)
+            {
+                return BadRequest();
+            }
+            if (bookReview.UserId != User.Id())
+            {
+                return Unauthorized();
+            }
+
+            var bookId = await bookService.DeleteBookReviewConfirmedAsync(id);
+
+            return RedirectToAction(nameof(AllReviews), new { bookId });
         }
 
         [HttpGet]
@@ -419,8 +451,10 @@ namespace NovelNest.Controllers
         [HttpGet]
         public async Task<IActionResult> AllReviews(int id, [FromQuery] AllBookReviewsQueryModel model)
         {
+            var book = bookService.FindBookByIdAsync(id).Result;
             var allBooks = await bookService.AllBookReviewsAsync(
                 id,
+                book.Title,
                 model.SearchTerm,
                 model.Sorting,
                 model.CurrentPage,
@@ -429,6 +463,7 @@ namespace NovelNest.Controllers
             model.TotalBookReviewsCount = allBooks.TotalReviewsCount;
             model.BookReviews = allBooks.BookReviews;
             model.BookId = id;
+            model.BookTitle = book.Title;
 
             return View(model);
         }

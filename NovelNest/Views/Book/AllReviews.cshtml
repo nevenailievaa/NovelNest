@@ -11,14 +11,24 @@
 
 @if (!Model.BookReviews.Any())
 {
-    <h2 class="text-center">Няма намерени ревюта за тази книга!</h2>
-    <div class="text-center mb-4 mt-4">
-        <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Добави Ревю</a>
+    <h2 class="text-center">Няма намерени ревюта за "@Model.BookTitle!"</h2>
+    <div class="text-center mb-2 mt-4">
+        <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-success btn-lg">Добави Ревю</a>
+    </div>
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Върни се Обратно</a>
     </div>
 }
 else
 {
-    <h3 class="text-center">Средна оценка: @Model.BookReviews.Average(br => br.Rate)</h3>
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Върни се Обратно</a>
+    </div>
+
+    <hr />
+
+    <h2 class="text-center">Всички ревюта за "@Model.BookTitle!"</h2>
+    <h3 class="text-center mb-4 mt-4">Средна оценка: @Model.BookReviews.Average(br => br.Rate)</h3>
 
     <form method="get">
         <div class="row justify-content-center">
@@ -68,7 +78,7 @@ else
                 {
                     continue;
                 }
-                <h2 class="text-center">@ViewBag.Title</h2>
+                <h2 class="text-center">Други Ревюта</h2>
                 <partial name="_BookReviewPartial" model="@currentReview" />
             }
             <partial name="_BookReviewPagesPartial" model="@Model" />

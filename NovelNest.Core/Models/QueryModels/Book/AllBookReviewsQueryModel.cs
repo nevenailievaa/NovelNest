@@ -6,6 +6,7 @@
     public class AllBookReviewsQueryModel
     {
         public int BookId { get; set; }
+        public string BookTitle { get; set; } = null!;
         public int ReviewsPerPage { get; } = 8;
 
         [Display(Name = "Търсене")]

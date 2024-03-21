@@ -1,0 +1,54 @@
+﻿@model BookReviewDeleteViewModel
+
+@{
+    ViewBag.Title = "Изтрий Ревю";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title text-danger" style="margin-top: 15px;">Сигурен ли си, че искаш да изтриеш своето ревю за тази книга?</h2>
+                    <h2 class="card-title" style="margin-top: 15px;">"@Model.BookTitle"</h2>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <form asp-action="DeleteBookReviewConfirmed" method="post" class="col-12">
+                        <input type="hidden" asp-for="ReviewId" />
+                        <a asp-action="AllReviews" asp-route-id="@Model.BookId" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Не</a>
+                        <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Да</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

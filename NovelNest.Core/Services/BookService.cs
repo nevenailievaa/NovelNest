@@ -11,6 +11,7 @@
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
 
     public class BookService : IBookService
@@ -120,6 +121,12 @@
             return await repository.AllAsReadOnly<Genre>()
                 .Select(g => g.Name)
                 .ToListAsync();
+        }
+
+        public async Task<Book> FindBookByIdAsync(int bookId)
+        {
+            return await repository.AllAsReadOnly<Book>()
+                .FirstOrDefaultAsync(r => r.Id == bookId);
         }
 
         public async Task<bool> BookExistsAsync(int bookId)
@@ -745,6 +752,7 @@
 
         public async Task<BookReviewQueryServiceModel> AllBookReviewsAsync(
             int bookId,
+            string bookTitle,
             string? searchTerm = null,
             BookReviewSorting sorting = BookReviewSorting.Newest,
             int currentPage = 1,
@@ -790,6 +798,37 @@
                 BookReviews = reviews,
                 TotalReviewsCount = totalReviews
             };
+        }
+
+        public async Task<BookReview> FindBookReviewAsync(int reviewId)
+        {
+            return await repository.AllAsReadOnly<BookReview>()
+                .FirstOrDefaultAsync(r => r.Id == reviewId);
+        }
+
+        public async Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId)
+        {
+            var review = await repository.GetById<BookReview>(reviewId);
+            var book = await repository.GetById<Book>(review.BookId);
+
+            var reviewModel = new BookReviewDeleteViewModel()
+            {
+                ReviewId = reviewId,
+                BookId = review.BookId,
+                BookTitle = book.Title
+            };
+
+            return reviewModel;
+        }
+
+        public async Task<int> DeleteBookReviewConfirmedAsync(int reviewId)
+        {
+            var review = await repository.GetById<BookReview>(reviewId);
+
+            await repository.RemoveAsync<BookReview>(review);
+            await repository.SaveChangesAsync();
+
+            return review.BookId;
         }
     }
 }

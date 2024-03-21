@@ -3,6 +3,7 @@
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Infrastructure.Data.Models.Books;
 
     public interface IBookService
     {
@@ -17,6 +18,7 @@
         Task<IEnumerable<string>> AllGenresNamesAsync();
         Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
         Task<IEnumerable<string>> AllCoverTypesNamesAsync();
+        Task<Book> FindBookByIdAsync(int bookId);
         Task<bool> BookExistsAsync(int bookId);
         Task<bool> GenreExistsAsync(int genreId);
         Task<bool> CoverTypeExistsAsync(int coverTypeId);
@@ -63,9 +65,13 @@
         Task<int> AddBookReviewAsync(BookReviewAddViewModel reviewForm, string userId, int bookId);
         Task<BookReviewQueryServiceModel> AllBookReviewsAsync(
             int bookId,
+            string bookTitle,
             string? searchTerm = null,
             BookReviewSorting sorting = BookReviewSorting.Newest,
             int currentPage = 1,
             int reviewsPerPage = 4);
+        Task<BookReview> FindBookReviewAsync(int reviewId);
+        Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId);
+        Task<int> DeleteBookReviewConfirmedAsync(int reviewId);
     }
 }
