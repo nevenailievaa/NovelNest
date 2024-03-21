@@ -6,6 +6,7 @@
 
     public class BookReviewAddViewModel
     {
+
         [StringLength(BookReviewTitleMaxLength, MinimumLength = BookReviewTitleMinLength, ErrorMessage = LengthErrorMessage)]
         public string? Title { get; set; } = null!;
 

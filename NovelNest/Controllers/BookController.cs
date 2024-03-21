@@ -404,9 +404,9 @@ namespace NovelNest.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteBookReviewConfirmed(int id)
+        public async Task<IActionResult> DeleteBookReviewConfirmed(int reviewId)
         {
-            var bookReview = await bookService.FindBookReviewAsync(id);
+            var bookReview = await bookService.FindBookReviewAsync(reviewId);
 
             if (bookReview == null)
             {
@@ -417,9 +417,9 @@ namespace NovelNest.Controllers
                 return Unauthorized();
             }
 
-            var bookId = await bookService.DeleteBookReviewConfirmedAsync(id);
+            var id = await bookService.DeleteBookReviewConfirmedAsync(reviewId);
 
-            return RedirectToAction(nameof(AllReviews), new { bookId });
+            return RedirectToAction(nameof(AllReviews), new { id });
         }
 
         [HttpGet]
@@ -445,7 +445,9 @@ namespace NovelNest.Controllers
             }
 
             int newBookReviewId = await bookService.AddBookReviewAsync(bookReviewForm, bookReviewForm.UserId, bookReviewForm.BookId);
-            return RedirectToAction(nameof(All));
+
+            int id = bookReviewForm.BookId;
+            return RedirectToAction(nameof(AllReviews), new { id });
         }
 
         [HttpGet]
