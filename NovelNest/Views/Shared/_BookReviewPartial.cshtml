@@ -18,18 +18,16 @@
     </div>
     <div><strong>Заглавие:</strong> @Model.Title</div>
     <div><strong>Описание:</strong> @(Model.Description?.Length <= 300 ? Model.Description : Model.Description.Substring(0, 300) + (Model.Description.Length > 300 ? "..." : ""))</div>
-    
 
-    
-    @if (Model.UserId == UserManager.GetUserId(User))
-    {
-        <div class="d-flex justify-content-center mt-4">
-            @if (Model.Description.Length > 300)
-            {
-                <a asp-controller="Book" asp-action="BookReviewDetails" asp-route-id="@Model.Id" class="btn btn-warning px-2 fw-bold me-2">Виж Повече</a>
-            }
+    <div class="d-flex justify-content-center mt-3">
+        @if (Model.Description.Length > 300)
+        {
+            <a asp-controller="Book" asp-action="BookReviewDetails" asp-route-id="@Model.Id" class="btn btn-warning px-2 fw-bold me-2">Виж Цялото Ревю</a>
+        }
+        @if (Model.UserId == UserManager.GetUserId(User))
+        {
             <a asp-controller="Book" asp-action="EditBookReview" asp-route-id="@Model.Id" class="btn btn-secondary px-2 fw-bold me-2">Редактирай</a>
             <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
-        </div>
-    }
+        }
+    </div>
 </div>
