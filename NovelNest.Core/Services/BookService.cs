@@ -373,14 +373,14 @@
 
             booksToShow = sorting switch
             {
-                BookSorting.Oldest => booksToShow.OrderBy(b => b.Book.Id),
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.TimeAdded),
                 BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
-                _ => booksToShow.OrderByDescending(b => b.Book.Id),
+                _ => booksToShow.OrderByDescending(b => b.TimeAdded)
             };
 
             var books = await booksToShow
@@ -449,14 +449,14 @@
 
             booksToShow = sorting switch
             {
-                BookSorting.Oldest => booksToShow.OrderBy(b => b.Book.Id),
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.TimeAdded),
                 BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
-                _ => booksToShow.OrderByDescending(b => b.Book.Id),
+                _ => booksToShow.OrderByDescending(b => b.TimeAdded)
             };
 
             var books = await booksToShow
@@ -525,14 +525,14 @@
 
             booksToShow = sorting switch
             {
-                BookSorting.Oldest => booksToShow.OrderBy(b => b.Book.Id),
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.TimeAdded),
                 BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Book.Price).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Book.Title).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
                 BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Book.Author).ThenByDescending(b => b.Book.Id),
-                _ => booksToShow.OrderByDescending(b => b.Book.Id),
+                _ => booksToShow.OrderByDescending(b => b.TimeAdded)
             };
 
             var books = await booksToShow
@@ -655,7 +655,8 @@
             var bookUser = new BookUserWantToRead()
             {
                 UserId = userId,
-                BookId = bookId
+                BookId = bookId,
+                TimeAdded = DateTime.Now
             };
 
             await repository.AddAsync<BookUserWantToRead>(bookUser);
@@ -674,7 +675,8 @@
             {
                 UserId = userId,
                 BookId = bookId,
-                CurrentPage = 1
+                CurrentPage = 1,
+                TimeAdded = DateTime.Now
             };
 
             await repository.AddAsync<BookUserCurrentlyReading>(bookUser);
@@ -692,7 +694,8 @@
             var bookUser = new BookUserRead()
             {
                 UserId = userId,
-                BookId = bookId
+                BookId = bookId,
+                TimeAdded = DateTime.Now
             };
 
             await repository.AddAsync<BookUserRead>(bookUser);

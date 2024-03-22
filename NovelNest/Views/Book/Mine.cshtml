@@ -15,7 +15,7 @@
     {
         <h2 class="text-center mt-4 mb-3">Книги, които искам да прочета:</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
-            @foreach (var book in Model.booksUserWantsToRead.Books.OrderByDescending(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
+            @foreach (var book in Model.booksUserWantsToRead.Books.OrderBy(m => m.Id).Take(4).Select((value, index) => new { Value = value, Index = index }))
             {
                 <div class="col mb-4
                     @if (book.Index == 3)

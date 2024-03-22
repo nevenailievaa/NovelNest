@@ -24,5 +24,9 @@
         [ForeignKey(nameof(UserId))]
         [Comment("The current User")]
         public IdentityUser User { get; set; } = null!;
+
+        [Required]
+        [Comment("The time when the entity was added")]
+        public DateTime TimeAdded { get; set; }
     }
 }

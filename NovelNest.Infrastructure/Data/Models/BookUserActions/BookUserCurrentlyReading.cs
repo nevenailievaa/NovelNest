@@ -26,6 +26,11 @@
         public IdentityUser User { get; set; } = null!;
 
         [Required]
+        [Comment("The Page the User is on to")]
         public int CurrentPage { get; set; }
+
+        [Required]
+        [Comment("The time when the entity was added")]
+        public DateTime TimeAdded { get; set; }
     }
 }
