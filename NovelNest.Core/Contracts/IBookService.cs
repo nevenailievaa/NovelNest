@@ -4,6 +4,7 @@
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
 
     public interface IBookService
     {
@@ -77,5 +78,8 @@
         Task<BookReviewEditViewModel> EditBookReviewGetAsync(int reviewId);
         Task<int> EditBookReviewPostAsync(BookReviewEditViewModel bookReviewForm);
         Task<BookReviewQuestionViewModel> BookReviewQuestionAsync(int bookId);
+        Task<ChangePageViewModel> ChangePageGetAsync(int bookId, string userId);
+        Task<int> ChangePagePostAsync(ChangePageViewModel pageForm);
+        Task<BookUserCurrentlyReading> FindBookCurrentlyReadingAsync(int bookId, string userId);
     }
 }

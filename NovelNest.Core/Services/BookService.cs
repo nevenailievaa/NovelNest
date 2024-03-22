@@ -893,5 +893,38 @@
 
             return bookReviewQuestion;
         }
+
+        public async Task<ChangePageViewModel> ChangePageGetAsync(int bookId, string userId)
+        {
+            var bookUserIsCurrentlyReading = FindBookCurrentlyReadingAsync(bookId, userId).Result;
+            var currentBook = await repository.GetById<Book>(bookId);
+
+            var changePageForm = new ChangePageViewModel()
+            {
+                BookId = bookUserIsCurrentlyReading.BookId,
+                UserId = bookUserIsCurrentlyReading.UserId,
+                BookPages = currentBook.Pages,
+                CurrentPage = bookUserIsCurrentlyReading.CurrentPage
+            };
+
+            return changePageForm;
+        }
+
+        public async Task<int> ChangePagePostAsync(ChangePageViewModel pageForm)
+        {
+            var bookUserIsCurrentlyReading = FindBookCurrentlyReadingAsync(pageForm.BookId, pageForm.UserId).Result;
+
+            bookUserIsCurrentlyReading.CurrentPage = pageForm.CurrentPage;
+
+            await repository.SaveChangesAsync();
+
+            return bookUserIsCurrentlyReading.BookId;
+        }
+
+        public async Task<BookUserCurrentlyReading> FindBookCurrentlyReadingAsync(int bookId, string userId)
+        {
+            return await repository.All<BookUserCurrentlyReading>()
+                .FirstOrDefaultAsync(b => b.BookId == bookId && b.UserId == userId);
+        }
     }
 }

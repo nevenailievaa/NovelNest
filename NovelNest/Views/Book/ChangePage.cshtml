@@ -1,0 +1,34 @@
+﻿@model ChangePageViewModel
+
+@{
+    ViewBag.Title = "Промени Страница";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="ChangePage" method="post">
+            <input type="hidden" asp-for="BookId" value="@Model.BookId" />
+            <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+            <input type="hidden" asp-for="BookPages" value="@Model.BookPages" />
+            <div class="mb-3">
+                <label asp-for="@Model.CurrentPage" class="form-label-add-edit"><bold>Текуща Страница (От 1 до @Model.BookPages)</bold></label>
+                <input asp-for="@Model.CurrentPage" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.CurrentPage" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                @{
+                    var id = Model.BookId;
+                }
+                <a asp-controller="Book" asp-action="DetailsCurrentlyReading" asp-route-id="@id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Обратно</a>
+                <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Редактирай" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

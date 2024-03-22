@@ -352,7 +352,6 @@
             return View(bookReviewQuestion);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> RemoveWantToRead(int id)
         {
@@ -532,6 +531,52 @@
             var id = bookReviewForm.BookId;
             await bookService.EditBookReviewPostAsync(bookReviewForm);
             return RedirectToAction(nameof(AllReviews), new { id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePage(int id)
+        {
+            string userId = User.Id();
+            var bookUserIsCurrentlyReading = await bookService.FindBookCurrentlyReadingAsync(id, userId);
+
+            if (bookUserIsCurrentlyReading == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != bookUserIsCurrentlyReading.UserId)
+            {
+                return Unauthorized();
+            }
+
+            var changePageForm = await bookService.ChangePageGetAsync(id, userId);
+            return View(changePageForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePage(ChangePageViewModel changePageForm)
+        {
+            var currentBook = bookService.FindBookByIdAsync(changePageForm.BookId).Result;
+
+            if (changePageForm == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != changePageForm.UserId)
+            {
+                return Unauthorized();
+            }
+            if (changePageForm.CurrentPage > currentBook.Pages)
+            {
+                ModelState.AddModelError("CurrentPage", "You can't be on an unexisting page!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(changePageForm);
+            }
+
+            int id = currentBook.Id;
+            await bookService.ChangePagePostAsync(changePageForm);
+            return RedirectToAction(nameof(DetailsCurrentlyReading), new { id });
         }
     }
 }
