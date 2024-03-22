@@ -575,6 +575,15 @@
             }
 
             int id = currentBook.Id;
+
+            if (changePageForm.CurrentPage == currentBook.Pages)
+            {
+                await RemoveCurrentlyReading(id);
+                await AddRead(id);
+
+                return RedirectToAction(nameof(DetailsRead), new { id });
+            }
+
             await bookService.ChangePagePostAsync(changePageForm);
             return RedirectToAction(nameof(DetailsCurrentlyReading), new { id });
         }
