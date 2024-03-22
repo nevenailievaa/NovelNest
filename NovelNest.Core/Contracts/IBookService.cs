@@ -74,6 +74,7 @@
         Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId);
         Task<int> DeleteBookReviewConfirmedAsync(int reviewId);
         Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId);
-
+        Task<BookReviewEditViewModel> EditBookReviewGetAsync(int reviewId);
+        Task<int> EditBookReviewPostAsync(BookReviewEditViewModel bookReviewForm);
     }
 }

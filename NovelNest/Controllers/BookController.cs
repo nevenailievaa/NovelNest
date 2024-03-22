@@ -6,6 +6,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Infrastructure.Data.Models.Books;
     using System.Security.Claims;
 
     public class BookController : BaseController
@@ -477,6 +478,45 @@
 
             var currentBookReview = await bookService.BookReviewDetailsAsync(id);
             return View(currentBookReview);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditBookReview(int id)
+        {
+            var bookReview = await bookService.FindBookReviewAsync(id);
+
+            if (bookReview == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != bookReview.UserId)
+            {
+                return Unauthorized();
+            }
+
+            var bookReviewForm = await bookService.EditBookReviewGetAsync(id);
+            return View(bookReviewForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditBookReview(BookReviewEditViewModel bookReviewForm)
+        {
+            if (bookReviewForm == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != bookReviewForm.UserId)
+            {
+                return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(bookReviewForm);
+            }
+
+            var id = bookReviewForm.BookId;
+            await bookService.EditBookReviewPostAsync(bookReviewForm);
+            return RedirectToAction(nameof(AllReviews), new { id });
         }
     }
 }

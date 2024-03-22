@@ -847,5 +847,35 @@
 
             return currentBookDetails;
         }
+
+        public async Task<BookReviewEditViewModel> EditBookReviewGetAsync(int reviewId)
+        {
+            var currentBookReview = await repository.GetById<BookReview>(reviewId);
+
+            var bookReviewEditForm = new BookReviewEditViewModel()
+            {
+                Id = reviewId,
+                BookId = currentBookReview.BookId,
+                UserId = currentBookReview.UserId,
+                Title = currentBookReview.Title,
+                Description = currentBookReview.Description,
+                Rate = currentBookReview.Rate
+            };
+
+            return bookReviewEditForm;
+        }
+
+        public async Task<int> EditBookReviewPostAsync(BookReviewEditViewModel bookReviewForm)
+        {
+            var currentBookReview = await repository.GetById<BookReview>(bookReviewForm.Id);
+
+            currentBookReview.Title = bookReviewForm.Title;
+            currentBookReview.Description = bookReviewForm.Description;
+            currentBookReview.Rate = bookReviewForm.Rate;
+
+            await repository.SaveChangesAsync();
+
+            return currentBookReview.Id;
+        }
     }
 }
