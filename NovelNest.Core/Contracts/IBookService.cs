@@ -73,5 +73,7 @@
         Task<BookReview> FindBookReviewAsync(int reviewId);
         Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId);
         Task<int> DeleteBookReviewConfirmedAsync(int reviewId);
+        Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId);
+
     }
 }

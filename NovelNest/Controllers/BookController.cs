@@ -1,9 +1,4 @@
-﻿using NovelNest.Core.Enums;
-using NovelNest.Core.Models.QueryModels.Book;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace NovelNest.Controllers
+﻿namespace NovelNest.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -450,6 +445,7 @@ namespace NovelNest.Controllers
             return RedirectToAction(nameof(AllReviews), new { id });
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> AllReviews(int id, [FromQuery] AllBookReviewsQueryModel model)
         {
@@ -468,6 +464,19 @@ namespace NovelNest.Controllers
             model.BookTitle = book.Title;
 
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> BookReviewDetails(int id)
+        {
+            if (await bookService.FindBookReviewAsync(id) == null)
+            {
+                return BadRequest();
+            }
+
+            var currentBookReview = await bookService.BookReviewDetailsAsync(id);
+            return View(currentBookReview);
         }
     }
 }

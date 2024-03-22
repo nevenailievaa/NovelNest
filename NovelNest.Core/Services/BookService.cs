@@ -830,5 +830,22 @@
 
             return review.BookId;
         }
+
+        public async Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId)
+        {
+            var currentBookReview = await repository.GetById<BookReview>(reviewId);
+
+            var currentBookDetails = new BookReviewDetailsViewModel()
+            {
+                Id = reviewId,
+                BookId = currentBookReview.BookId,
+                Title = currentBookReview.Title,
+                Description = currentBookReview.Description,
+                Rate = currentBookReview.Rate,
+                AuthorId = currentBookReview.UserId
+            };
+
+            return currentBookDetails;
+        }
     }
 }

@@ -8,10 +8,10 @@
     {
 
         [StringLength(BookReviewTitleMaxLength, MinimumLength = BookReviewTitleMinLength, ErrorMessage = LengthErrorMessage)]
-        public string? Title { get; set; } = null!;
+        public string Title { get; set; } = null!;
 
         [StringLength(BookReviewDescriptionMaxLength, MinimumLength = BookReviewDescriptionMinLength, ErrorMessage = LengthErrorMessage)]
-        public string? Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [Required]
         [Range(BookReviewRateMinRange, BookReviewRateMaxRange, ErrorMessage = RangeErrorMessage)]
