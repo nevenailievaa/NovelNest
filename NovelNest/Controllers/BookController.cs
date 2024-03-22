@@ -298,6 +298,7 @@
                 await bookService.RemoveBookFromAllCollectionsAsync(id, userId);
             }
 
+
             await bookService.AddWantToReadBookAsync(id, userId);
             return RedirectToAction(nameof(WantToRead));
         }
@@ -335,8 +336,22 @@
             }
 
             await bookService.AddReadBookAsync(id, userId);
-            return RedirectToAction(nameof(BookReviewQuestion), new {id});
+            return RedirectToAction(nameof(Read));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> BookReviewQuestion(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var bookReviewQuestion = await bookService.BookReviewQuestionAsync(id);
+
+            return View(bookReviewQuestion);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> RemoveWantToRead(int id)
@@ -517,19 +532,6 @@
             var id = bookReviewForm.BookId;
             await bookService.EditBookReviewPostAsync(bookReviewForm);
             return RedirectToAction(nameof(AllReviews), new { id });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> BookReviewQuestion(int id)
-        {
-            if (!await bookService.BookExistsAsync(id))
-            {
-                return BadRequest();
-            }
-
-            var bookReviewQuestion = await bookService.BookReviewQuestionAsync(id);
-
-            return View(bookReviewQuestion);
         }
     }
 }
