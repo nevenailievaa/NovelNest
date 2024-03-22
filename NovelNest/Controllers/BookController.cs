@@ -335,7 +335,7 @@
             }
 
             await bookService.AddReadBookAsync(id, userId);
-            return RedirectToAction(nameof(Read));
+            return RedirectToAction(nameof(BookReviewQuestion), new {id});
         }
 
         [HttpGet]
@@ -517,6 +517,19 @@
             var id = bookReviewForm.BookId;
             await bookService.EditBookReviewPostAsync(bookReviewForm);
             return RedirectToAction(nameof(AllReviews), new { id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BookReviewQuestion(int id)
+        {
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var bookReviewQuestion = await bookService.BookReviewQuestionAsync(id);
+
+            return View(bookReviewQuestion);
         }
     }
 }

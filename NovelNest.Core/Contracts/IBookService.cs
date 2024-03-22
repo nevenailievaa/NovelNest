@@ -76,5 +76,6 @@
         Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId);
         Task<BookReviewEditViewModel> EditBookReviewGetAsync(int reviewId);
         Task<int> EditBookReviewPostAsync(BookReviewEditViewModel bookReviewForm);
+        Task<BookReviewQuestionViewModel> BookReviewQuestionAsync(int bookId);
     }
 }
