@@ -8,6 +8,6 @@
             <p class="card-text"><strong>Автор:</strong> @Model.Author</p>
             <p class="card-text"><strong>Цена:</strong> @Model.Price лв.</p>
         </div>
-        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
+        <a asp-controller="Book" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
     </div>
 </div>

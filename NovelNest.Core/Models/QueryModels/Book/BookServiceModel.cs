@@ -1,10 +1,11 @@
 ﻿namespace NovelNest.Core.Models.QueryModels.Book
 {
+    using NovelNest.Core.Contracts;
     using System.ComponentModel.DataAnnotations;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.BookConstants;
 
-    public class BookServiceModel
+    public class BookServiceModel : IBookModel
     {
         public int Id { get; set; }
 

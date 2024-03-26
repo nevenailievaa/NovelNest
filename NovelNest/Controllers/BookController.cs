@@ -2,8 +2,10 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.VisualBasic;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
     using System.Security.Claims;
@@ -41,7 +43,7 @@
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string information)
         {
             if (!await bookService.BookExistsAsync(id))
             {
@@ -49,6 +51,12 @@
             }
 
             var currentBook = await bookService.DetailsAsync(id);
+
+            if (information != currentBook.GetInformation())
+            {
+                return BadRequest();
+            }
+
             return View(currentBook);
         }
 
@@ -124,8 +132,9 @@
                 return View(bookForm);
             }
 
+            int id = bookForm.Id;
             await bookService.EditPostAsync(bookForm);
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id, information = bookForm.GetInformation() });
         }
 
         [HttpGet]

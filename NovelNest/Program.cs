@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NovelNest.Infrastructure.Data.Models.Books;
 using NovelNest.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +37,15 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
-app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "Book Details",
+        pattern: "/Book/Details/{id}/{information}",
+        defaults: new { Controller = "Book", Action = "Details" }
+        );
+    endpoints.MapDefaultControllerRoute();
+    endpoints.MapRazorPages();
+});
 
 await app.RunAsync();

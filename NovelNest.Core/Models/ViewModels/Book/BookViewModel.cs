@@ -1,8 +1,9 @@
-﻿using NovelNest.Infrastructure.Data.Models.Books;
+﻿using NovelNest.Core.Contracts;
+using NovelNest.Infrastructure.Data.Models.Books;
 
 namespace NovelNest.Core.Models.ViewModels.Book
 {
-    public class BookViewModel
+    public class BookViewModel : IBookModel
     {
         public int Id { get; set; }
 
