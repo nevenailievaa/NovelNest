@@ -6,7 +6,6 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
-    using NovelNest.Infrastructure.Data.Models.Books;
     using System.Security.Claims;
 
     public class BookController : BaseController

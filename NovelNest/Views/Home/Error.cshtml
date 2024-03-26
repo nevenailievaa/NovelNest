@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Error";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .error-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+            .error-container img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .error-container p {
+                margin-bottom: 20px;
+                color: #555;
+            }
+
+            .error-container a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .error-container a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height: 50vh;">
+            <div class="col-10 col-md-6 error-container">
+                <img src="https://cdn3.iconfinder.com/data/icons/basicolor-signs-warnings/24/182_warning_notice_error-512.png" alt="Error Stamp" class="img-thumbnail" style="max-width: 200px;">
+                <h3 class="text-danger">Error.</h3>
+                <p class="text-danger">An error occurred while processing your request.</p>
+                <p>Return to <a asp-controller="Home" asp-action="Index">Homepage</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

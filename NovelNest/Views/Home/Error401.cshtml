@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Error";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .error-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+            .error-container img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .error-container p {
+                margin-bottom: 20px;
+                color: #555;
+            }
+
+            .error-container a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .error-container a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height: 50vh;">
+            <div class="col-10 col-md-6 error-container">
+                <img src="https://media.istockphoto.com/photos/rubber-stamp-picture-id545992942?k=6&m=545992942&s=612x612&w=0&h=XD1kddQeDrbG9DEQQxGNf6_3snw4gdFZv8GqSFta6Is=" alt="Error Stamp" class="img-thumbnail" style="max-width: 200px;">
+                <p>Oops! You are not authorized to access this page.</p>
+                <p>Return to <a asp-controller="Home" asp-action="Index">Homepage</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
