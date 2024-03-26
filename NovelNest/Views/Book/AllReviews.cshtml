@@ -1,12 +1,11 @@
-﻿@inject UserManager<IdentityUser> UserManager
-@model AllBookReviewsQueryModel
+﻿@model AllBookReviewsQueryModel
 
 @{
     ViewBag.Title = "Всички Ревюта";
 }
 
 @{
-    var review = Model.BookReviews.FirstOrDefault(r => r.UserId == UserManager.GetUserId(User));
+    var review = Model.BookReviews.FirstOrDefault(r => r.UserId == User.Id());
 }
 
 @if (!Model.BookReviews.Any())
@@ -15,16 +14,9 @@
     <div class="text-center mb-2 mt-4">
         <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-success btn-lg">Добави Ревю</a>
     </div>
-    <div class="text-center mb-2 mt-2">
-        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Върни се Обратно</a>
-    </div>
 }
 else
 {
-    <div class="text-center mb-2 mt-2">
-        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Върни се Обратно</a>
-    </div>
-
     <hr />
 
     <h2 class="text-center">Всички ревюта за "@Model.BookTitle!"</h2>
@@ -74,7 +66,7 @@ else
         {
             @foreach (var currentReview in Model.BookReviews)
             {
-                @if (currentReview.UserId == UserManager.GetUserId(User))
+                @if (currentReview.UserId == User.Id())
                 {
                     continue;
                 }

@@ -1,5 +1,4 @@
-﻿@inject UserManager<IdentityUser> UserManager
-@model BookReviewQuestionViewModel
+﻿@model BookReviewQuestionViewModel
 
 @{
     ViewBag.Title = "Добави Ревю";
@@ -16,7 +15,7 @@
                 <div class="card-footer d-flex justify-content-center">
                     <form asp-action="AddReview" method="get" class="col-12">
                         <input type="hidden" asp-for="Id" />
-                        <a asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Не</a>
+                        <a asp-action="Mine" asp-route-id="@User.Id()" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Не</a>
                         <button type="submit" class="btn btn-success mb-1 w-100 p-3 fw-bold">Да</button>
                     </form>
                 </div>

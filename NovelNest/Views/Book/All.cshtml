@@ -1,4 +1,5 @@
 ﻿@model AllBooksQueryModel
+@inject IPublisherService publisherService
 
 @{
     ViewBag.Title = "Всички книги";
@@ -7,9 +8,12 @@
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<div class="text-center mb-4">
-    <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
-</div>
+@if (await publisherService.ExistsByIdAsync(User.Id()))
+{
+    <div class="text-center mb-4">
+        <a asp-controller="Book" asp-action="Add" class="btn btn-primary btn-lg">Добави книга</a>
+    </div>
+}
 
 <form method="get">
     <div class="row">

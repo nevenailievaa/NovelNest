@@ -1,6 +1,4 @@
-﻿@inject UserManager<IdentityUser> UserManager
-
-@model AllBooksQueryModel
+﻿@model AllBooksQueryModel
 
 @{
     ViewBag.Title = "Прочетени";
@@ -10,7 +8,7 @@
 <hr />
 
 <div class="text-center mb-4">
-    <a asp-controller="Book" asp-action="Mine" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-primary btn-lg">Обратно Към Моите Книги</a>
+    <a asp-controller="Book" asp-action="Mine" asp-route-id="@User.Id()" class="btn btn-primary btn-lg">Обратно Към Моите Книги</a>
 </div>
 
 <form method="get">
