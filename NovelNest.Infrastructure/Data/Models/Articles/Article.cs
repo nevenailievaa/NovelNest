@@ -32,5 +32,7 @@
         [Required]
         [Comment("The current Article's Views Count")]
         public int ViewsCount { get; set; }
+
+        public ICollection<ArticleComment> Comments { get; set; } = new HashSet<ArticleComment>();
     }
 }

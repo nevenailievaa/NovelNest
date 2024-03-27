@@ -135,5 +135,15 @@
             public const int ArticleViewsCountMinRange = 0;
             public const int ArticleViewsCountMaxLength = int.MaxValue;
         }
+        public static class ArticleCommentConstants
+        {
+            //Title
+            public const int ArticleCommentTitleMinLength = 1;
+            public const int ArticleCommentTitleMaxLength = 50;
+
+            //Description
+            public const int ArticleCommentDescriptionMinLength = 15;
+            public const int ArticleCommentDescriptionMaxLength = 8000;
+        }
     }
 }

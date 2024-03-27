@@ -29,6 +29,7 @@
         public DbSet<Event> Events { get; set; } = null!;
         public DbSet<EventParticipant> EventsParticipants { get; set; } = null!;
         public DbSet<Article> Articles { get; set; } = null!;
+        public DbSet<ArticleComment> ArticleComments { get; set; } = null!;
         public DbSet<Cart> Carts { get; set; } = null!;
         public DbSet<BookCart> BooksCarts { get; set; } = null!;
         public DbSet<Publisher> Publishers { get; set; } = null!;

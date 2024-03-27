@@ -4,11 +4,9 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Article;
-    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
-    using NovelNest.Infrastructure.Data.Models.Books;
 
     public class ArticleService : IArticleService
     {
@@ -168,15 +166,14 @@
         {
             var currentArticle = await repository.GetById<Article>(articleId);
 
-            //var articleComments = await repository.All<ArticleComment>()
-            //.Where(ac => ac.ArticleId == articleId)
-            //    .ToListAsync();
+            var articleComments = await repository.All<ArticleComment>()
+            .Where(ac => ac.ArticleId == articleId)
+                .ToListAsync();
 
-
-            //if (articleComments != null && articleComments.Any())
-            //{
-            //    await repository.RemoveRangeAsync(articleComments);
-            //}
+            if (articleComments != null && articleComments.Any())
+            {
+                await repository.RemoveRangeAsync(articleComments);
+            }
 
             await repository.RemoveAsync(currentArticle);
             await repository.SaveChangesAsync();
