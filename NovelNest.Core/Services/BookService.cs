@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;

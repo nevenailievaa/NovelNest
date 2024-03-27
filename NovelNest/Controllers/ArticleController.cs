@@ -6,7 +6,10 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Article;
+    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class ArticleController : BaseController
@@ -140,6 +143,54 @@
             await articleService.DeleteConfirmedAsync(id);
 
             return RedirectToAction(nameof(All));
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> AllComments(int id, [FromQuery] AllArticleCommentsQueryModel model)
+        {
+            var article = articleService.FindArticleByIdAsync(id).Result;
+            var allArticleComments = await articleService.AllArticleCommentsAsync(
+                id,
+                article.Title,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.CommentsPerPage);
+
+            model.TotalArticleCommentsCount = allArticleComments.TotalArticleCommentsCount;
+            model.ArticleComments = allArticleComments.ArticleComments;
+            model.ArticleId = id;
+            model.ArticleTitle = article.Title;
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddComment(int id)
+        {
+            string userId = User.Id();
+
+            var articleCommentForm = new ArticleCommentAddViewModel()
+            {
+                ArticleId = id,
+                UserId = userId
+            };
+
+            return View(articleCommentForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(ArticleCommentAddViewModel articleCommentForm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(articleCommentForm);
+            }
+
+            int newArticleComment = await articleService.AddArticleCommentAsync(articleCommentForm, articleCommentForm.UserId, articleCommentForm.ArticleId);
+
+            return RedirectToAction(nameof(AllComments), new { id = articleCommentForm.ArticleId });
         }
     }
 }

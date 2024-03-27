@@ -7,6 +7,7 @@
     using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
+    using NovelNest.Infrastructure.Data.Models.Books;
 
     public class ArticleService : IArticleService
     {
@@ -180,5 +181,75 @@
 
             return currentArticle.Id;
         }
+
+        public async Task<ArticleCommentQueryServiceModel> AllArticleCommentsAsync(
+            int articleId,
+            string articleTitle,
+            string? searchTerm = null,
+            ArticleCommentSorting sorting = ArticleCommentSorting.Newest,
+            int currentPage = 1, int reviewsPerPage = 4)
+        {
+            var commentsToShow = repository.AllAsReadOnly<ArticleComment>()
+                .Where(ac => ac.ArticleId == articleId);
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                commentsToShow = commentsToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Title.ToLower()) || b.Title.ToLower().Contains(normalizedSearchTerm)
+                || normalizedSearchTerm.Contains(b.Description.ToLower()) || b.Description.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            commentsToShow = sorting switch
+            {
+                ArticleCommentSorting.Oldest => commentsToShow.OrderBy(b => b.Id),
+                _ => commentsToShow.OrderByDescending(b => b.Id),
+            };
+
+            var comments = await commentsToShow
+                .Skip((currentPage - 1) * reviewsPerPage)
+                .Take(reviewsPerPage)
+                .Select(c => new ArticleCommentServiceModel()
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Description = c.Description,
+                    ArticleId = c.ArticleId,
+                    UserId = c.UserId
+                })
+                .ToListAsync();
+
+            int totalComments = await commentsToShow.CountAsync();
+
+            return new ArticleCommentQueryServiceModel()
+            {
+                ArticleComments = comments,
+                TotalArticleCommentsCount = totalComments
+            };
+        }
+
+        public async Task<ArticleComment> FindArticleCommentByIdAsync(int id)
+        {
+            return await repository.All<ArticleComment>()
+                .FirstOrDefaultAsync(ac => ac.Id == id);
+        }
+
+        public async Task<int> AddArticleCommentAsync(ArticleCommentAddViewModel commentForm, string userId, int articleId)
+        {
+            var articleComment = new ArticleComment()
+            {
+                Title = commentForm.Title,
+                Description= commentForm.Description,
+                UserId = userId,
+                ArticleId = articleId
+            };
+
+            await repository.AddAsync<ArticleComment>(articleComment);
+            await repository.SaveChangesAsync();
+
+            return articleComment.Id;
+        }
+
     }
 }

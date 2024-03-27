@@ -2,10 +2,10 @@
 {
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Article;
-    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Data.Models.Articles;
+    using NovelNest.Infrastructure.Data.Models.Books;
 
     public interface IArticleService
     {
@@ -22,5 +22,15 @@
         Task<int> EditPostAsync(ArticleEditViewModel articleForm);
         Task<ArticleDeleteViewModel> DeleteAsync(int articleId);
         Task<int> DeleteConfirmedAsync(int articleId);
+        Task<ArticleCommentQueryServiceModel> AllArticleCommentsAsync(
+            int articleId,
+            string articleTitle,
+            string? searchTerm = null,
+            ArticleCommentSorting sorting = ArticleCommentSorting.Newest,
+            int currentPage = 1,
+            int articlesPerPage = 4);
+
+        Task<int> AddArticleCommentAsync(ArticleCommentAddViewModel commentForm, string userId, int articleId);
+        Task<ArticleComment> FindArticleCommentByIdAsync(int id);
     }
 }
