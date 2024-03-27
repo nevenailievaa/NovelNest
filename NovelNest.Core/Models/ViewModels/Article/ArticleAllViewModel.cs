@@ -1,4 +1,4 @@
-﻿namespace NovelNest.Core.ViewModels.Article
+﻿namespace NovelNest.Core.Models.ViewModels.Article
 {
     public class ArticleAllViewModel
     {

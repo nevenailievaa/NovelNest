@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace NovelNest.Core.ViewModels.Article
+﻿namespace NovelNest.Core.Models.ViewModels.Article
 {
     public class ArticleViewModel
     {

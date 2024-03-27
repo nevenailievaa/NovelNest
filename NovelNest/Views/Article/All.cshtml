@@ -1,8 +1,16 @@
 ﻿@model IEnumerable<ArticleAllViewModel>
+@inject IPublisherService publisherService
 
 @{
     ViewBag.Title = "Всички статии";
     CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+@if (await publisherService.ExistsByIdAsync(User.Id()))
+{
+    <div class="text-center mb-4">
+        <a asp-controller="Article" asp-action="Add" class="btn btn-primary btn-lg">Добави Статия</a>
+    </div>
 }
 
 <div class="container">

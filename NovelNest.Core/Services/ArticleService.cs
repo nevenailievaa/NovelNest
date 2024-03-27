@@ -2,10 +2,9 @@
 {
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
-    using NovelNest.Core.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
-    using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
 
     public class ArticleService : IArticleService
     {
@@ -57,6 +56,29 @@
             };
 
             return currentArticleDetails;
+        }
+
+        public async Task<Article> FindArticleByIdAsync(int articleId)
+        {
+            return await repository.AllAsReadOnly<Article>()
+                .FirstOrDefaultAsync(a => a.Id == articleId);
+        }
+
+        public async Task<int> AddAsync(ArticleAddViewModel articleForm)
+        {
+            Article article = new Article()
+            {
+                Title = articleForm.Title,
+                Content = articleForm.Content,
+                ImageUrl = articleForm.ImageUrl,
+                DatePublished = DateTime.Now,
+                ViewsCount = 0
+            };
+
+            await repository.AddAsync(article);
+            await repository.SaveChangesAsync();
+
+            return article.Id;
         }
     }
 }

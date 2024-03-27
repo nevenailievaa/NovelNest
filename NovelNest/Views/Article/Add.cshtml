@@ -1,0 +1,38 @@
+﻿@model ArticleAddViewModel
+
+@{
+    ViewBag.Title = "Добави Статия";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="Add" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.Title" class="form-label-add-edit"><bold>Заглавие</bold></label>
+                <input asp-for="@Model.Title" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Content" class="form-label-add-edit"><bold>Съдържание</bold></label>
+                <input asp-for="@Model.Content" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Content" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.ImageUrl" class="form-label-add-edit"><bold>Снимка (Линк)</bold></label>
+                <input asp-for="@Model.ImageUrl" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Добави" />
+                <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
