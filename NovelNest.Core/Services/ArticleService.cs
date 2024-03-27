@@ -7,6 +7,9 @@
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
+    using System.Net;
 
     public class ArticleService : IArticleService
     {
@@ -104,6 +107,41 @@
             currentArticle.Content = articleForm.Content;
             currentArticle.ImageUrl = articleForm.ImageUrl;
 
+            await repository.SaveChangesAsync();
+
+            return currentArticle.Id;
+        }
+
+        public async Task<ArticleDeleteViewModel> DeleteAsync(int articleId)
+        {
+            var currentArticle = await repository.GetById<Article>(articleId);
+
+            var deleteForm = new ArticleDeleteViewModel()
+            {
+                Id = articleId,
+                Title = currentArticle.Title,
+                ImageUrl = currentArticle.ImageUrl,
+                ViewsCount = currentArticle.ViewsCount
+            };
+
+            return deleteForm;
+        }
+
+        public async Task<int> DeleteConfirmedAsync(int articleId)
+        {
+            var currentArticle = await repository.GetById<Article>(articleId);
+
+            //var articleComments = await repository.All<ArticleComment>()
+            //.Where(ac => ac.ArticleId == articleId)
+            //    .ToListAsync();
+
+
+            //if (articleComments != null && articleComments.Any())
+            //{
+            //    await repository.RemoveRangeAsync(articleComments);
+            //}
+
+            await repository.RemoveAsync(currentArticle);
             await repository.SaveChangesAsync();
 
             return currentArticle.Id;

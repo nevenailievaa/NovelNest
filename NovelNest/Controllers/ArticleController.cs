@@ -99,5 +99,33 @@
             await articleService.EditPostAsync(articleForm);
             return RedirectToAction(nameof(Details), new { id });
         }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedBook = await articleService.DeleteAsync(id);
+
+            return View(searchedBook);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await articleService.DeleteConfirmedAsync(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }
