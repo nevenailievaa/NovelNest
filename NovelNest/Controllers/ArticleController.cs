@@ -4,9 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.ViewModels.Article;
-    using NovelNest.Core.Models.ViewModels.Book;
-    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class ArticleController : BaseController
@@ -22,10 +21,18 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery]AllArticlesQueryModel model)
         {
-            var allArticles = await articleService.AllAsync();
-            return View(allArticles);
+            var allArticles = await articleService.AllAsync(
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.ArticlesPerPage);
+
+            model.TotalArticlesCount = allArticles.TotalArticlesCount;
+            model.Articles = allArticles.Articles;
+
+            return View(model);
         }
 
         [HttpGet]

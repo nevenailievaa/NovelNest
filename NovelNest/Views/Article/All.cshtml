@@ -1,10 +1,12 @@
-﻿@model IEnumerable<ArticleAllViewModel>
+﻿@model AllArticlesQueryModel
 @inject IPublisherService publisherService
 
 @{
     ViewBag.Title = "Всички статии";
-    CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
 }
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
 
 @if (await publisherService.ExistsByIdAsync(User.Id()))
 {
@@ -13,28 +15,43 @@
     </div>
 }
 
-<div class="container">
-    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-    <hr />
-
-    <div class="row justify-content-center">
-        @foreach (var article in Model)
-        {
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card h-100 text-center">
-                    <img class="card-img-top" src="@article.ImageUrl" alt="Article Image">
-                    <div class="card-body">
-                        <h4 class="card-title"><strong>@article.Title</strong></h4>
-                        <p class="card-text"><strong>Публикувана:</strong> @article.DatePublished.ToString("dd/MM/yyyy")</p>
-                        <p class="card-text"><strong>Прочитания:</strong> @article.ViewsCount</p>
-                    </div>
-                    <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Прочети повече</a>
-                </div>
+<form method="get">
+    <div class="row justify-content-center align-items-end">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
             </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0">Най-скоро добавени</option>
+                    <option value="1">Най-късно добавени</option>
+                    <option value="2">Най-големи</option>
+                    <option value="3">Най-малки</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.Articles.Any())
+{
+    <h2 class="text-center">Няма намерени статии!</h2>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-5">
+        @foreach (var article in Model.Articles)
+        {
+            <partial name="_ArticlePartial" model="@article" />
         }
     </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 }
+
+<partial name="_ArticlePagesPartial" model="@Model" />

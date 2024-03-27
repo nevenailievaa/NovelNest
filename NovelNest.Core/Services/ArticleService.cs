@@ -2,14 +2,13 @@
 {
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.QueryModels.Article;
+    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Article;
-    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Books;
-    using NovelNest.Infrastructure.Data.Models.BookUserActions;
-    using NovelNest.Infrastructure.Data.Models.Mappings;
-    using System.Net;
 
     public class ArticleService : IArticleService
     {
@@ -20,19 +19,57 @@
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<ArticleAllViewModel>> AllAsync()
+        public async Task<ArticleQueryServiceModel> AllAsync(
+            string? searchTerm = null,
+            ArticleSorting sorting = ArticleSorting.Newest,
+            int currentPage = 1,
+            int articlesPerPage = 8)
         {
-            return await repository.AllAsReadOnly<Article>()
-                .OrderByDescending(a => a.DatePublished)
-                .Select(a => new ArticleAllViewModel()
+            var articlesToShow = repository.AllAsReadOnly<Article>();
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                articlesToShow = articlesToShow
+                .Where(a => normalizedSearchTerm.Contains(a.Title.ToLower())
+                || normalizedSearchTerm.Contains(a.Content.ToLower())
+                || normalizedSearchTerm.Contains(a.DatePublished.ToString().ToLower())
+                || normalizedSearchTerm.Contains(a.ViewsCount.ToString().ToLower())
+
+                || a.Title.ToLower().Contains(normalizedSearchTerm)
+                || a.Content.ToLower().Contains(normalizedSearchTerm)
+                || a.DatePublished.ToString().ToLower().Contains(normalizedSearchTerm));
+            }
+
+            articlesToShow = sorting switch
+            {
+                ArticleSorting.Oldest => articlesToShow.OrderBy(a => a.Id),
+                ArticleSorting.Shortest => articlesToShow.OrderBy(a => a.Content.Length).ThenByDescending(a => a.Id),
+                ArticleSorting.Longest => articlesToShow.OrderByDescending(a => a.Content.Length).ThenByDescending(a => a.Id),
+                _ => articlesToShow.OrderByDescending(a => a.Id)
+            };
+
+            var articles = await articlesToShow
+                .Skip((currentPage - 1) * articlesPerPage)
+                .Take(articlesPerPage)
+                .Select(a => new ArticleServiceModel()
                 {
                     Id = a.Id,
                     Title = a.Title,
-                    DatePublished = a.DatePublished,
-                    ImageUrl = a.ImageUrl,
                     ViewsCount = a.ViewsCount,
+                    DatePublished = a.DatePublished,
+                    ImageUrl = a.ImageUrl
                 })
                 .ToListAsync();
+
+            int totalArticles = await articlesToShow.CountAsync();
+
+            return new ArticleQueryServiceModel()
+            {
+                Articles = articles,
+                TotalArticlesCount = totalArticles
+            };
         }
 
         public async Task<bool> ArticleExistsAsync(int articleId)
