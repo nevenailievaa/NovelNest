@@ -3,8 +3,10 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
+    using NovelNest.Infrastructure.Data.Models.Books;
 
     public class ArticleService : IArticleService
     {
@@ -38,8 +40,7 @@
 
         public async Task<ArticleViewModel> DetailsAsync(int articleId)
         {
-            Article? currentArticle = await repository.All<Article>()
-                .FirstOrDefaultAsync(a => a.Id == articleId);
+            Article? currentArticle = await repository.GetById<Article>(articleId);
 
             currentArticle.ViewsCount++;
 
@@ -60,8 +61,7 @@
 
         public async Task<Article> FindArticleByIdAsync(int articleId)
         {
-            return await repository.AllAsReadOnly<Article>()
-                .FirstOrDefaultAsync(a => a.Id == articleId);
+            return await repository.GetById<Article>(articleId);
         }
 
         public async Task<int> AddAsync(ArticleAddViewModel articleForm)
@@ -79,6 +79,34 @@
             await repository.SaveChangesAsync();
 
             return article.Id;
+        }
+
+        public async Task<ArticleEditViewModel> EditGetAsync(int articleId)
+        {
+            var currentArticle = await repository.GetById<Article>(articleId);
+
+            var articleForm = new ArticleEditViewModel()
+            {
+                Id = articleId,
+                Title = currentArticle.Title,
+                Content = currentArticle.Content,
+                ImageUrl = currentArticle.ImageUrl
+            };
+
+            return articleForm;
+        }
+
+        public async Task<int> EditPostAsync(ArticleEditViewModel articleForm)
+        {
+            var currentArticle = await repository.GetById<Article>(articleForm.Id);
+
+            currentArticle.Title = articleForm.Title;
+            currentArticle.Content = articleForm.Content;
+            currentArticle.ImageUrl = articleForm.ImageUrl;
+
+            await repository.SaveChangesAsync();
+
+            return currentArticle.Id;
         }
     }
 }

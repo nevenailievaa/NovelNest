@@ -5,6 +5,8 @@
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class ArticleController : BaseController
@@ -64,6 +66,38 @@
 
             await articleService.AddAsync(articleForm);
             return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var articleForm = await articleService.EditGetAsync(id);
+            return View(articleForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(ArticleEditViewModel articleForm)
+        {
+            if (articleForm == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(articleForm);
+            }
+
+            int id = articleForm.Id;
+            await articleService.EditPostAsync(articleForm);
+            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }
