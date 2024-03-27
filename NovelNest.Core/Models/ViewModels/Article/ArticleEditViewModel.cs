@@ -1,10 +1,11 @@
 ﻿namespace NovelNest.Core.Models.ViewModels.Article
 {
+    using NovelNest.Core.Contracts;
     using System.ComponentModel.DataAnnotations;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
 
-    public class ArticleEditViewModel
+    public class ArticleEditViewModel : IArticleModel
     {
         public int Id { get; set; }
 

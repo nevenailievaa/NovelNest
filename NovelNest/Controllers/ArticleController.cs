@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.ViewModels.Article;
     using System.Security.Claims;
@@ -37,7 +38,7 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string information)
         {
             if (!await articleService.ArticleExistsAsync(id))
             {
@@ -45,6 +46,12 @@
             }
 
             var currentArticle = await articleService.DetailsAsync(id);
+
+            if (information != currentArticle.GetArticleInformation())
+            {
+                return BadRequest();
+            }
+
             return View(currentArticle);
         }
 
@@ -104,7 +111,7 @@
 
             int id = articleForm.Id;
             await articleService.EditPostAsync(articleForm);
-            return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Details), new { id, information = articleForm.GetArticleInformation() });
         }
 
         [HttpGet]

@@ -1,10 +1,11 @@
 ﻿namespace NovelNest.Core.Models.ViewModels.Article
 {
+    using NovelNest.Core.Contracts;
     using System.ComponentModel.DataAnnotations;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
 
-    public class ArticleAddViewModel
+    public class ArticleAddViewModel : IArticleModel
     {
         [Required]
         [StringLength(ArticleTitleMaxLength, MinimumLength = ArticleTitleMinLength, ErrorMessage = LengthErrorMessage)]

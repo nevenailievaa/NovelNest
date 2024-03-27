@@ -1,10 +1,11 @@
 ﻿namespace NovelNest.Core.Models.QueryModels.Article
 {
+    using NovelNest.Core.Contracts;
     using System.ComponentModel.DataAnnotations;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
 
-    public class ArticleServiceModel
+    public class ArticleServiceModel : IArticleModel
     {
         public int Id { get; set; }
 

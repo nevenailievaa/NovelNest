@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.VisualBasic;
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;

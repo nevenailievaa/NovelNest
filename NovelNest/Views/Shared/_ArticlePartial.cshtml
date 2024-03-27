@@ -12,6 +12,6 @@
             <p class="card-text"><strong>Публикувана:</strong> @Model.DatePublished.ToString("dd/MM/yyyy")</p>
             <p class="card-text"><strong>Прочитания:</strong> @Model.ViewsCount</p>
         </div>
-        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Прочети повече</a>
+        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetArticleInformation()" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Прочети повече</a>
     </div>
 </div>

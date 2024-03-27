@@ -1,6 +1,8 @@
-﻿namespace NovelNest.Core.Models.ViewModels.Article
+﻿using NovelNest.Core.Contracts;
+
+namespace NovelNest.Core.Models.ViewModels.Article
 {
-    public class ArticleViewModel
+    public class ArticleViewModel : IArticleModel
     {
         public int Id { get; set; }
 
