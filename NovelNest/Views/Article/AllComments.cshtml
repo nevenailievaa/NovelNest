@@ -15,9 +15,16 @@
     <div class="text-center mb-2 mt-4">
         <a asp-controller="Article" asp-action="AddComment" asp-route-id="@Model.ArticleId" class="btn btn-success btn-lg">Добави Коментар</a>
     </div>
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.ArticleId" asp-route-information="@Model.ArticleInfo" class="btn btn-warning btn-lg">Върни се към Статията</a>
+    </div>
 }
 else
 {
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.ArticleId" asp-route-information="@Model.ArticleInfo" class="btn btn-warning btn-lg">Върни се към Статията</a>
+    </div>
+
     <hr />
 
     <h2 class="text-center">Всички Коментари за</h2>

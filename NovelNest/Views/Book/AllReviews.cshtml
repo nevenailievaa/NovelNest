@@ -14,9 +14,15 @@
     <div class="text-center mb-2 mt-4">
         <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-success btn-lg">Добави Ревю</a>
     </div>
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" asp-route-information="@Model.BookInfo" class="btn btn-warning btn-lg">Върни се към Книгата</a>
+    </div>
 }
 else
 {
+    <div class="text-center mb-2 mt-2">
+        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId" asp-route-information="@Model.BookInfo" class="btn btn-warning btn-lg">Върни се към Книгата</a>
+    </div>
     <hr />
 
     <h2 class="text-center">Всички ревюта за "@Model.BookTitle!"</h2>

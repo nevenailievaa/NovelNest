@@ -150,6 +150,8 @@
         public async Task<IActionResult> AllComments(int id, [FromQuery] AllArticleCommentsQueryModel model)
         {
             var article = articleService.FindArticleByIdAsync(id).Result;
+            var articleInfo = await articleService.DetailsAsync(id);
+
             var allArticleComments = await articleService.AllArticleCommentsAsync(
                 id,
                 article.Title,
@@ -162,6 +164,7 @@
             model.ArticleComments = allArticleComments.ArticleComments;
             model.ArticleId = id;
             model.ArticleTitle = article.Title;
+            model.ArticleInfo = articleInfo.GetArticleInformation();
 
             return View(model);
         }

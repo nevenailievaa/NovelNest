@@ -6,6 +6,7 @@ namespace NovelNest.Core.Models.QueryModels.Article
     public class AllArticleCommentsQueryModel
     {
         public int ArticleId { get; set; }
+        public string ArticleInfo { get; set; } = null!;
         public string ArticleTitle { get; set; } = null!;
         public int CommentsPerPage { get; } = 8;
 

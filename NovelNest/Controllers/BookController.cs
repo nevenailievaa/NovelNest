@@ -343,7 +343,7 @@
             }
 
             await bookService.AddReadBookAsync(id, userId);
-            return RedirectToAction(nameof(Read));
+            return RedirectToAction(nameof(BookReviewQuestion), new { id });
         }
 
         [HttpGet]
@@ -472,6 +472,8 @@
         public async Task<IActionResult> AllReviews(int id, [FromQuery] AllBookReviewsQueryModel model)
         {
             var book = bookService.FindBookByIdAsync(id).Result;
+            var currentBookInfo = await bookService.DetailsAsync(id);
+
             var allBooks = await bookService.AllBookReviewsAsync(
                 id,
                 book.Title,
@@ -484,6 +486,7 @@
             model.BookReviews = allBooks.BookReviews;
             model.BookId = id;
             model.BookTitle = book.Title;
+            model.BookInfo = currentBookInfo.GetInformation();
 
             return View(model);
         }
