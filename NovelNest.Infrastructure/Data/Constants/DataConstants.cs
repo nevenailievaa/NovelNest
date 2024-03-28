@@ -143,7 +143,7 @@
 
             //Description
             public const int ArticleCommentDescriptionMinLength = 15;
-            public const int ArticleCommentDescriptionMaxLength = 8000;
+            public const int ArticleCommentDescriptionMaxLength = 2000;
         }
     }
 }
