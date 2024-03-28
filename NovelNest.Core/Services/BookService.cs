@@ -8,6 +8,7 @@
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Collections.Generic;
@@ -301,30 +302,54 @@
 
             if (bookBookStores != null && bookBookStores.Any())
             {
-                await repository.RemoveRangeAsync(bookBookStores);
+                await repository.RemoveRangeAsync<BookBookStore>(bookBookStores);
+                //for (int i = 0; i < bookBookStores.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookStore>(bookBookStores[i].BookStoreId);
+                //}
             }
             if (bookCarts != null && bookCarts.Any())
             {
-                await repository.RemoveRangeAsync(bookCarts);
+                await repository.RemoveRangeAsync<BookCart>(bookCarts);
+                //for (int i = 0; i < bookCarts.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookCart>(bookCarts[i]);
+                //}
             }
             if (bookWantToReads != null && bookWantToReads.Any())
             {
-                await repository.RemoveRangeAsync(bookWantToReads);
+                await repository.RemoveRangeAsync<BookUserWantToRead>(bookWantToReads);
+                //for (int i = 0; i < bookWantToReads.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookUserWantToRead>(bookWantToReads[i]);
+                //}
             }
             if (bookCurrentlyReadings != null && bookCurrentlyReadings.Any())
             {
-                await repository.RemoveRangeAsync(bookCurrentlyReadings);
+                await repository.RemoveRangeAsync<BookUserCurrentlyReading>(bookCurrentlyReadings);
+                //for (int i = 0; i < bookCurrentlyReadings.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookUserCurrentlyReading>(bookCurrentlyReadings[i]);
+                //}
             }
             if (bookReads != null && bookReads.Any())
             {
-                await repository.RemoveRangeAsync(bookReads);
+                await repository.RemoveRangeAsync<BookUserRead>(bookReads);
+                //for (int i = 0; i < bookReads.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookUserRead>(bookReads[i]);
+                //}
             }
             if (bookReviews != null && bookReviews.Any())
             {
-                await repository.RemoveRangeAsync(bookReviews);
+                await repository.RemoveRangeAsync<BookReview>(bookReviews);
+                //for (int i = 0; i < bookReviews.Count; i++)
+                //{
+                //    await repository.RemoveAsync<BookReview>(bookReviews[i].Id);
+                //}
             }
 
-            await repository.RemoveAsync(book);
+            await repository.RemoveAsync<Book>(book);
             await repository.SaveChangesAsync();
 
             return book.Id;
@@ -600,15 +625,15 @@
 
             if (wantToReadBook != null)
             {
-                await repository.RemoveAsync(wantToReadBook);
+                await repository.RemoveAsync<BookUserWantToRead>(wantToReadBook);
             }
             else if (currentlyReadingBook != null)
             {
-                await repository.RemoveAsync(currentlyReadingBook);
+                await repository.RemoveAsync<BookUserCurrentlyReading>(currentlyReadingBook);
             }
             else if (readBook != null)
             {
-                await repository.RemoveAsync(readBook);
+                await repository.RemoveAsync<BookUserRead>(readBook);
             }
 
             return await repository.SaveChangesAsync();
@@ -710,7 +735,7 @@
                 .Where(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId)
                 .FirstOrDefault();
 
-            await repository.RemoveAsync(currentUserBook);
+            await repository.RemoveAsync<BookUserWantToRead>(currentUserBook);
             await repository.SaveChangesAsync();
             return bookId;
         }
@@ -721,7 +746,7 @@
                 .Where(bucr => bucr.UserId == userId && bucr.BookId == bookId)
                 .FirstOrDefault();
 
-            await repository.RemoveAsync(currentUserBook);
+            await repository.RemoveAsync<BookUserCurrentlyReading>(currentUserBook);
             await repository.SaveChangesAsync();
             return bookId;
         }
@@ -732,7 +757,7 @@
                 .Where(bur => bur.UserId == userId && bur.BookId == bookId)
                 .FirstOrDefault();
 
-            await repository.RemoveAsync(currentUserBook);
+            await repository.RemoveAsync<BookUserRead>(currentUserBook);
             await repository.SaveChangesAsync();
             return bookId;
         }
@@ -812,8 +837,8 @@
 
         public async Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId)
         {
-            var review = await repository.GetById<BookReview>(reviewId);
-            var book = await repository.GetById<Book>(review.BookId);
+            var review = await repository.GetByIdAsync<BookReview>(reviewId);
+            var book = await repository.GetByIdAsync<Book>(review.BookId);
 
             var reviewModel = new BookReviewDeleteViewModel()
             {
@@ -827,7 +852,7 @@
 
         public async Task<int> DeleteBookReviewConfirmedAsync(int reviewId)
         {
-            var review = await repository.GetById<BookReview>(reviewId);
+            var review = await repository.GetByIdAsync<BookReview>(reviewId);
 
             await repository.RemoveAsync<BookReview>(review);
             await repository.SaveChangesAsync();
@@ -837,7 +862,7 @@
 
         public async Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId)
         {
-            var currentBookReview = await repository.GetById<BookReview>(reviewId);
+            var currentBookReview = await repository.GetByIdAsync<BookReview>(reviewId);
 
             var currentBookDetails = new BookReviewDetailsViewModel()
             {
@@ -854,7 +879,7 @@
 
         public async Task<BookReviewEditViewModel> EditBookReviewGetAsync(int reviewId)
         {
-            var currentBookReview = await repository.GetById<BookReview>(reviewId);
+            var currentBookReview = await repository.GetByIdAsync<BookReview>(reviewId);
 
             var bookReviewEditForm = new BookReviewEditViewModel()
             {
@@ -871,7 +896,7 @@
 
         public async Task<int> EditBookReviewPostAsync(BookReviewEditViewModel bookReviewForm)
         {
-            var currentBookReview = await repository.GetById<BookReview>(bookReviewForm.Id);
+            var currentBookReview = await repository.GetByIdAsync<BookReview>(bookReviewForm.Id);
 
             currentBookReview.Title = bookReviewForm.Title;
             currentBookReview.Description = bookReviewForm.Description;
@@ -884,7 +909,7 @@
 
         public async Task<BookReviewQuestionViewModel> BookReviewQuestionAsync(int bookId)
         {
-            var book = await repository.GetById<Book>(bookId);
+            var book = await repository.GetByIdAsync<Book>(bookId);
 
             var bookReviewQuestion = new BookReviewQuestionViewModel()
             {
@@ -898,7 +923,7 @@
         public async Task<ChangePageViewModel> ChangePageGetAsync(int bookId, string userId)
         {
             var bookUserIsCurrentlyReading = FindBookCurrentlyReadingAsync(bookId, userId).Result;
-            var currentBook = await repository.GetById<Book>(bookId);
+            var currentBook = await repository.GetByIdAsync<Book>(bookId);
 
             var changePageForm = new ChangePageViewModel()
             {

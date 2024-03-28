@@ -34,6 +34,8 @@
         Task<ArticleComment> FindArticleCommentByIdAsync(int id);
         Task<ArticleCommentEditViewModel> EditArticleCommentGetAsync(int commentId);
         Task<int> EditArticleCommentPostAsync(ArticleCommentEditViewModel commentForm);
+        Task<ArticleCommentDeleteViewModel> DeleteArticleCommentAsync(int commentId);
+        Task<int> DeleteArticleCommentConfirmedAsync(int commentId);
 
     }
 }

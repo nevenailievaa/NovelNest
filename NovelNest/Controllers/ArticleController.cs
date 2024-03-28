@@ -230,5 +230,42 @@
             await articleService.EditArticleCommentPostAsync(commentForm);
             return RedirectToAction(nameof(AllComments), new { id = commentForm.ArticleId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var articleComment = await articleService.FindArticleCommentByIdAsync(id);
+
+            if (articleComment == null)
+            {
+                return BadRequest();
+            }
+            if (articleComment.UserId != User.Id())
+            {
+                return Unauthorized();
+            }
+
+            var searchedArticleComment = await articleService.DeleteArticleCommentAsync(id);
+
+            return View(searchedArticleComment);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCommentConfirmed(int commentId)
+        {
+            var bookReview = await articleService.FindArticleCommentByIdAsync(commentId);
+
+            if (bookReview == null)
+            {
+                return BadRequest();
+            }
+            if (bookReview.UserId != User.Id())
+            {
+                return Unauthorized();
+            }
+
+
+            return RedirectToAction(nameof(AllComments), new { id = await articleService.DeleteArticleCommentConfirmedAsync(commentId) });
+        }
     }
 }

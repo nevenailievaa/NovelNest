@@ -32,23 +32,31 @@
         {
             await DbSet<T>().AddAsync(entity);
         }
-
         public async Task RemoveAsync<T>(T entity) where T : class
         {
             DbSet<T>().Remove(entity);
         }
-
-        public async Task RemoveRangeAsync<T>(T entity) where T : class
+        public async Task RemoveRangeAsync<T>(IEnumerable<T> entities) where T : class
         {
-            DbSet<T>().RemoveRange(entity);
+            DbSet<T>().RemoveRange(entities);
         }
+
+        //public async Task RemoveByIdAsync<T>(object id) where T : class
+        //{
+        //    T? entity = await GetByIdAsync<T>(id);
+
+        //    if (entity != null)
+        //    {
+        //        DbSet<T>().Remove(entity);
+        //    }
+        //}
 
         public async Task<int> SaveChangesAsync()
         {
             return await dbContext.SaveChangesAsync();
         }
 
-        public async Task<T?> GetById<T>(object id) where T : class
+        public async Task<T?> GetByIdAsync<T>(object id) where T : class
         {
             return await DbSet<T>().FindAsync(id);
         }

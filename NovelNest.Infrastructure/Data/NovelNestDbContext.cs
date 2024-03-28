@@ -11,6 +11,7 @@
     using NovelNest.Infrastructure.Data.Models.Events;
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using NovelNest.Infrastructure.Data.Models.Roles;
+    using System.Reflection.Emit;
 
     public class NovelNestDbContext : IdentityDbContext
     {
@@ -56,7 +57,7 @@
 
             builder.Entity<Book>()
                 .Property(b => b.Price)
-                .HasPrecision(18,2);
+            .HasPrecision(18,2);
 
             //Configuration (Data Seeding)
             builder.ApplyConfiguration(new UserConfiguration());

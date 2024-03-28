@@ -5,11 +5,8 @@
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.ViewModels.Article;
-    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
-    using NovelNest.Infrastructure.Data.Models.Books;
-    using System.ComponentModel.Design;
 
     public class ArticleService : IArticleService
     {
@@ -81,7 +78,7 @@
 
         public async Task<ArticleViewModel> DetailsAsync(int articleId)
         {
-            Article? currentArticle = await repository.GetById<Article>(articleId);
+            Article? currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
             currentArticle.ViewsCount++;
 
@@ -102,7 +99,7 @@
 
         public async Task<Article> FindArticleByIdAsync(int articleId)
         {
-            return await repository.GetById<Article>(articleId);
+            return await repository.GetByIdAsync<Article>(articleId);
         }
 
         public async Task<int> AddAsync(ArticleAddViewModel articleForm)
@@ -124,7 +121,7 @@
 
         public async Task<ArticleEditViewModel> EditGetAsync(int articleId)
         {
-            var currentArticle = await repository.GetById<Article>(articleId);
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
             var articleForm = new ArticleEditViewModel()
             {
@@ -139,7 +136,7 @@
 
         public async Task<int> EditPostAsync(ArticleEditViewModel articleForm)
         {
-            var currentArticle = await repository.GetById<Article>(articleForm.Id);
+            var currentArticle = await repository.GetByIdAsync<Article>(articleForm.Id);
 
             currentArticle.Title = articleForm.Title;
             currentArticle.Content = articleForm.Content;
@@ -152,7 +149,7 @@
 
         public async Task<ArticleDeleteViewModel> DeleteAsync(int articleId)
         {
-            var currentArticle = await repository.GetById<Article>(articleId);
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
             var deleteForm = new ArticleDeleteViewModel()
             {
@@ -167,7 +164,7 @@
 
         public async Task<int> DeleteConfirmedAsync(int articleId)
         {
-            var currentArticle = await repository.GetById<Article>(articleId);
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
             var articleComments = await repository.All<ArticleComment>()
             .Where(ac => ac.ArticleId == articleId)
@@ -175,10 +172,14 @@
 
             if (articleComments != null && articleComments.Any())
             {
-                await repository.RemoveRangeAsync(articleComments);
+                await repository.RemoveRangeAsync<ArticleComment>(articleComments);
+                //for (int i = 0; i < articleComments.Count; i++)
+                //{
+                //    await repository.RemoveAsync<ArticleComment>(articleComments[i].Id);
+                //}
             }
 
-            await repository.RemoveAsync(currentArticle);
+            await repository.RemoveAsync<Article>(currentArticle);
             await repository.SaveChangesAsync();
 
             return currentArticle.Id;
@@ -255,7 +256,7 @@
 
         public async Task<ArticleCommentEditViewModel> EditArticleCommentGetAsync(int commentId)
         {
-            var currentArticleComment = repository.GetById<ArticleComment>(commentId).Result;
+            var currentArticleComment = repository.GetByIdAsync<ArticleComment>(commentId).Result;
 
             var articleCommentEditForm = new ArticleCommentEditViewModel()
             {
@@ -271,7 +272,7 @@
 
         public async Task<int> EditArticleCommentPostAsync(ArticleCommentEditViewModel commentForm)
         {
-            var currentArticleComment = repository.GetById<ArticleComment>(commentForm.Id).Result;
+            var currentArticleComment = repository.GetByIdAsync<ArticleComment>(commentForm.Id).Result;
 
             currentArticleComment.Title = commentForm.Title;
             currentArticleComment.Description = commentForm.Description;
@@ -279,6 +280,31 @@
             await repository.SaveChangesAsync();
 
             return currentArticleComment.Id;
+        }
+
+        public async Task<ArticleCommentDeleteViewModel> DeleteArticleCommentAsync(int commentId)
+        {
+            var comment = await repository.GetByIdAsync<ArticleComment>(commentId);
+            var article = await repository.GetByIdAsync<Article>(comment.ArticleId);
+
+            var commentForm = new ArticleCommentDeleteViewModel()
+            {
+                ArticleId = article.Id,
+                ArticleTitle = article.Title,
+                CommentId = comment.Id
+            };
+
+            return commentForm;
+        }
+
+        public async Task<int> DeleteArticleCommentConfirmedAsync(int commentId)
+        {
+            var comment = await repository.GetByIdAsync<ArticleComment>(commentId);
+
+            await repository.RemoveAsync<ArticleComment>(comment);
+            await repository.SaveChangesAsync();
+
+            return comment.ArticleId;
         }
     }
 }
