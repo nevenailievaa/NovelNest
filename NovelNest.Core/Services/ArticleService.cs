@@ -5,9 +5,11 @@
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using System.ComponentModel.Design;
 
     public class ArticleService : IArticleService
     {
@@ -251,5 +253,32 @@
             return articleComment.Id;
         }
 
+        public async Task<ArticleCommentEditViewModel> EditArticleCommentGetAsync(int commentId)
+        {
+            var currentArticleComment = repository.GetById<ArticleComment>(commentId).Result;
+
+            var articleCommentEditForm = new ArticleCommentEditViewModel()
+            {
+                Id = currentArticleComment.Id,
+                Title = currentArticleComment.Title,
+                Description = currentArticleComment.Description,
+                ArticleId = currentArticleComment.ArticleId,
+                UserId = currentArticleComment.UserId
+            };
+
+            return articleCommentEditForm;
+        }
+
+        public async Task<int> EditArticleCommentPostAsync(ArticleCommentEditViewModel commentForm)
+        {
+            var currentArticleComment = repository.GetById<ArticleComment>(commentForm.Id).Result;
+
+            currentArticleComment.Title = commentForm.Title;
+            currentArticleComment.Description = commentForm.Description;
+
+            await repository.SaveChangesAsync();
+
+            return currentArticleComment.Id;
+        }
     }
 }

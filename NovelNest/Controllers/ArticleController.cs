@@ -192,5 +192,43 @@
 
             return RedirectToAction(nameof(AllComments), new { id = articleCommentForm.ArticleId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditComment(int id)
+        {
+            var comment = await articleService.FindArticleCommentByIdAsync(id);
+
+            if (comment == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != comment.UserId)
+            {
+                return Unauthorized();
+            }
+
+            var commentForm = await articleService.EditArticleCommentGetAsync(id);
+            return View(commentForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditComment(ArticleCommentEditViewModel commentForm)
+        {
+            if (commentForm == null)
+            {
+                return BadRequest();
+            }
+            if (User.Id() != commentForm.UserId)
+            {
+                return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(commentForm);
+            }
+
+            await articleService.EditArticleCommentPostAsync(commentForm);
+            return RedirectToAction(nameof(AllComments), new { id = commentForm.ArticleId });
+        }
     }
 }

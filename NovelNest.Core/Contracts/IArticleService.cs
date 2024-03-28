@@ -32,5 +32,8 @@
 
         Task<int> AddArticleCommentAsync(ArticleCommentAddViewModel commentForm, string userId, int articleId);
         Task<ArticleComment> FindArticleCommentByIdAsync(int id);
+        Task<ArticleCommentEditViewModel> EditArticleCommentGetAsync(int commentId);
+        Task<int> EditArticleCommentPostAsync(ArticleCommentEditViewModel commentForm);
+
     }
 }
