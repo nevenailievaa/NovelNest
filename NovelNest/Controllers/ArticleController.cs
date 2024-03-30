@@ -6,10 +6,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Article;
-    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Article;
-    using NovelNest.Core.Models.ViewModels.Book;
-    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class ArticleController : BaseController

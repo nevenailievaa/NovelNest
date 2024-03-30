@@ -35,10 +35,15 @@
         public DateTime EndDate { get; set; }
 
         [Required]
+        [Comment("The current Event's seats")]
+        public int Seats { get; set; }
+
+        [Required]
         [MaxLength(EventImageUrlMaxLength)]
         [Comment("The current Event's Image Url")]
         public string ImageUrl { get; set; } = null!;
 
         public ICollection<EventParticipant> EventsParticipants { get; set; } = new HashSet<EventParticipant>();
+        public ICollection<EventCart> EventsCarts { get; set; } = new HashSet<EventCart>();
     }
 }

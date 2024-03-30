@@ -33,6 +33,7 @@
         public DbSet<ArticleComment> ArticleComments { get; set; } = null!;
         public DbSet<Cart> Carts { get; set; } = null!;
         public DbSet<BookCart> BooksCarts { get; set; } = null!;
+        public DbSet<EventCart> EventsCarts { get; set; } = null!;
         public DbSet<Publisher> Publishers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -54,6 +55,9 @@
 
             builder.Entity<BookCart>()
                 .HasKey(bc => new { bc.BookId, bc.CartId });
+
+            builder.Entity<EventCart>()
+                .HasKey(bc => new { bc.EventId, bc.CartId });
 
             builder.Entity<Book>()
                 .Property(b => b.Price)

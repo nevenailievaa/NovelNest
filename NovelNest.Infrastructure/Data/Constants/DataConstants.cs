@@ -113,6 +113,9 @@
             //ImageUrl
             public const int EventImageUrlMinLength = 5;
             public const int EventImageUrlMaxLength = 500;
+
+            //Seats
+            public const int EventSeatsMinRange = 1;
         }
 
         public static class ArticleConstants

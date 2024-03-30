@@ -20,5 +20,6 @@
         public IdentityUser User { get; set; } = null!;
 
         public ICollection<BookCart> BooksCarts { get; set; } = new HashSet<BookCart>();
+        public ICollection<EventCart> EventsCarts { get; set; } = new HashSet<EventCart>();
     }
 }
