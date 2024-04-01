@@ -6,9 +6,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Event;
-    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Event;
-    using NovelNest.Core.Services;
     using System.Globalization;
     using System.Security.Claims;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
@@ -77,15 +75,15 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(EventAddViewModel eventForm)
         {
-            if (!DateTime.TryParseExact(eventForm.StartDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
-            {
-                ModelState.AddModelError("StartDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            }
-            if (!DateTime.TryParseExact(eventForm.EndDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
-            {
-                ModelState.AddModelError("EndDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            }
-            if (startDate >= endDate)
+            //if (!DateTime.TryParseExact(eventForm.StartDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+            //{
+            //    ModelState.AddModelError("StartDate", "Date must be in a dd/MM/yyyy HH:mm format!");
+            //}
+            //if (!DateTime.TryParseExact(eventForm.EndDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            //{
+            //    ModelState.AddModelError("EndDate", "Date must be in a dd/MM/yyyy HH:mm format!");
+            //}
+            if (eventForm.StartDate >= eventForm.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Invalid timespan!");
                 ModelState.AddModelError("EndDate", "Invalid timespan!");
@@ -96,7 +94,7 @@
                 return View(eventForm);
             }
 
-            await eventService.AddAsync(eventForm, startDate, endDate);
+            await eventService.AddAsync(eventForm);
             return RedirectToAction(nameof(All));
         }
 
@@ -109,8 +107,8 @@
                 return BadRequest();
             }
 
-            var articleForm = await eventService.EditGetAsync(id);
-            return View(articleForm);
+            var eventForm = await eventService.EditGetAsync(id);
+            return View(eventForm);
         }
 
         [HttpPost]
@@ -121,7 +119,19 @@
             {
                 return BadRequest();
             }
-
+            //if (!DateTime.TryParseExact(eventForm.StartDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
+            //{
+            //    ModelState.AddModelError("StartDate", "Date must be in a dd/MM/yyyy HH:mm format!");
+            //}
+            //if (!DateTime.TryParseExact(eventForm.EndDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            //{
+            //    ModelState.AddModelError("EndDate", "Date must be in a dd/MM/yyyy HH:mm format!");
+            //}
+            if (eventForm.StartDate >= eventForm.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Invalid timespan!");
+                ModelState.AddModelError("EndDate", "Invalid timespan!");
+            }
             if (!ModelState.IsValid)
             {
                 return View(eventForm);
@@ -129,7 +139,7 @@
 
             int id = eventForm.Id;
             await eventService.EditPostAsync(eventForm);
-            return RedirectToAction(nameof(Details), new { id, information = eventForm.GetArticleInformation() });
+            return RedirectToAction(nameof(Details), new { id, information = eventForm.GetInformation() });
         }
     }
 }

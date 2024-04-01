@@ -173,10 +173,6 @@
             if (articleComments != null && articleComments.Any())
             {
                 await repository.RemoveRangeAsync<ArticleComment>(articleComments);
-                //for (int i = 0; i < articleComments.Count; i++)
-                //{
-                //    await repository.RemoveAsync<ArticleComment>(articleComments[i].Id);
-                //}
             }
 
             await repository.RemoveAsync<Article>(currentArticle);

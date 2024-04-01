@@ -21,9 +21,9 @@
         [StringLength(EventLocationMaxLength, MinimumLength = EventLocationMinLength, ErrorMessage = LengthErrorMessage)]
         public string Location { get; set; } = null!;
 
-        public string StartDate { get; set; } = null!;
+        public DateTime StartDate { get; set; }
 
-        public string EndDate { get; set; } = null!;
+        public DateTime EndDate { get; set; }
 
         [Required]
         [Range(EventSeatsMinRange, EventSeatsMaxRange)]

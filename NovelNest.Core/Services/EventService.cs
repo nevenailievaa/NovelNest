@@ -9,6 +9,7 @@
     using NovelNest.Infrastructure.Data.Models.Events;
     using System.Linq;
     using System.Threading.Tasks;
+    using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
 
     public class EventService : IEventService
     {
@@ -119,21 +120,59 @@
             return currentEventDetails;
         }
 
-        public async Task<int> AddAsync(EventAddViewModel eventForm, DateTime startDate, DateTime endDate)
+        public async Task<int> AddAsync(EventAddViewModel eventForm)
         {
             Event currentEvent = new Event()
             {
                 Topic = eventForm.Topic,
                 Description = eventForm.Description,
                 Location = eventForm.Location,
-                StartDate = startDate,
-                EndDate = endDate,
+                StartDate = eventForm.StartDate,
+                EndDate = eventForm.EndDate,
                 ImageUrl = eventForm.ImageUrl,
                 Seats = eventForm.Seats,
                 TicketPrice = eventForm.TicketPrice
             };
 
             await repository.AddAsync(currentEvent);
+            await repository.SaveChangesAsync();
+
+            return currentEvent.Id;
+        }
+
+        public async Task<EventEditViewModel> EditGetAsync(int eventId)
+        {
+            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
+
+            var eventForm = new EventEditViewModel()
+            {
+                Id = eventId,
+                Topic =  currentEvent.Topic,
+                Description= currentEvent.Description,
+                Location= currentEvent.Location,
+                Seats= currentEvent.Seats,
+                TicketPrice = currentEvent.TicketPrice,
+                StartDate = currentEvent.StartDate,
+                EndDate = currentEvent.EndDate,
+                ImageUrl = currentEvent.ImageUrl
+            };
+
+            return eventForm;
+        }
+
+        public async Task<int> EditPostAsync(EventEditViewModel eventForm)
+        {
+            var currentEvent = await repository.GetByIdAsync<Event>(eventForm.Id);
+
+            currentEvent.Topic = eventForm.Topic;
+            currentEvent.Description = eventForm.Description;
+            currentEvent.Location = eventForm.Location;
+            currentEvent.Seats = eventForm.Seats;
+            currentEvent.TicketPrice = eventForm.TicketPrice;
+            currentEvent.StartDate = eventForm.StartDate;
+            currentEvent.EndDate = eventForm.EndDate;
+            currentEvent.ImageUrl = eventForm.ImageUrl;
+
             await repository.SaveChangesAsync();
 
             return currentEvent.Id;

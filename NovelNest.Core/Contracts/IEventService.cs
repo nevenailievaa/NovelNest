@@ -17,6 +17,8 @@
         Task<bool> EventExistsAsync(int eventId);
         Task<Event> FindEventByIdAsync(int eventId);
         Task<EventDetailsViewModel> DetailsAsync(int eventId);
-        Task<int> AddAsync(EventAddViewModel eventForm, DateTime startDate, DateTime endDate);
+        Task<int> AddAsync(EventAddViewModel eventForm);
+        Task<EventEditViewModel> EditGetAsync(int eventId);
+        Task<int> EditPostAsync(EventEditViewModel eventForm);
     }
 }

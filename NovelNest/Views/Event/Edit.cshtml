@@ -1,7 +1,7 @@
-﻿@model EventAddViewModel
+﻿@model EventEditViewModel
 
 @{
-    ViewBag.Title = "Добави Събитие";
+    ViewBag.Title = "Редактирай Събитие";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Add" method="post">
+        <form asp-action="Edit" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Topic" class="form-label-add-edit"><bold>Тема</bold></label>
                 <input asp-for="@Model.Topic" class="form-control" aria-required="true" />
@@ -27,14 +27,16 @@
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.StartDate" class="form-label-add-edit"><bold>Дата и Час на Започване</bold></label>
-                <input asp-for="@Model.StartDate" class="form-control" aria-required="true" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                <input asp-for="@Model.StartDate" class="form-control" aria-required="true" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" />
                 <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="@Model.EndDate" class="form-label-add-edit"><bold>Дата и Час на Приключване</bold></label>
-                <input asp-for="@Model.EndDate" class="form-control" aria-required="true" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                <input asp-for="@Model.EndDate" class="form-control" aria-required="true" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" />
                 <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="@Model.Seats" class="form-label-add-edit"><bold>Свободни Места</bold></label>
                 <input asp-for="@Model.Seats" class="form-control"/>
@@ -52,7 +54,7 @@
                 <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Добави" />
+                <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Редактирай" />
                 <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
             </div>
         </form>
