@@ -4,12 +4,14 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Event;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Infrastructure.Common;
+    using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Events;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Linq;
     using System.Threading.Tasks;
-    using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
 
     public class EventService : IEventService
     {
@@ -173,6 +175,39 @@
             currentEvent.EndDate = eventForm.EndDate;
             currentEvent.ImageUrl = eventForm.ImageUrl;
 
+            await repository.SaveChangesAsync();
+
+            return currentEvent.Id;
+        }
+
+        public async Task<EventDeleteViewModel> DeleteAsync(int eventId)
+        {
+            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
+
+            var deleteForm = new EventDeleteViewModel()
+            {
+                Id = currentEvent.Id,
+                Topic = currentEvent.Topic,
+                Location = currentEvent.Location,
+                ImageUrl = currentEvent.ImageUrl
+            };
+
+            return deleteForm;
+        }
+
+        public async Task<int> DeleteConfirmedAsync(int eventId)
+        {
+            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
+
+            var eventCarts = await repository.All<EventCart>()
+            .Where(ec => ec.EventId == eventId).ToListAsync();
+
+            if (eventCarts != null && eventCarts.Any())
+            {
+                await repository.RemoveRangeAsync<EventCart>(eventCarts);
+            }
+
+            await repository.RemoveAsync<Event>(currentEvent);
             await repository.SaveChangesAsync();
 
             return currentEvent.Id;

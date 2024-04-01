@@ -123,9 +123,9 @@
                 return BadRequest();
             }
 
-            var searchedBook = await articleService.DeleteAsync(id);
+            var searchedArticle = await articleService.DeleteAsync(id);
 
-            return View(searchedBook);
+            return View(searchedArticle);
         }
 
         [HttpPost]

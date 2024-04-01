@@ -1,7 +1,7 @@
-﻿@model ArticleDeleteViewModel
+﻿@model EventDeleteViewModel
 
 @{
-    ViewBag.Title = "Изтрий Статия";
+    ViewBag.Title = "Изтрий Събитие";
 }
 
 <div class="container">
@@ -9,15 +9,14 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body text-center">
-                    <img class="card-img-top" src="@Model.ImageUrl" alt="Article Image" style="max-width: 200px; height: auto;">
-                    <h2 class="card-title" style="margin-top: 15px;">@Model.Title</h2>
-                    <h5 class="card-title" style="margin-top: 15px;">Прочитания: @Model.ViewsCount</h5>
-                    <p class="text-danger mt-3">Сигурен ли си, че искаш да изтриеш тази статия?</p>
+                    <img class="card-img-top" src="@Model.ImageUrl" alt="Event Image" style="max-width: 200px; height: auto;">
+                    <h2 class="card-title" style="margin-top: 15px;">@Model.Topic</h2>
+                    <p class="text-danger mt-3">Сигурен ли си, че искаш да изтриеш това събитие?</p>
                 </div>
                 <div class="card-footer d-flex justify-content-center">
                     <form asp-action="DeleteConfirmed" method="post" class="col-12">
                         <input type="hidden" asp-for="Id" />
-                        <a asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetArticleInformation()" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
+                        <a asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetInformation()" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
                         <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Изтрий</button>
                     </form>
                 </div>

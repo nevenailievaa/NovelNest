@@ -7,6 +7,7 @@
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Event;
     using NovelNest.Core.Models.ViewModels.Event;
+    using NovelNest.Core.Services;
     using System.Globalization;
     using System.Security.Claims;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
@@ -75,14 +76,6 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(EventAddViewModel eventForm)
         {
-            //if (!DateTime.TryParseExact(eventForm.StartDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
-            //{
-            //    ModelState.AddModelError("StartDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            //}
-            //if (!DateTime.TryParseExact(eventForm.EndDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
-            //{
-            //    ModelState.AddModelError("EndDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            //}
             if (eventForm.StartDate >= eventForm.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Invalid timespan!");
@@ -119,14 +112,6 @@
             {
                 return BadRequest();
             }
-            //if (!DateTime.TryParseExact(eventForm.StartDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate))
-            //{
-            //    ModelState.AddModelError("StartDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            //}
-            //if (!DateTime.TryParseExact(eventForm.EndDate, DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
-            //{
-            //    ModelState.AddModelError("EndDate", "Date must be in a dd/MM/yyyy HH:mm format!");
-            //}
             if (eventForm.StartDate >= eventForm.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Invalid timespan!");
@@ -140,6 +125,34 @@
             int id = eventForm.Id;
             await eventService.EditPostAsync(eventForm);
             return RedirectToAction(nameof(Details), new { id, information = eventForm.GetInformation() });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await eventService.EventExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedEvent = await eventService.DeleteAsync(id);
+
+            return View(searchedEvent);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!await eventService.EventExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await eventService.DeleteConfirmedAsync(id);
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Event;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Infrastructure.Data.Models.Events;
 
@@ -20,5 +21,7 @@
         Task<int> AddAsync(EventAddViewModel eventForm);
         Task<EventEditViewModel> EditGetAsync(int eventId);
         Task<int> EditPostAsync(EventEditViewModel eventForm);
+        Task<EventDeleteViewModel> DeleteAsync(int eventId);
+        Task<int> DeleteConfirmedAsync(int eventId);
     }
 }
