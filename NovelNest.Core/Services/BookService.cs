@@ -3,17 +3,14 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
-    using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
-    using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
 
     public class BookService : IBookService

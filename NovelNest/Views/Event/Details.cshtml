@@ -1,0 +1,43 @@
+﻿@model EventDetailsViewModel
+@inject IPublisherService publisherService
+
+@{
+    ViewBag.Title = "Събития";
+    CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+<div class="container text-center mt-5">
+    <div class="card">
+        <div class="card-body">
+            <img src="@Model.ImageUrl" alt="Article Image" class="img-fluid mb-3" />
+            <h2 class="card-title">@Model.Topic</h2>
+            <h4 class="card-title">@Model.Location</h4>
+            <p class="card-text"><strong>Начало:</strong> @Model.StartDate.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="card-text"><strong>Край:</strong> @Model.EndDate.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="card-text"><strong>Свободни Места:</strong> @Model.Seats</p>
+            <p class="card-text"><strong>Цена за Билет:</strong> @Model.TicketPrice лв.</p>
+
+            <div class="container-sm">
+                <p>@Html.DisplayFor(model => model.Description)</p>
+            </div>
+
+            <div class="text-center mt-1">
+                <a asp-controller="Event" asp-action="All" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Обратно към Всички Събития</a>
+                @if (Model.Seats > 0)
+                {
+                    <a asp-controller="Cart" asp-action="AddEvent" class="btn btn-primary mb-2 w-100 p-3 fw-bold">Добави Билет в Количката</a>
+                }
+                
+            </div>
+
+            @if (await publisherService.ExistsByIdAsync(User.Id()))
+            {
+                <hr />
+                <div class="d-flex justify-content-center mt-1">
+                    <a asp-controller="Article" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Редактирай</a>
+                    <a asp-controller="Article" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Изтрий</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

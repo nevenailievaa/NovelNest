@@ -3,10 +3,9 @@
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
-    using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.QueryModels.Event;
+    using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Infrastructure.Common;
-    using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.Events;
     using System.Linq;
     using System.Threading.Tasks;
@@ -87,6 +86,57 @@
                 Events = events,
                 TotalEventsCount = totalEvents
             };
+        }
+
+        public async Task<bool> EventExistsAsync(int eventId)
+        {
+            return await repository.AllAsReadOnly<Event>()
+                .AnyAsync(e => e.Id == eventId);
+        }
+
+        public async Task<Event> FindEventByIdAsync(int eventId)
+        {
+            return await repository.GetByIdAsync<Event>(eventId);
+        }
+
+        public async Task<EventDetailsViewModel> DetailsAsync(int eventId)
+        {
+            Event? currentEvent = await repository.GetByIdAsync<Event>(eventId);
+
+            var currentEventDetails = new EventDetailsViewModel()
+            {
+                Id = currentEvent.Id,
+                Topic = currentEvent.Topic,
+                Description = currentEvent.Description,
+                Location = currentEvent.Location,
+                StartDate = currentEvent.StartDate,
+                EndDate = currentEvent.EndDate,
+                Seats = currentEvent.Seats,
+                TicketPrice= currentEvent.TicketPrice,
+                ImageUrl = currentEvent.ImageUrl
+            };
+
+            return currentEventDetails;
+        }
+
+        public async Task<int> AddAsync(EventAddViewModel eventForm, DateTime startDate, DateTime endDate)
+        {
+            Event currentEvent = new Event()
+            {
+                Topic = eventForm.Topic,
+                Description = eventForm.Description,
+                Location = eventForm.Location,
+                StartDate = startDate,
+                EndDate = endDate,
+                ImageUrl = eventForm.ImageUrl,
+                Seats = eventForm.Seats,
+                TicketPrice = eventForm.TicketPrice
+            };
+
+            await repository.AddAsync(currentEvent);
+            await repository.SaveChangesAsync();
+
+            return currentEvent.Id;
         }
     }
 }

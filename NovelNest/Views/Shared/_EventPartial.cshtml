@@ -19,6 +19,11 @@
         {
             <p class="card-text"><strong>Свободни Места:</strong> @Model.Seats</p>
             <p class="card-text"><strong>Цена:</strong> @Model.TicketPrice лв.</p>
+
+            @if (Model.Seats < 10 && Model.Seats > 0)
+            {
+                <h5 class="card-text text-danger"><strong>ПОСЛЕДНИ БРОЙКИ БИЛЕТИ!</strong> Вземи своя преди да са свършили!</h5>
+            }
         }
     </div>
     <a asp-controller="Event" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>

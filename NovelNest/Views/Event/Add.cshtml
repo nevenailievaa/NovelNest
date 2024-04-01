@@ -1,0 +1,70 @@
+﻿@model EventAddViewModel
+
+@{
+    ViewBag.Title = "Добави Събитие";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="Add" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.Topic" class="form-label-add-edit"><bold>Тема</bold></label>
+                <input asp-for="@Model.Topic" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Topic" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Location" class="form-label-add-edit"><bold>Локация</bold></label>
+                <input asp-for="@Model.Location" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Location" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Description" class="form-label-add-edit"><bold>Описание</bold></label>
+                <textarea asp-for="@Model.Description" class="form-control" aria-required="true" rows="5"></textarea>
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.StartDate" class="form-label-add-edit"><bold>Дата и Час на Започване</bold></label>
+                <input asp-for="@Model.StartDate" class="form-control gray-value" aria-required="true" value="dd/MM/yyyy HH:mm" />
+                <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.EndDate" class="form-label-add-edit"><bold>Дата и Час на Приключване</bold></label>
+                <input asp-for="@Model.EndDate" class="form-control gray-value" aria-required="true" value="dd/MM/yyyy HH:mm" />
+                <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Seats" class="form-label-add-edit"><bold>Свободни Места</bold></label>
+                <input asp-for="@Model.Seats" class="form-control gray-value" value="100" />
+                <span asp-validation-for="@Model.Seats" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.TicketPrice" class="form-label-add-edit"><bold>Цена за Билет</bold></label>
+                <input asp-for="@Model.TicketPrice" class="form-control gray-value" value="10.00" />
+                <span asp-validation-for="@Model.TicketPrice" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="@Model.ImageUrl" class="form-label-add-edit"><bold>Снимка (Линк)</bold></label>
+                <input asp-for="@Model.ImageUrl" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Добави" />
+                <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .gray-value {
+        color: gray; /* Set text color to gray */
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

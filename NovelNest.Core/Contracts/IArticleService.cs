@@ -3,9 +3,7 @@
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Article;
     using NovelNest.Core.Models.ViewModels.Article;
-    using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Data.Models.Articles;
-    using NovelNest.Infrastructure.Data.Models.Books;
 
     public interface IArticleService
     {
