@@ -1,0 +1,25 @@
+﻿@model EventServiceModel
+
+@{
+    CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+<div class="card mb-4">
+    <img class="card-img-top" src="@Model.ImageUrl" alt="Event Image">
+    <div class="card-body">
+        <h4 class="card-title"><strong>@Model.Topic</strong></h4>
+        <p class="card-text"><strong>Локация:</strong> @Model.Location</p>
+        <p class="card-text">
+            <strong>Начало:</strong> @Model.StartDate.ToString("dd/MM/yyyy HH:mm")
+        </p>
+        <p class="card-text">
+            <strong>Край:</strong> @Model.EndDate.ToString("dd/MM/yyyy HH:mm")
+        </p>
+    </div>
+    <a asp-controller="Event" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
+
+    @if (DateTime.Now < Model.StartDate)
+    {
+        <a asp-controller="Event" asp-action="BuyTicket"  asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Вземи билет</a>
+    }
+</div>

@@ -116,6 +116,7 @@
 
             //Seats
             public const int EventSeatsMinRange = 1;
+            public const uint EventSeatsMaxRange = uint.MaxValue;
         }
 
         public static class ArticleConstants

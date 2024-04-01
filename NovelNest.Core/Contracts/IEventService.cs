@@ -1,9 +1,15 @@
 ﻿namespace NovelNest.Core.Contracts
 {
-    using NovelNest.Core.ViewModels.Event;
+    using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.QueryModels.Event;
 
     public interface IEventService
     {
-        Task<IEnumerable<EventAllViewModel>> AllAsync();
+        Task<EventQueryServiceModel> AllAsync(
+            string? searchTerm = null,
+            EventSorting sorting = EventSorting.Newest,
+            EventStatus status = EventStatus.All,
+            int currentPage = 1,
+            int eventsPerPage = 4);
     }
 }

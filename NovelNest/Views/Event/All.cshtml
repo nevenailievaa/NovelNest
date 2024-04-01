@@ -1,41 +1,67 @@
-﻿@using NovelNest.Core.ViewModels.Event
-@model IEnumerable<EventAllViewModel>
+﻿@model AllEventsQueryModel
+@inject IPublisherService publisherService
 
 @{
-    ViewBag.Title = "Всички събития";
-    System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+    ViewBag.Title = "Всички Събития";
 }
 
-<div class="container">
-    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-    <hr />
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
 
-    <div class="text-center">
-        @foreach (var currentEvent in Model)
-        {
-            <div class="card mb-4">
-                <img class="card-img-top" src="@currentEvent.ImageUrl" alt="Event Image">
-                <div class="card-body">
-                    <h4 class="card-title"><strong>@currentEvent.Topic</strong></h4>
-                    <p class="card-text"><strong>Локация:</strong> @currentEvent.Location</p>
-                    <p class="card-text">
-                        <strong>Начало:</strong> @currentEvent.StartDate.ToString("dd/MM/yyyy HH:mm")
-                    </p>
-                    <p class="card-text">
-                        <strong>Край:</strong> @currentEvent.EndDate.ToString("dd/MM/yyyy HH:mm")
-                    </p>
-                </div>
-                <a asp-controller="Event" asp-action="Details" asp-route-id="@currentEvent.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
+@if (await publisherService.ExistsByIdAsync(User.Id()))
+{
+    <div class="text-center mb-4">
+        <a asp-controller="Event" asp-action="Add" class="btn btn-primary btn-lg">Добави Събитие</a>
+    </div>
+}
 
-                @if (DateTime.Now < currentEvent.StartDate)
-                {
-                    <a asp-controller="Event" asp-action="GetTicket" asp-route-id="@currentEvent.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Вземи билет</a>
-                }
+<form method="get">
+    <div class="row justify-content-center align-items-end">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
             </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0">Най-скоро добавени</option>
+                    <option value="1">Най-късно добавени</option>
+                    <option value="2">Цена (Възходяща)</option>
+                    <option value="3">Цена (Низходяща)</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="0">Всички</option>
+                    <option value="1">Предстоящи</option>
+                    <option value="2">Изминали</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.Events.Any())
+{
+    <h2 class="text-center">Няма намерени събития!</h2>
+}
+else
+{
+    <div class="text-center mt-5">
+        @foreach (var currentEvent in Model.Events)
+        {
+            <partial name="_EventPartial" model="@currentEvent" />
         }
     </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 }
+
+<partial name="_EventPagesPartial" model="@Model" />
