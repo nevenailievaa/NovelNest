@@ -15,10 +15,15 @@
         <p class="card-text">
             <strong>Край:</strong> @Model.EndDate.ToString("dd/MM/yyyy HH:mm")
         </p>
+        @if (DateTime.Now < Model.StartDate)
+        {
+            <p class="card-text"><strong>Свободни Места:</strong> @Model.Seats</p>
+            <p class="card-text"><strong>Цена:</strong> @Model.TicketPrice лв.</p>
+        }
     </div>
     <a asp-controller="Event" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
 
-    @if (DateTime.Now < Model.StartDate)
+    @if (DateTime.Now < Model.StartDate && Model.Seats > 0)
     {
         <a asp-controller="Event" asp-action="BuyTicket"  asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Вземи билет</a>
     }

@@ -117,6 +117,10 @@
             //Seats
             public const int EventSeatsMinRange = 1;
             public const uint EventSeatsMaxRange = uint.MaxValue;
+
+            //Ticket Price
+            public const int EventTicketPriceMinRange = 1;
+            public const uint EventTicketPriceMaxRange = uint.MaxValue;
         }
 
         public static class ArticleConstants

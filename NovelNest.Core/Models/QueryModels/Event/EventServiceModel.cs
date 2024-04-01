@@ -27,6 +27,10 @@
         public int Seats { get; set; }
 
         [Required]
+        [Range(EventTicketPriceMinRange, EventTicketPriceMaxRange)]
+        public decimal TicketPrice { get; set; }
+
+        [Required]
         [StringLength(EventImageUrlMaxLength, MinimumLength = EventImageUrlMinLength, ErrorMessage = LengthErrorMessage)]
         public string ImageUrl { get; set; } = null!;
     }

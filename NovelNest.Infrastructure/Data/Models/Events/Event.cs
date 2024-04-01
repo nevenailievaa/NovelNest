@@ -39,6 +39,10 @@
         public int Seats { get; set; }
 
         [Required]
+        [Comment("The current Event's Ticket Price")]
+        public decimal TicketPrice { get; set; } = 10;
+
+        [Required]
         [MaxLength(EventImageUrlMaxLength)]
         [Comment("The current Event's Image Url")]
         public string ImageUrl { get; set; } = null!;

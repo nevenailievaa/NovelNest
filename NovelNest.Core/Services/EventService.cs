@@ -59,8 +59,8 @@
             eventsToShow = sorting switch
             {
                 EventSorting.Oldest => eventsToShow.OrderBy(e => e.Id),
-                //EventSorting.PriceAscending => eventsToShow.OrderBy(e => e.TicketPrice).ThenByDescending(a => a.Id),
-                //EventSorting.PriceAscending => eventsToShow.OrderByDescending(e => e.TicketPrice).ThenByDescending(a => a.Id),
+                EventSorting.PriceAscending => eventsToShow.OrderBy(e => e.TicketPrice).ThenByDescending(a => a.Id),
+                EventSorting.PriceDescending => eventsToShow.OrderByDescending(e => e.TicketPrice).ThenByDescending(a => a.Id),
                 _ => eventsToShow.OrderByDescending(e => e.Id)
             };
 
@@ -76,7 +76,7 @@
                     EndDate = e.EndDate,
                     ImageUrl = e.ImageUrl,
                     Seats = e.Seats,
-                    //TicketPrice = e.TicketPrice
+                    TicketPrice = e.TicketPrice
                 })
                 .ToListAsync();
 
