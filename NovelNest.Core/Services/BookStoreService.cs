@@ -4,7 +4,6 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.BookStore;
-    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
@@ -160,6 +159,24 @@
             };
 
             return currentBookStoreDetails;
+        }
+
+        public async Task<int> AddAsync(BookStoreAddViewModel bookStoreForm)
+        {
+            BookStore bookStore = new BookStore()
+            {
+                Name = bookStoreForm.Name,
+                Location = bookStoreForm.Location,
+                OpeningTime = new DateTime(bookStoreForm.OpeningTime.Year, bookStoreForm.OpeningTime.Month, bookStoreForm.OpeningTime.Day, bookStoreForm.OpeningTime.Hour, bookStoreForm.OpeningTime.Minute, 0),
+                ClosingTime = new DateTime(bookStoreForm.ClosingTime.Year, bookStoreForm.ClosingTime.Month, bookStoreForm.ClosingTime.Day, bookStoreForm.ClosingTime.Hour, bookStoreForm.ClosingTime.Minute, 0),
+                Contact = bookStoreForm.Contact,
+                ImageUrl = bookStoreForm.ImageUrl
+            };
+
+            await repository.AddAsync(bookStore);
+            await repository.SaveChangesAsync();
+
+            return bookStore.Id;
         }
     }
 }

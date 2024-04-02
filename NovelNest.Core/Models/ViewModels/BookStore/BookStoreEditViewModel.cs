@@ -18,7 +18,7 @@
         public string Location { get; set; } = null!;
 
         [Required]
-        [RegularExpression(BookStoreContactRegex)]
+        [StringLength(BookStoreContactMaxLength, MinimumLength = BookStoreContactMinLength, ErrorMessage = LengthErrorMessage)]
         public string Contact { get; set; } = null!;
 
         [Required]

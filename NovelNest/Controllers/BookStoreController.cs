@@ -2,10 +2,14 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.BookStore;
+    using NovelNest.Core.Models.ViewModels.Article;
+    using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Core.Services;
+    using System.Security.Claims;
 
     public class BookStoreController : BaseController
     {
@@ -51,6 +55,33 @@
             }
 
             return View(currentBookStore);
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Add()
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var bookStoreForm = new BookStoreAddViewModel();
+
+            return View(bookStoreForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> Add(BookStoreAddViewModel bookStoreForm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(bookStoreForm);
+            }
+
+            await bookStoreService.AddAsync(bookStoreForm);
+            return RedirectToAction(nameof(All));
         }
     }
 }

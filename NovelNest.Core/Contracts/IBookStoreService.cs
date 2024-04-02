@@ -2,6 +2,7 @@
 {
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.BookStore;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Data.Models.BookStores;
 
@@ -16,5 +17,6 @@
         Task<bool> BookStoreExistsAsync(int bookStoreId);
         Task<BookStore> FindBookStoreByIdAsync(int bookStoreId);
         Task<BookStoreDetailsViewModel> DetailsAsync(int bookStoreId);
+        Task<int> AddAsync(BookStoreAddViewModel bookStoreForm);
     }
 }

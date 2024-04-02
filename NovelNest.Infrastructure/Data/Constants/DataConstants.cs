@@ -88,7 +88,8 @@
             public const int BookStoreLocationMaxLength = 100;
 
             //Contact
-            public const string BookStoreContactRegex = @"^(?:\\+359\\d{9}|\\d{10})$";
+            public const int BookStoreContactMinLength = 8;
+            public const int BookStoreContactMaxLength = 20;
 
             //ImageUrl
             public const int BookStoreImageUrlMinLength = 5;
