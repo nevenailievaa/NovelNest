@@ -4,6 +4,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.BookStore;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
@@ -177,6 +178,43 @@
             await repository.SaveChangesAsync();
 
             return bookStore.Id;
+        }
+
+        public async Task<BookStoreEditViewModel> EditGetAsync(int bookStoreId)
+        {
+            var currentBookStore = await repository.GetByIdAsync<BookStore>(bookStoreId);
+
+            var articleForm = new BookStoreEditViewModel()
+            {
+                Id = bookStoreId,
+                Name = currentBookStore.Name,
+                Location = currentBookStore.Location,
+                OpeningTime = currentBookStore.OpeningTime,
+                ClosingTime = currentBookStore.ClosingTime,
+                Contact = currentBookStore.Contact,
+                ImageUrl = currentBookStore.ImageUrl
+            };
+
+            return articleForm;
+        }
+
+        public async Task<int> EditPostAsync(BookStoreEditViewModel bookStoreForm)
+        {
+            var currentBookStore = await repository.GetByIdAsync<BookStore>(bookStoreForm.Id);
+
+            currentBookStore.Name = bookStoreForm.Name;
+            currentBookStore.Location = bookStoreForm.Location;
+
+            currentBookStore.OpeningTime = new DateTime(bookStoreForm.OpeningTime.Year, bookStoreForm.OpeningTime.Month, bookStoreForm.OpeningTime.Day, bookStoreForm.OpeningTime.Hour, bookStoreForm.OpeningTime.Minute, 0);
+
+            currentBookStore.ClosingTime = new DateTime(bookStoreForm.ClosingTime.Year, bookStoreForm.ClosingTime.Month, bookStoreForm.ClosingTime.Day, bookStoreForm.ClosingTime.Hour, bookStoreForm.ClosingTime.Minute, 0);
+
+            currentBookStore.Contact = bookStoreForm.Contact;
+            currentBookStore.ImageUrl = bookStoreForm.ImageUrl;
+
+            await repository.SaveChangesAsync();
+
+            return currentBookStore.Id;
         }
     }
 }

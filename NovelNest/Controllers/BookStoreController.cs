@@ -83,5 +83,37 @@
             await bookStoreService.AddAsync(bookStoreForm);
             return RedirectToAction(nameof(All));
         }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var bookStoreForm = await bookStoreService.EditGetAsync(id);
+            return View(bookStoreForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> Edit(BookStoreEditViewModel bookStoreForm)
+        {
+            if (bookStoreForm == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(bookStoreForm);
+            }
+
+            int id = bookStoreForm.Id;
+            await bookStoreService.EditPostAsync(bookStoreForm);
+            return RedirectToAction(nameof(Details), new { id, information = bookStoreForm.GetInformation() });
+        }
     }
 }

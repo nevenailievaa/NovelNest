@@ -18,5 +18,7 @@
         Task<BookStore> FindBookStoreByIdAsync(int bookStoreId);
         Task<BookStoreDetailsViewModel> DetailsAsync(int bookStoreId);
         Task<int> AddAsync(BookStoreAddViewModel bookStoreForm);
+        Task<BookStoreEditViewModel> EditGetAsync(int bookStoreId);
+        Task<int> EditPostAsync(BookStoreEditViewModel bookStoreForm);
     }
 }

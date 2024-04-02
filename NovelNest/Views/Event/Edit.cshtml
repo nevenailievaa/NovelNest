@@ -55,7 +55,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Редактирай" />
-                <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
+                <a asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
             </div>
         </form>
     </div>
