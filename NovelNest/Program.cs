@@ -54,6 +54,11 @@ app.UseEndpoints(endpoints =>
         pattern: "/Event/Details/{id}/{information}",
         defaults: new { Controller = "Event", Action = "Details" }
         );
+    endpoints.MapControllerRoute(
+        name: "BookStore Details",
+        pattern: "/BookStore/Details/{id}/{information}",
+        defaults: new { Controller = "BookStore", Action = "Details" }
+        );
     endpoints.MapDefaultControllerRoute();
     endpoints.MapRazorPages();
 });

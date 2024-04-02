@@ -4,10 +4,13 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.BookStore;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
+    using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.BookStores;
     using System;
+    using static NovelNest.Infrastructure.Data.Constants.DataConstants.BookStoreConstants;
 
     public class BookStoreService : IBookStoreService
     {
@@ -16,6 +19,21 @@
         public BookStoreService(IRepository repository)
         {
             this.repository = repository;
+        }
+
+        public async Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStoresAsync()
+        {
+            return await repository
+                .AllAsReadOnly<BookStore>()
+                .OrderByDescending(b => b.BooksBookStores.Count)
+                .Select(bs => new BookStoreIndexViewModel()
+                {
+                    Id = bs.Id,
+                    Name = bs.Name,
+                    ImageUrl = bs.ImageUrl
+                })
+                .Take(10)
+                .ToListAsync();
         }
 
         public async Task<BookStoreQueryServiceModel> AllAsync(
@@ -76,21 +94,6 @@
             };
         }
 
-        public async Task<IEnumerable<BookStoreIndexViewModel>> LastTenBookStoresAsync()
-        {
-            return await repository
-                .AllAsReadOnly<BookStore>()
-                .OrderByDescending(b => b.BooksBookStores.Count)
-                .Select(bs => new BookStoreIndexViewModel()
-                {
-                    Id = bs.Id,
-                    Name = bs.Name,
-                    ImageUrl = bs.ImageUrl
-                })
-                .Take(10)
-                .ToListAsync();
-        }
-
         private async Task<bool> IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
         {
             var now = DateTime.Now;
@@ -127,6 +130,36 @@
                     return false;
                 }
             }
+        }
+
+        public async Task<bool> BookStoreExistsAsync(int bookStoreId)
+        {
+            return await repository.AllAsReadOnly<BookStore>()
+                .AnyAsync(bs => bs.Id == bookStoreId);
+        }
+
+        public async Task<BookStore> FindBookStoreByIdAsync(int bookStoreId)
+        {
+            return await repository.GetByIdAsync<BookStore>(bookStoreId);
+        }
+
+        public async Task<BookStoreDetailsViewModel> DetailsAsync(int bookStoreId)
+        {
+            BookStore? currentBookStore = await repository.GetByIdAsync<BookStore>(bookStoreId);
+
+            var currentBookStoreDetails = new BookStoreDetailsViewModel()
+            {
+                Id = currentBookStore.Id,
+                Name = currentBookStore.Name,
+                Location = currentBookStore.Location,
+                OpeningTime = currentBookStore.OpeningTime.ToString(DateTimeBookStoreFormat),
+                ClosingTime = currentBookStore.ClosingTime.ToString(DateTimeBookStoreFormat),
+                Contact = currentBookStore.Contact,
+                Status = await IsBookstoreOpen(currentBookStore.OpeningTime, currentBookStore.ClosingTime) ? "Отворено" : "Затворено",
+                ImageUrl = currentBookStore.ImageUrl
+            };
+
+            return currentBookStoreDetails;
         }
     }
 }

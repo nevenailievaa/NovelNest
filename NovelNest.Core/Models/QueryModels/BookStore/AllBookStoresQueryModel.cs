@@ -1,4 +1,5 @@
-﻿using NovelNest.Core.Enums;
+﻿using NovelNest.Core.Contracts;
+using NovelNest.Core.Enums;
 using NovelNest.Core.Models.QueryModels.Article;
 using System.ComponentModel.DataAnnotations;
 

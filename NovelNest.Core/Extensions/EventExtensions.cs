@@ -1,7 +1,7 @@
-﻿using NovelNest.Core.Contracts;
-
-namespace NovelNest.Core.Extensions
+﻿namespace NovelNest.Core.Extensions
 {
+    using NovelNest.Core.Contracts;
+
     public static class EventExtensions
     {
         public static string GetInformation(this IEventModel currentEvent)

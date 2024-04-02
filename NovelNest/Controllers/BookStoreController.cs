@@ -3,7 +3,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.BookStore;
+    using NovelNest.Core.Services;
 
     public class BookStoreController : BaseController
     {
@@ -30,6 +32,25 @@
             model.BookStores = allEvents.BookStores;
 
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id, string information)
+        {
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var currentBookStore = await bookStoreService.DetailsAsync(id);
+
+            if (information != currentBookStore.GetInformation())
+            {
+                return BadRequest();
+            }
+
+            return View(currentBookStore);
         }
     }
 }
