@@ -20,5 +20,7 @@
         Task<int> AddAsync(BookStoreAddViewModel bookStoreForm);
         Task<BookStoreEditViewModel> EditGetAsync(int bookStoreId);
         Task<int> EditPostAsync(BookStoreEditViewModel bookStoreForm);
+        Task<BookStoreDeleteViewModel> DeleteAsync(int bookStoreId);
+        Task<int> DeleteConfirmedAsync(int bookStoreId);
     }
 }

@@ -115,5 +115,33 @@
             await bookStoreService.EditPostAsync(bookStoreForm);
             return RedirectToAction(nameof(Details), new { id, information = bookStoreForm.GetInformation() });
         }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedArticle = await bookStoreService.DeleteAsync(id);
+
+            return View(searchedArticle);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await bookStoreService.DeleteConfirmedAsync(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

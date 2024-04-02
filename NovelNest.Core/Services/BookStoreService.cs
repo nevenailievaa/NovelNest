@@ -9,6 +9,7 @@
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.BookStores;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
     using System;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.BookStoreConstants;
 
@@ -212,6 +213,39 @@
             currentBookStore.Contact = bookStoreForm.Contact;
             currentBookStore.ImageUrl = bookStoreForm.ImageUrl;
 
+            await repository.SaveChangesAsync();
+
+            return currentBookStore.Id;
+        }
+
+        public async Task<BookStoreDeleteViewModel> DeleteAsync(int bookStoreId)
+        {
+            var currentBookStore = await repository.GetByIdAsync<BookStore>(bookStoreId);
+
+            var deleteForm = new BookStoreDeleteViewModel()
+            {
+                Id = bookStoreId,
+                Name = currentBookStore.Name,
+                ImageUrl = currentBookStore.ImageUrl
+            };
+
+            return deleteForm;
+        }
+
+        public async Task<int> DeleteConfirmedAsync(int bookStoreId)
+        {
+            var currentBookStore = await repository.GetByIdAsync<BookStore>(bookStoreId);
+
+            var booksInTheCurrentBookStore = await repository.All<BookBookStore>()
+                .Where(bbs => bbs.BookStoreId == bookStoreId)
+                .ToListAsync();
+
+            if (booksInTheCurrentBookStore != null && booksInTheCurrentBookStore.Any())
+            {
+                await repository.RemoveRangeAsync<BookBookStore>(booksInTheCurrentBookStore);
+            }
+
+            await repository.RemoveAsync<BookStore>(currentBookStore);
             await repository.SaveChangesAsync();
 
             return currentBookStore.Id;
