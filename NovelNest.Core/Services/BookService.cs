@@ -300,50 +300,26 @@
             if (bookBookStores != null && bookBookStores.Any())
             {
                 await repository.RemoveRangeAsync<BookBookStore>(bookBookStores);
-                //for (int i = 0; i < bookBookStores.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookStore>(bookBookStores[i].BookStoreId);
-                //}
             }
             if (bookCarts != null && bookCarts.Any())
             {
                 await repository.RemoveRangeAsync<BookCart>(bookCarts);
-                //for (int i = 0; i < bookCarts.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookCart>(bookCarts[i]);
-                //}
             }
             if (bookWantToReads != null && bookWantToReads.Any())
             {
                 await repository.RemoveRangeAsync<BookUserWantToRead>(bookWantToReads);
-                //for (int i = 0; i < bookWantToReads.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookUserWantToRead>(bookWantToReads[i]);
-                //}
             }
             if (bookCurrentlyReadings != null && bookCurrentlyReadings.Any())
             {
                 await repository.RemoveRangeAsync<BookUserCurrentlyReading>(bookCurrentlyReadings);
-                //for (int i = 0; i < bookCurrentlyReadings.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookUserCurrentlyReading>(bookCurrentlyReadings[i]);
-                //}
             }
             if (bookReads != null && bookReads.Any())
             {
                 await repository.RemoveRangeAsync<BookUserRead>(bookReads);
-                //for (int i = 0; i < bookReads.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookUserRead>(bookReads[i]);
-                //}
             }
             if (bookReviews != null && bookReviews.Any())
             {
                 await repository.RemoveRangeAsync<BookReview>(bookReviews);
-                //for (int i = 0; i < bookReviews.Count; i++)
-                //{
-                //    await repository.RemoveAsync<BookReview>(bookReviews[i].Id);
-                //}
             }
 
             await repository.RemoveAsync<Book>(book);

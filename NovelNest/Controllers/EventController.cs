@@ -7,10 +7,7 @@
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Event;
     using NovelNest.Core.Models.ViewModels.Event;
-    using NovelNest.Core.Services;
-    using System.Globalization;
     using System.Security.Claims;
-    using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
 
     public class EventController : BaseController
     {

@@ -10,8 +10,4 @@
     <ProjectReference Include="..\NovelNest.Infrastructure\NovelNest.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\QueryModels\BookStore\" />
-  </ItemGroup>
-
 </Project>

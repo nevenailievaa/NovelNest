@@ -1,83 +1,55 @@
-﻿@using NovelNest.Core.ViewModels.BookStore
-@using System.Globalization
-@model IEnumerable<BookStoreAllViewModel>
+﻿@model AllBookStoresQueryModel
+@inject IPublisherService publisherService
 
 @{
-    ViewBag.Title = "Всички книжарници";
+    ViewBag.Title = "Всички Книжарници";
 }
 
-<div class="container">
-    <h2 class="text-center mt-4 mb-3">@ViewBag.Title</h2>
-    <hr />
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
 
-    <div class="row justify-content-center">
-        @foreach (var bookstore in Model)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100 text-center">
-                    <img class="card-img-top" src="@bookstore.ImageUrl" alt="Bookstore Image">
-                    <div class="card-body">
-                        <h3 class="card-title"><strong>@bookstore.Name</strong></h3>
-                        <p class="card-text"><strong>Локация:</strong> @bookstore.Location</p>
-                        <p class="card-text"><strong>Отваря:</strong> @bookstore.OpeningTime.ToString("HH:mm")</p>
-                        <p class="card-text"><strong>Затваря:</strong> @bookstore.ClosingTime.ToString("HH:mm")</p>
-                        <p class="card-text">
-                            <strong>В момента:</strong>
-                            @if (IsBookstoreOpen(bookstore.OpeningTime, bookstore.ClosingTime))
-                            {
-                                <span class="text-success"><strong>Отворено</strong></span>
-                            }
-                            else
-                            {
-                                <span class="text-danger"><strong>Затворено</strong></span>
-                            }
-                        </p>
-                    </div>
-                    <a asp-controller="BookStore" asp-action="Details" asp-route-id="@bookstore.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
+@if (await publisherService.ExistsByIdAsync(User.Id()))
+{
+    <div class="text-center mb-4">
+        <a asp-controller="BookStore" asp-action="Add" class="btn btn-primary btn-lg">Добави Книжарница</a>
+    </div>
+}
 
-                    <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@bookstore.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж всички налични книги</a>
-                </div>
+<form method="get">
+    <div class="row justify-content-center align-items-end">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
             </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="0">Всички</option>
+                    <option value="1">Отворени</option>
+                    <option value="2">Затворени</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.BookStores.Any())
+{
+    <h2 class="text-center mt-5">Няма намерени книжарници!</h2>
+}
+else
+{
+    <div class="row justify-content-center mt-5">
+        @foreach (var bookStore in Model.BookStores)
+        {
+            <partial name="_BookStorePartial" model="@bookStore" />
         }
     </div>
-</div>
-
-@functions {
-    bool IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
-    {
-        var now = DateTime.Now;
-
-        if (now.Hour < openingTime.Hour || now.Hour > closingTime.Hour)
-        {
-            return false;
-        }
-
-        if (now.Hour > openingTime.Hour && now.Hour < closingTime.Hour)
-        {
-            return true;
-        }
-
-        if (now.Hour == openingTime.Hour)
-        {
-            if (now.Minute >= openingTime.Minute)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (now.Minute <= closingTime.Minute)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
+    <partial name="_BookStorePagesPartial" model="@Model" />
 }

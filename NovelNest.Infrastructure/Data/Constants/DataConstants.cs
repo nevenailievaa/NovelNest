@@ -80,6 +80,7 @@
             public const string DateTimeBookStoreFormat = "HH:mm";
 
             //Name
+            public const int BookStoreNameMinLength = 1;
             public const int BookStoreNameMaxLength = 100;
 
             //Location

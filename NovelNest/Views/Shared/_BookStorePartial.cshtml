@@ -1,0 +1,71 @@
+﻿@model BookStoreServiceModel
+
+@{
+    CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-EN");
+}
+
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="card h-100 text-center">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="Bookstore Image">
+        <div class="card-body">
+            <h3 class="card-title"><strong>@Model.Name</strong></h3>
+            <p class="card-text"><strong>Локация:</strong> @Model.Location</p>
+            <p class="card-text"><strong>Отваря:</strong> @Model.OpeningTime.ToString("HH:mm")</p>
+            <p class="card-text"><strong>Затваря:</strong> @Model.ClosingTime.ToString("HH:mm")</p>
+            <p class="card-text">
+                <strong>В момента:</strong>
+                @if (IsBookstoreOpen(Model.OpeningTime, Model.ClosingTime))
+                {
+                    <span class="text-success"><strong>Отворено</strong></span>
+                }
+                else
+                {
+                    <span class="text-danger"><strong>Затворено</strong></span>
+                }
+            </p>
+        </div>
+        <a asp-controller="BookStore" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
+
+        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Виж всички налични книги</a>
+    </div>
+</div>
+
+@functions {
+    bool IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
+    {
+        var now = DateTime.Now;
+
+        if (now.Hour < openingTime.Hour || now.Hour > closingTime.Hour)
+        {
+            return false;
+        }
+
+        if (now.Hour > openingTime.Hour && now.Hour < closingTime.Hour)
+        {
+            return true;
+        }
+
+        if (now.Hour == openingTime.Hour)
+        {
+            if (now.Minute >= openingTime.Minute)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (now.Minute <= closingTime.Minute)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}

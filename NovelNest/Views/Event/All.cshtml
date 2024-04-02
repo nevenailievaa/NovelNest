@@ -52,7 +52,7 @@
 
 @if (!Model.Events.Any())
 {
-    <h2 class="text-center">Няма намерени събития!</h2>
+    <h2 class="text-center mt-5">Няма намерени събития!</h2>
 }
 else
 {
@@ -62,6 +62,5 @@ else
             <partial name="_EventPartial" model="@currentEvent" />
         }
     </div>
+    <partial name="_EventPagesPartial" model="@Model" />
 }
-
-<partial name="_EventPagesPartial" model="@Model" />

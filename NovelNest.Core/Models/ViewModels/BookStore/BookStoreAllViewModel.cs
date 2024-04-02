@@ -1,4 +1,4 @@
-﻿namespace NovelNest.Core.ViewModels.BookStore
+﻿namespace NovelNest.Core.Models.ViewModels.BookStore
 {
     public class BookStoreAllViewModel
     {

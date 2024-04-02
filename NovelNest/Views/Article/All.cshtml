@@ -42,7 +42,7 @@
 
 @if (!Model.Articles.Any())
 {
-    <h2 class="text-center">Няма намерени статии!</h2>
+    <h2 class="text-center mt-5">Няма намерени статии!</h2>
 }
 else
 {
@@ -52,6 +52,5 @@ else
             <partial name="_ArticlePartial" model="@article" />
         }
     </div>
+    <partial name="_ArticlePagesPartial" model="@Model" />
 }
-
-<partial name="_ArticlePagesPartial" model="@Model" />
