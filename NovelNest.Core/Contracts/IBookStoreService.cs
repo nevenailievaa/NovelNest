@@ -5,6 +5,7 @@
     using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Data.Models.BookStores;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
 
     public interface IBookStoreService
     {
@@ -30,5 +31,16 @@
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
             int booksPerPage = 4);
+
+        Task<BookQueryServiceModel> AllBooksToChooseAsync(
+            int bookStoreId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4);
+
+        Task<BookBookStore> AddBookAsync(int bookId, int bookStoreId);
     }
 }

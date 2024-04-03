@@ -81,6 +81,10 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(BookAddViewModel bookForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (await bookService.GenreExistsAsync(bookForm.GenreId) == false)
             {
                 ModelState.AddModelError(nameof(bookForm.GenreId), "Genre does not exist!");

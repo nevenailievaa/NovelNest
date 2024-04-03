@@ -168,5 +168,45 @@
 
             return View(model);
         }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> SelectBook([FromQuery] AllBooksQueryModel model, int id)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var allBooks = await bookStoreService.AllBooksToChooseAsync(
+                id,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
+
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.BookStoreId = id;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> AddBook(int id, int secondId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            await bookStoreService.AddBookAsync(id, secondId);
+            return RedirectToAction(nameof(AllBooks), new { id = secondId });
+        }
     }
 }

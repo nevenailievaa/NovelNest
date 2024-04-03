@@ -73,6 +73,10 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(ArticleAddViewModel articleForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return View(articleForm);

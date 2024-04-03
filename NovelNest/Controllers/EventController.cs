@@ -73,6 +73,10 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(EventAddViewModel eventForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (eventForm.StartDate >= eventForm.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Invalid timespan!");

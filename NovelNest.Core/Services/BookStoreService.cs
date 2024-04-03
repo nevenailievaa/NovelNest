@@ -319,5 +319,88 @@
                 TotalBooksCount = totalBooks
             };
         }
+
+        public async Task<BookQueryServiceModel> AllBooksToChooseAsync(
+            int bookStoreId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4)
+        {
+            var booksToShow = repository.AllAsReadOnly<Book>()
+                .Where(b => !b.BooksBookStores.Any(bbs => bbs.BookStoreId == bookStoreId));
+
+            if (genre != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.Genre.Name.ToLower() == genre.ToLower());
+            }
+
+            if (coverType != null)
+            {
+                booksToShow = booksToShow
+                    .Where(b => b.CoverType.Name.ToLower() == coverType.ToLower());
+            }
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                booksToShow = booksToShow
+                .Where(b => normalizedSearchTerm.Contains(b.Title.ToLower())
+                || normalizedSearchTerm.Contains(b.Author.ToLower())
+                || normalizedSearchTerm.Contains(b.PublishingHouse.ToLower())
+                || normalizedSearchTerm.Contains(b.Genre.Name.ToLower())
+                || normalizedSearchTerm.Contains(b.CoverType.Name.ToLower())
+
+                || b.Title.ToLower().Contains(normalizedSearchTerm)
+                || b.Author.ToLower().Contains(normalizedSearchTerm)
+                || b.PublishingHouse.ToLower().Contains(normalizedSearchTerm)
+                || b.Genre.Name.ToLower().Contains(normalizedSearchTerm)
+                || b.CoverType.Name.ToLower().Contains(normalizedSearchTerm));
+            }
+
+            booksToShow = sorting switch
+            {
+                BookSorting.Oldest => booksToShow.OrderBy(b => b.Id),
+                BookSorting.PriceAscending => booksToShow.OrderBy(b => b.Price).ThenByDescending(b => b.Id),
+                BookSorting.PriceDescending => booksToShow.OrderByDescending(b => b.Price).ThenByDescending(b => b.Id),
+                BookSorting.TitleAscending => booksToShow.OrderBy(b => b.Title).ThenByDescending(b => b.Id),
+                BookSorting.TitleDescending => booksToShow.OrderByDescending(b => b.Title).ThenByDescending(b => b.Id),
+                BookSorting.AuthorAscending => booksToShow.OrderBy(b => b.Author).ThenByDescending(b => b.Id),
+                BookSorting.AuthorDescending => booksToShow.OrderByDescending(b => b.Author).ThenByDescending(b => b.Id),
+                _ => booksToShow.OrderByDescending(b => b.Id),
+            };
+
+            var books = await booksToShow
+                .Skip((currentPage - 1) * booksPerPage)
+                .Take(booksPerPage)
+                .ProjectToBookServiceModel()
+                .ToListAsync();
+
+            int totalBooks = await booksToShow.CountAsync();
+
+            return new BookQueryServiceModel()
+            {
+                Books = books,
+                TotalBooksCount = totalBooks
+            };
+        }
+
+        public async Task<BookBookStore> AddBookAsync(int bookId, int bookStoreId)
+        {
+            BookBookStore bookBookStore = new BookBookStore()
+            {
+                BookId = bookId,
+                BookStoreId = bookStoreId
+            };
+
+            await repository.AddAsync(bookBookStore);
+            await repository.SaveChangesAsync();
+
+            return bookBookStore;
+        }
     }
 }
