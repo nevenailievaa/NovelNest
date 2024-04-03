@@ -1,8 +1,8 @@
 ﻿namespace NovelNest.Core.Contracts
 {
     using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.QueryModels.BookStore;
-    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Data.Models.BookStores;
 
@@ -22,5 +22,13 @@
         Task<int> EditPostAsync(BookStoreEditViewModel bookStoreForm);
         Task<BookStoreDeleteViewModel> DeleteAsync(int bookStoreId);
         Task<int> DeleteConfirmedAsync(int bookStoreId);
+        Task<BookQueryServiceModel> AllBooksAsync(
+            int bookStoreId,
+            string? genre = null,
+            string? coverType = null,
+            string? searchTerm = null,
+            BookSorting sorting = BookSorting.Newest,
+            int currentPage = 1,
+            int booksPerPage = 4);
     }
 }

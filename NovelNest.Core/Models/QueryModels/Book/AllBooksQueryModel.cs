@@ -24,6 +24,8 @@
         public string CoverType { get; set; } = null!;
         public IEnumerable<string> CoverTypes { get; set; } = null!;
 
+        public int BookStoreId { get; set; } = -1;
+
         public IEnumerable<BookServiceModel> Books { get; set; } = new HashSet<BookServiceModel>();
     }
 }

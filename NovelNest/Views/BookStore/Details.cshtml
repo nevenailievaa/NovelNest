@@ -17,7 +17,17 @@
             <p><strong>Локация:</strong> @Model.Location</p>
             <p><strong>Отваря:</strong> @Model.OpeningTime</p>
             <p><strong>Затваря:</strong> @Model.ClosingTime</p>
-            <p><strong>В момента:</strong> @Model.Status</p>
+            <p>
+                <strong>В момента:</strong>
+                @if (Model.Status == "Отворено")
+                {
+                    <span class="text-success"><strong>Отворено</strong></span>
+                }
+                else
+                {
+                    <span class="text-danger"><strong>Затворено</strong></span>
+                }
+            </p>
             <p><strong>Контакт:</strong> @Model.Contact</p>
         </div>
     </div>

@@ -5,6 +5,7 @@
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
+    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.BookStore;
@@ -14,12 +15,14 @@
     public class BookStoreController : BaseController
     {
         private readonly IBookStoreService bookStoreService;
+        private readonly IBookService bookService;
         private readonly IPublisherService publisherService;
 
-        public BookStoreController(IBookStoreService bookStoreService, IPublisherService publisherService)
+        public BookStoreController(IBookStoreService bookStoreService, IPublisherService publisherService, IBookService bookService)
         {
             this.bookStoreService = bookStoreService;
             this.publisherService = publisherService;
+            this.bookService = bookService;
         }
 
         [HttpGet]
@@ -142,6 +145,28 @@
             await bookStoreService.DeleteConfirmedAsync(id);
 
             return RedirectToAction(nameof(All));
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> AllBooks([FromQuery] AllBooksQueryModel model, int id)
+        {
+            var allBooks = await bookStoreService.AllBooksAsync(
+                id,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
+
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.BookStoreId = id;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
         }
     }
 }
