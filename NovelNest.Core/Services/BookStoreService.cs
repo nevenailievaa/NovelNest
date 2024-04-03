@@ -389,18 +389,58 @@
             };
         }
 
+        public async Task<bool> BookExistsInBookStoreAsync(int bookId, int bookStoreId)
+        {
+            return await repository.AllAsReadOnly<BookBookStore>()
+                .AnyAsync(bbs => bbs.BookId == bookId && bbs.BookStoreId == bookStoreId);
+        }
+
         public async Task<BookBookStore> AddBookAsync(int bookId, int bookStoreId)
         {
-            BookBookStore bookBookStore = new BookBookStore()
-            {
-                BookId = bookId,
-                BookStoreId = bookStoreId
-            };
+            var bookBookStore = await repository.All<BookBookStore>()
+                .Where(bbs => bbs.BookId == bookId && bbs.BookStoreId == bookStoreId)
+                .FirstOrDefaultAsync();
 
-            await repository.AddAsync(bookBookStore);
-            await repository.SaveChangesAsync();
+            if (bookBookStore == null)
+            {
+                bookBookStore = new BookBookStore()
+                {
+                    BookId = bookId,
+                    BookStoreId = bookStoreId
+                };
+
+                await repository.AddAsync(bookBookStore);
+                await repository.SaveChangesAsync();
+            }
 
             return bookBookStore;
+        }
+
+        public async Task<BookBookStoreDeleteViewModel> RemoveBookAsync(int bookId, int bookStoreId)
+        {
+            var book = await repository.GetByIdAsync<Book>(bookId);
+            var bookStore = await repository.GetByIdAsync<BookStore>(bookStoreId);
+
+            var deleteForm = new BookBookStoreDeleteViewModel()
+            {
+                BookId = bookId,
+                BookStoreId = bookStoreId,
+                BookTitle = book.Title,
+                BookImageUrl = book.ImageUrl,
+                BookStoreName = bookStore.Name
+            };
+
+            return deleteForm;
+        }
+
+        public async Task RemoveBookConfirmedAsync(int bookId, int bookStoreId)
+        {
+            var bookInTheCurrentBookStore = await repository.All<BookBookStore>()
+                .Where(bbs => bbs.BookId == bookId && bbs.BookStoreId == bookStoreId)
+                .FirstOrDefaultAsync();
+
+            await repository.RemoveAsync<BookBookStore>(bookInTheCurrentBookStore);
+            await repository.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,56 @@
+﻿@model BookBookStoreDeleteViewModel
+
+@{
+    ViewBag.Title = "Изтрий Книга";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top" src="@Model.BookImageUrl" alt="Book Image" style="max-width: 200px; height: auto;">
+                    <h2 class="card-title" style="margin-top: 15px;">@Model.BookTitle</h2>
+                    <p class="text-danger mt-3">Сигурен ли си, че искаш да премахнеш тази книга от книжарница "@Model.BookStoreName"?</p>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <form asp-action="RemoveBookConfirmed" method="post" class="col-12">
+                        <input type="hidden" asp-for="BookId" />
+                        <input type="hidden" asp-for="BookStoreId" />
+                        <a asp-action="AllBooks" asp-route-id="@Model.BookStoreId" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
+                        <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

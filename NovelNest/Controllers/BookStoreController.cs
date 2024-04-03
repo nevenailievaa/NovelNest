@@ -78,6 +78,10 @@
         [MustBePublisher]
         public async Task<IActionResult> Add(BookStoreAddViewModel bookStoreForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return View(bookStoreForm);
@@ -91,6 +95,10 @@
         [MustBePublisher]
         public async Task<IActionResult> Edit(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (!await bookStoreService.BookStoreExistsAsync(id))
             {
                 return BadRequest();
@@ -104,6 +112,11 @@
         [MustBePublisher]
         public async Task<IActionResult> Edit(BookStoreEditViewModel bookStoreForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
             if (bookStoreForm == null)
             {
                 return BadRequest();
@@ -123,20 +136,28 @@
         [MustBePublisher]
         public async Task<IActionResult> Delete(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (!await bookStoreService.BookStoreExistsAsync(id))
             {
                 return BadRequest();
             }
 
-            var searchedArticle = await bookStoreService.DeleteAsync(id);
+            var searchedBookStore = await bookStoreService.DeleteAsync(id);
 
-            return View(searchedArticle);
+            return View(searchedBookStore);
         }
 
         [HttpPost]
         [MustBePublisher]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
             if (!await bookStoreService.BookStoreExistsAsync(id))
             {
                 return BadRequest();
@@ -177,6 +198,10 @@
             {
                 return Unauthorized();
             }
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
 
             var allBooks = await bookStoreService.AllBooksToChooseAsync(
                 id,
@@ -204,9 +229,49 @@
             {
                 return Unauthorized();
             }
+            if (!await bookStoreService.BookStoreExistsAsync(secondId) || !await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
 
             await bookStoreService.AddBookAsync(id, secondId);
             return RedirectToAction(nameof(AllBooks), new { id = secondId });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> RemoveBook(int id, int secondId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(secondId) || !await bookService.BookExistsAsync(id) || !await bookStoreService.BookExistsInBookStoreAsync(id, secondId))
+            {
+                return BadRequest();
+            }
+
+            var searchedBookBookStore = await bookStoreService.RemoveBookAsync(id, secondId);
+
+            return View(searchedBookBookStore);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> RemoveBookConfirmed(int bookId, int bookStoreId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(bookStoreId) || !await bookService.BookExistsAsync(bookId) || !await bookStoreService.BookExistsInBookStoreAsync(bookId, bookStoreId))
+            {
+                return BadRequest();
+            }
+
+            await bookStoreService.RemoveBookConfirmedAsync(bookId, bookStoreId);
+
+            return RedirectToAction(nameof(AllBooks), new { id = bookStoreId });
         }
     }
 }

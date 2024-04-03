@@ -41,6 +41,9 @@
             int currentPage = 1,
             int booksPerPage = 4);
 
+        Task<bool> BookExistsInBookStoreAsync(int bookId, int bookStoreId);
         Task<BookBookStore> AddBookAsync(int bookId, int bookStoreId);
+        Task<BookBookStoreDeleteViewModel> RemoveBookAsync(int bookId, int bookStoreId);
+        Task RemoveBookConfirmedAsync(int bookId, int bookStoreId);
     }
 }

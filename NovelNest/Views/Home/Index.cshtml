@@ -28,7 +28,7 @@
                 <h5 class="carousel-title">@bookStore.Name</h5>
                 <img class="d-block w-100" style="height:500px" src="@bookStore.ImageUrl" alt="@bookStore.Name">
                 <div class="carousel-caption d-none d-md-block">
-                    <a class="btn btn-primary btn-view-more" asp-controller="BookStore" asp-action="Details" asp-route-id="@bookStore.Id">Виж повече</a>
+                    <a class="btn btn-primary btn-view-more" asp-controller="BookStore" asp-action="Details" asp-route-information="@bookStore.GetInformation()" asp-route-id="@bookStore.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж повече</a>
                 </div>
             </div>
         }
