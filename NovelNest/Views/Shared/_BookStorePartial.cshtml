@@ -14,7 +14,7 @@
             <p class="card-text"><strong>Затваря:</strong> @Model.ClosingTime.ToString("HH:mm")</p>
             <p class="card-text">
                 <strong>В момента:</strong>
-                @if (IsBookstoreOpen(Model.OpeningTime, Model.ClosingTime))
+                @if (Model.Status == true)
                 {
                     <span class="text-success"><strong>Отворено</strong></span>
                 }
@@ -29,43 +29,3 @@
         <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@Model.Id" class="btn btn-success mb-1 w-100 p-3 fw-bold">Виж всички налични книги</a>
     </div>
 </div>
-
-@functions {
-    bool IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
-    {
-        var now = DateTime.Now;
-
-        if (now.Hour < openingTime.Hour || now.Hour > closingTime.Hour)
-        {
-            return false;
-        }
-
-        if (now.Hour > openingTime.Hour && now.Hour < closingTime.Hour)
-        {
-            return true;
-        }
-
-        if (now.Hour == openingTime.Hour)
-        {
-            if (now.Minute >= openingTime.Minute)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (now.Minute <= closingTime.Minute)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-}

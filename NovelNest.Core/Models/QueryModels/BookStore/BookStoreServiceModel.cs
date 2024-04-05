@@ -25,5 +25,7 @@
         [Required]
         [StringLength(BookStoreImageUrlMaxLength, MinimumLength = BookStoreImageUrlMinLength, ErrorMessage = LengthErrorMessage)]
         public string ImageUrl { get; set; } = null!;
+
+        public bool Status { get; set; } = false;
     }
 }

@@ -85,7 +85,8 @@
                 Location = bs.Location,
                 OpeningTime = bs.OpeningTime,
                 ClosingTime = bs.ClosingTime,
-                ImageUrl = bs.ImageUrl
+                ImageUrl = bs.ImageUrl,
+                Status = IsBookstoreOpen(bs.OpeningTime, bs.ClosingTime).Result
             }).ToList();
 
             return new BookStoreQueryServiceModel()
