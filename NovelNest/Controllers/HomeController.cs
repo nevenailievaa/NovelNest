@@ -3,8 +3,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
-    using NovelNest.Models;
-    using System.Diagnostics;
 
     public class HomeController : BaseController
     {

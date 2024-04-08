@@ -14,7 +14,7 @@
             string? searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = 4);
+            int booksPerPage = 8);
         Task<IEnumerable<GenreViewModel>> AllGenresAsync();
         Task<IEnumerable<string>> AllGenresNamesAsync();
         Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
@@ -44,14 +44,14 @@
             string? searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = 4);
+            int booksPerPage = 8);
         Task<BookQueryServiceModel> AllReadBooksIdsByUserIdAsync(string userId,
             string? genre = null,
             string? coverType = null,
             string? searchTerm = null,
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
-            int booksPerPage = 4);
+            int booksPerPage = 8);
         Task<bool> BookIsInAnotherCollectionAsync(int bookId, string userId);
         Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId);
         Task<bool> BookIsCurrentlyReadingAsync(int bookId, string userId);
@@ -70,7 +70,7 @@
             string? searchTerm = null,
             BookReviewSorting sorting = BookReviewSorting.Newest,
             int currentPage = 1,
-            int reviewsPerPage = 4);
+            int reviewsPerPage = 8);
         Task<BookReview> FindBookReviewAsync(int reviewId);
         Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId);
         Task<int> DeleteBookReviewConfirmedAsync(int reviewId);

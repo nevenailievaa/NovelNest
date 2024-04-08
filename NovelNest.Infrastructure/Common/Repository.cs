@@ -41,16 +41,6 @@
             DbSet<T>().RemoveRange(entities);
         }
 
-        //public async Task RemoveByIdAsync<T>(object id) where T : class
-        //{
-        //    T? entity = await GetByIdAsync<T>(id);
-
-        //    if (entity != null)
-        //    {
-        //        DbSet<T>().Remove(entity);
-        //    }
-        //}
-
         public async Task<int> SaveChangesAsync()
         {
             return await dbContext.SaveChangesAsync();
