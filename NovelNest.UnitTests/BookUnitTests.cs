@@ -34,7 +34,7 @@ namespace NovelNest.UnitTests
         IBookService service;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             //Books
             AnnaKarenina = new Book()
@@ -156,7 +156,7 @@ namespace NovelNest.UnitTests
             };
 
             var options = new DbContextOptionsBuilder<NovelNestDbContext>()
-                .UseInMemoryDatabase(databaseName: "NovelNestInMemoryDb")
+                .UseInMemoryDatabase(databaseName: "NovelNestInMemoryDb" + Guid.NewGuid().ToString())
                 .Options;
 
             dbContext = new NovelNestDbContext(options);
@@ -168,6 +168,13 @@ namespace NovelNest.UnitTests
 
             repository = new Repository(dbContext);
             service = new BookService(repository);
+        }
+
+        [TearDown]
+        public async Task Teardown()
+        {
+            await this.dbContext.Database.EnsureDeletedAsync();
+            await this.dbContext.DisposeAsync();
         }
 
         [Test]
@@ -490,12 +497,6 @@ namespace NovelNest.UnitTests
             // Assert
             Assert.AreEqual(result.Count(), 2);
             Assert.AreEqual(result, expectedResult);
-        }
-
-        [TearDown]
-        public void Teardown()
-        {
-            dbContext.Dispose();
         }
 
     }
