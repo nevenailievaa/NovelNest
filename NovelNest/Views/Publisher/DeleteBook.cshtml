@@ -14,9 +14,9 @@
                     <p class="text-danger mt-3">Сигурен ли си, че искаш да изтриеш тази книга?</p>
                 </div>
                 <div class="card-footer d-flex justify-content-center">
-                    <form asp-action="DeleteConfirmed" method="post" class="col-12">
+                    <form asp-action="DeleteBookConfirmed" method="post" class="col-12">
                         <input type="hidden" asp-for="Id" />
-                        <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
+                        <a asp-controller="Book" asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
                         <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Изтрий</button>
                     </form>
                 </div>
