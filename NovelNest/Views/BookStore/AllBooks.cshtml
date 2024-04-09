@@ -11,7 +11,7 @@
 @if (await publisherService.ExistsByIdAsync(User.Id()))
 {
     <div class="text-center mb-4">
-        <a asp-controller="BookStore" asp-action="SelectBook" asp-route-id="@Model.BookStoreId" class="btn btn-primary btn-lg">Добави Книга</a>
+        <a asp-controller="Publisher" asp-action="SelectBookFromBookStore" asp-route-id="@Model.BookStoreId" class="btn btn-primary btn-lg">Добави Книга</a>
     </div>
 }
 
@@ -85,7 +85,7 @@ else
                     
                     @if (await publisherService.ExistsByIdAsync(User.Id()))
                     {
-                        <a asp-controller="BookStore" asp-action="RemoveBook" asp-route-id="@book.Id" asp-route-secondId="@Model.BookStoreId" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни от Книжарница</a>
+                        <a asp-controller="Publisher" asp-action="RemoveBookFromBookStore" asp-route-id="@book.Id" asp-route-secondId="@Model.BookStoreId" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни от Книжарница</a>
                     }
                 </div>
             </div>

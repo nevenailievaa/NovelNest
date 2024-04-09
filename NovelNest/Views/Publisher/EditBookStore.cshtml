@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Edit" method="post">
+        <form asp-action="EditBookStore" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Name" class="form-label-add-edit"><bold>Име</bold></label>
                 <input asp-for="@Model.Name" class="form-control" aria-required="true" />
@@ -42,7 +42,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Редактирай" />
-                <a asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
+                <a asp-controller="BookStore" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
             </div>
         </form>
     </div>

@@ -14,10 +14,10 @@
                     <p class="text-danger mt-3">Сигурен ли си, че искаш да премахнеш тази книга от книжарница "@Model.BookStoreName"?</p>
                 </div>
                 <div class="card-footer d-flex justify-content-center">
-                    <form asp-action="RemoveBookConfirmed" method="post" class="col-12">
+                    <form asp-action="RemoveBookFromBookStoreConfirmed" method="post" class="col-12">
                         <input type="hidden" asp-for="BookId" />
                         <input type="hidden" asp-for="BookStoreId" />
-                        <a asp-action="AllBooks" asp-route-id="@Model.BookStoreId" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
+                        <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@Model.BookStoreId" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
                         <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни</button>
                     </form>
                 </div>

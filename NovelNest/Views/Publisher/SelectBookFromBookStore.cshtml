@@ -77,7 +77,7 @@ else
                     </div>
                     @if (await publisherService.ExistsByIdAsync(User.Id()))
                     {
-                        <a asp-controller="BookStore" asp-action="AddBook" asp-route-id="@book.Id" asp-route-secondId="@Model.BookStoreId" class="btn btn-success mb-1 w-100 p-3 fw-bold">Добави</a>
+                        <a asp-controller="Publisher" asp-action="AddBookToBookStore" asp-route-id="@book.Id" asp-route-secondId="@Model.BookStoreId" class="btn btn-success mb-1 w-100 p-3 fw-bold">Добави</a>
                     }
                 </div>
             </div>

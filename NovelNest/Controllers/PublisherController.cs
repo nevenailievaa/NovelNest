@@ -4,20 +4,26 @@
     using NovelNest.Attributes;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
+    using NovelNest.Core.Models.QueryModels.Book;
     using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Core.Models.ViewModels.BookStore;
+    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class PublisherController : BaseController
     {
         private readonly IPublisherService publisherService;
         private readonly IBookService bookService;
+        private readonly IBookStoreService bookStoreService;
 
-        public PublisherController(IPublisherService publisherService, IBookService bookService)
+        public PublisherController(IPublisherService publisherService, IBookService bookService, IBookStoreService bookStoreService)
         {
             this.publisherService = publisherService;
             this.bookService = bookService;
+            this.bookStoreService = bookStoreService;
         }
 
+        //Books
         [HttpGet]
         [MustBePublisher]
         public async Task<IActionResult> AddBook()
@@ -125,6 +131,199 @@
             await publisherService.DeleteBookConfirmedAsync(id);
 
             return RedirectToAction("All", "Book");
+        }
+
+        //BookStores
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> AddBookStore()
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var bookStoreForm = new BookStoreAddViewModel();
+
+            return View(bookStoreForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> AddBookStore(BookStoreAddViewModel bookStoreForm)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(bookStoreForm);
+            }
+
+            await publisherService.AddBookStoreAsync(bookStoreForm);
+            return RedirectToAction("All", "BookStore");
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> EditBookStore(int id)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var bookStoreForm = await publisherService.EditBookStoreGetAsync(id);
+            return View(bookStoreForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> EditBookStore(BookStoreEditViewModel bookStoreForm)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            if (bookStoreForm == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(bookStoreForm);
+            }
+
+            int id = bookStoreForm.Id;
+            await publisherService.EditBookStorePostAsync(bookStoreForm);
+            return RedirectToAction("Details", "BookStore", new { id, information = bookStoreForm.GetInformation() });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteBookStore(int id)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedBookStore = await publisherService.DeleteBookStoreAsync(id);
+
+            return View(searchedBookStore);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteBookStoreConfirmed(int id)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await publisherService.DeleteBookStoreConfirmedAsync(id);
+
+            return RedirectToAction("All", "BookStore");
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> SelectBookFromBookStore([FromQuery] AllBooksQueryModel model, int id)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var allBooks = await publisherService.AllBooksToChooseAsync(
+                id,
+                model.Genre,
+                model.CoverType,
+                model.SearchTerm,
+                model.Sorting,
+                model.CurrentPage,
+                model.BooksPerPage);
+
+            model.TotalBooksCount = allBooks.TotalBooksCount;
+            model.Books = allBooks.Books;
+            model.BookStoreId = id;
+            model.Genres = await bookService.AllGenresNamesAsync();
+            model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> AddBookToBookStore(int id, int secondId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(secondId) || !await bookService.BookExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await publisherService.AddBookToBookStoreAsync(id, secondId);
+            return RedirectToAction("AllBooks", "BookStore", new { id = secondId });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> RemoveBookFromBookStore(int id, int secondId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(secondId) || !await bookService.BookExistsAsync(id) || !await publisherService.BookExistsInBookStoreAsync(id, secondId))
+            {
+                return BadRequest();
+            }
+
+            var searchedBookBookStore = await publisherService.RemoveBookFromBookStoreAsync(id, secondId);
+
+            return View(searchedBookBookStore);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> RemoveBookFromBookStoreConfirmed(int bookId, int bookStoreId)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!await bookStoreService.BookStoreExistsAsync(bookStoreId) || !await bookService.BookExistsAsync(bookId) || !await publisherService.BookExistsInBookStoreAsync(bookId, bookStoreId))
+            {
+                return BadRequest();
+            }
+
+            await publisherService.RemoveBookFromBookStoreConfirmedAsync(bookId, bookStoreId);
+
+            return RedirectToAction("AllBooks", "BookStore", new { id = bookStoreId });
         }
     }
 }
