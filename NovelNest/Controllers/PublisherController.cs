@@ -5,6 +5,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Core.Services;
@@ -15,12 +16,17 @@
         private readonly IPublisherService publisherService;
         private readonly IBookService bookService;
         private readonly IBookStoreService bookStoreService;
+        private readonly IArticleService articleService;
+        private readonly IEventService eventService;
 
-        public PublisherController(IPublisherService publisherService, IBookService bookService, IBookStoreService bookStoreService)
+        public PublisherController(IPublisherService publisherService, IBookService bookService,
+            IBookStoreService bookStoreService, IArticleService articleService, IEventService eventService)
         {
             this.publisherService = publisherService;
             this.bookService = bookService;
             this.bookStoreService = bookStoreService;
+            this.articleService = articleService;
+            this.eventService=eventService;
         }
 
         //Books
@@ -324,6 +330,98 @@
             await publisherService.RemoveBookFromBookStoreConfirmedAsync(bookId, bookStoreId);
 
             return RedirectToAction("AllBooks", "BookStore", new { id = bookStoreId });
+        }
+
+        //Articles
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> AddArticle()
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var articleForm = new ArticleAddViewModel();
+
+            return View(articleForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> AddArticle(ArticleAddViewModel articleForm)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(articleForm);
+            }
+
+            await publisherService.AddArticleAsync(articleForm);
+            return RedirectToAction("All", "Article");
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> EditArticle(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var articleForm = await publisherService.EditArticleGetAsync(id);
+            return View(articleForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> EditArticle(ArticleEditViewModel articleForm)
+        {
+            if (articleForm == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(articleForm);
+            }
+
+            int id = articleForm.Id;
+            await publisherService.EditArticlePostAsync(articleForm);
+            return RedirectToAction("Details", "Article", new { id, information = articleForm.GetArticleInformation() });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteArticle(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedArticle = await publisherService.DeleteArticleAsync(id);
+
+            return View(searchedArticle);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteArticleConfirmed(int id)
+        {
+            if (!await articleService.ArticleExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await publisherService.DeleteArticleConfirmedAsync(id);
+
+            return RedirectToAction("All", "Article");
         }
     }
 }

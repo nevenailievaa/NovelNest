@@ -55,96 +55,96 @@
             return View(currentArticle);
         }
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Add()
-        {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
-            {
-                return Unauthorized();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Add()
+        //{
+        //    if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+        //    {
+        //        return Unauthorized();
+        //    }
 
-            var articleForm = new ArticleAddViewModel();
+        //    var articleForm = new ArticleAddViewModel();
 
-            return View(articleForm);
-        }
+        //    return View(articleForm);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> Add(ArticleAddViewModel articleForm)
-        {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
-            {
-                return Unauthorized();
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(articleForm);
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Add(ArticleAddViewModel articleForm)
+        //{
+        //    if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(articleForm);
+        //    }
 
-            await articleService.AddAsync(articleForm);
-            return RedirectToAction(nameof(All));
-        }
+        //    await articleService.AddAsync(articleForm);
+        //    return RedirectToAction(nameof(All));
+        //}
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Edit(int id)
-        {
-            if (!await articleService.ArticleExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    if (!await articleService.ArticleExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            var articleForm = await articleService.EditGetAsync(id);
-            return View(articleForm);
-        }
+        //    var articleForm = await articleService.EditGetAsync(id);
+        //    return View(articleForm);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> Edit(ArticleEditViewModel articleForm)
-        {
-            if (articleForm == null)
-            {
-                return BadRequest();
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Edit(ArticleEditViewModel articleForm)
+        //{
+        //    if (articleForm == null)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            if (!ModelState.IsValid)
-            {
-                return View(articleForm);
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(articleForm);
+        //    }
 
-            int id = articleForm.Id;
-            await articleService.EditPostAsync(articleForm);
-            return RedirectToAction(nameof(Details), new { id, information = articleForm.GetArticleInformation() });
-        }
+        //    int id = articleForm.Id;
+        //    await articleService.EditPostAsync(articleForm);
+        //    return RedirectToAction(nameof(Details), new { id, information = articleForm.GetArticleInformation() });
+        //}
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (!await articleService.ArticleExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    if (!await articleService.ArticleExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            var searchedArticle = await articleService.DeleteAsync(id);
+        //    var searchedArticle = await articleService.DeleteAsync(id);
 
-            return View(searchedArticle);
-        }
+        //    return View(searchedArticle);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!await articleService.ArticleExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (!await articleService.ArticleExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            await articleService.DeleteConfirmedAsync(id);
+        //    await articleService.DeleteConfirmedAsync(id);
 
-            return RedirectToAction(nameof(All));
-        }
+        //    return RedirectToAction(nameof(All));
+        //}
 
         [AllowAnonymous]
         [HttpGet]

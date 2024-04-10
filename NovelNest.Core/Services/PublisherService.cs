@@ -4,9 +4,11 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
+    using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
@@ -401,6 +403,87 @@
 
             await repository.RemoveAsync<BookBookStore>(bookInTheCurrentBookStore);
             await repository.SaveChangesAsync();
+        }
+
+
+        //Article
+        public async Task<int> AddArticleAsync(ArticleAddViewModel articleForm)
+        {
+            Article article = new Article()
+            {
+                Title = articleForm.Title,
+                Content = articleForm.Content,
+                ImageUrl = articleForm.ImageUrl,
+                DatePublished = DateTime.Now,
+                ViewsCount = 0
+            };
+
+            await repository.AddAsync(article);
+            await repository.SaveChangesAsync();
+
+            return article.Id;
+        }
+
+        public async Task<ArticleEditViewModel> EditArticleGetAsync(int articleId)
+        {
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+
+            var articleForm = new ArticleEditViewModel()
+            {
+                Id = articleId,
+                Title = currentArticle.Title,
+                Content = currentArticle.Content,
+                ImageUrl = currentArticle.ImageUrl
+            };
+
+            return articleForm;
+        }
+
+        public async Task<int> EditArticlePostAsync(ArticleEditViewModel articleForm)
+        {
+            var currentArticle = await repository.GetByIdAsync<Article>(articleForm.Id);
+
+            currentArticle.Title = articleForm.Title;
+            currentArticle.Content = articleForm.Content;
+            currentArticle.ImageUrl = articleForm.ImageUrl;
+
+            await repository.SaveChangesAsync();
+
+            return currentArticle.Id;
+        }
+
+        public async Task<ArticleDeleteViewModel> DeleteArticleAsync(int articleId)
+        {
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+
+            var deleteForm = new ArticleDeleteViewModel()
+            {
+                Id = articleId,
+                Title = currentArticle.Title,
+                ImageUrl = currentArticle.ImageUrl,
+                ViewsCount = currentArticle.ViewsCount
+            };
+
+            return deleteForm;
+        }
+
+        public async Task<int> DeleteArticleConfirmedAsync(int articleId)
+        {
+            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+
+            var articleComments = await repository.All<ArticleComment>()
+            .Where(ac => ac.ArticleId == articleId)
+                .ToListAsync();
+
+            if (articleComments != null && articleComments.Any())
+            {
+                await repository.RemoveRangeAsync<ArticleComment>(articleComments);
+            }
+
+            await repository.RemoveAsync<Article>(currentArticle);
+            await repository.SaveChangesAsync();
+
+            return currentArticle.Id;
         }
     }
 }

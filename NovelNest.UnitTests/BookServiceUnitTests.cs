@@ -9,7 +9,7 @@ using NovelNest.Infrastructure.Data.Models.Books;
 namespace NovelNest.UnitTests
 {
     [TestFixture]
-    public class BookUnitTests
+    public class BookServiceUnitTests
     {
         private NovelNestDbContext dbContext;
         private IEnumerable<Book> books;
@@ -224,7 +224,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByNewest()
+        public async Task Test_AllAsync_SortsByNewest()
         {
             // Act
             var booksNewestSorting = await service.AllAsync();
@@ -244,7 +244,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByOldest()
+        public async Task Test_AllAsync_SortsByOldest()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.Oldest);
@@ -264,7 +264,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByTitleAscending()
+        public async Task Test_AllAsync_SortsByTitleAscending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.TitleAscending);
@@ -284,7 +284,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByTitleDescending()
+        public async Task Test_AllAsync_SortsByTitleDescending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.TitleDescending);
@@ -304,7 +304,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByAuthorAscending()
+        public async Task Test_AllAsync_SortsByAuthorAscending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.AuthorAscending);
@@ -324,7 +324,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByAuthorDescending()
+        public async Task Test_AllAsync_SortsByAuthorDescending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.AuthorDescending);
@@ -344,7 +344,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByPriceAscending()
+        public async Task Test_AllAsync_SortsByPriceAscending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.PriceAscending);
@@ -364,7 +364,7 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
-        public async Task Test_AllAsync_SortingByPriceDescending()
+        public async Task Test_AllAsync_SortsByPriceDescending()
         {
             // Act
             var booksNewestSorting = await service.AllAsync(null, null, null, BookSorting.PriceDescending);
@@ -498,6 +498,5 @@ namespace NovelNest.UnitTests
             Assert.AreEqual(result.Count(), 2);
             Assert.AreEqual(result, expectedResult);
         }
-
     }
 }

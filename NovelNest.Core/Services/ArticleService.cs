@@ -102,84 +102,84 @@
             return await repository.GetByIdAsync<Article>(articleId);
         }
 
-        public async Task<int> AddAsync(ArticleAddViewModel articleForm)
-        {
-            Article article = new Article()
-            {
-                Title = articleForm.Title,
-                Content = articleForm.Content,
-                ImageUrl = articleForm.ImageUrl,
-                DatePublished = DateTime.Now,
-                ViewsCount = 0
-            };
+        //public async Task<int> AddAsync(ArticleAddViewModel articleForm)
+        //{
+        //    Article article = new Article()
+        //    {
+        //        Title = articleForm.Title,
+        //        Content = articleForm.Content,
+        //        ImageUrl = articleForm.ImageUrl,
+        //        DatePublished = DateTime.Now,
+        //        ViewsCount = 0
+        //    };
 
-            await repository.AddAsync(article);
-            await repository.SaveChangesAsync();
+        //    await repository.AddAsync(article);
+        //    await repository.SaveChangesAsync();
 
-            return article.Id;
-        }
+        //    return article.Id;
+        //}
 
-        public async Task<ArticleEditViewModel> EditGetAsync(int articleId)
-        {
-            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+        //public async Task<ArticleEditViewModel> EditGetAsync(int articleId)
+        //{
+        //    var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
-            var articleForm = new ArticleEditViewModel()
-            {
-                Id = articleId,
-                Title = currentArticle.Title,
-                Content = currentArticle.Content,
-                ImageUrl = currentArticle.ImageUrl
-            };
+        //    var articleForm = new ArticleEditViewModel()
+        //    {
+        //        Id = articleId,
+        //        Title = currentArticle.Title,
+        //        Content = currentArticle.Content,
+        //        ImageUrl = currentArticle.ImageUrl
+        //    };
 
-            return articleForm;
-        }
+        //    return articleForm;
+        //}
 
-        public async Task<int> EditPostAsync(ArticleEditViewModel articleForm)
-        {
-            var currentArticle = await repository.GetByIdAsync<Article>(articleForm.Id);
+        //public async Task<int> EditPostAsync(ArticleEditViewModel articleForm)
+        //{
+        //    var currentArticle = await repository.GetByIdAsync<Article>(articleForm.Id);
 
-            currentArticle.Title = articleForm.Title;
-            currentArticle.Content = articleForm.Content;
-            currentArticle.ImageUrl = articleForm.ImageUrl;
+        //    currentArticle.Title = articleForm.Title;
+        //    currentArticle.Content = articleForm.Content;
+        //    currentArticle.ImageUrl = articleForm.ImageUrl;
 
-            await repository.SaveChangesAsync();
+        //    await repository.SaveChangesAsync();
 
-            return currentArticle.Id;
-        }
+        //    return currentArticle.Id;
+        //}
 
-        public async Task<ArticleDeleteViewModel> DeleteAsync(int articleId)
-        {
-            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+        //public async Task<ArticleDeleteViewModel> DeleteAsync(int articleId)
+        //{
+        //    var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
-            var deleteForm = new ArticleDeleteViewModel()
-            {
-                Id = articleId,
-                Title = currentArticle.Title,
-                ImageUrl = currentArticle.ImageUrl,
-                ViewsCount = currentArticle.ViewsCount
-            };
+        //    var deleteForm = new ArticleDeleteViewModel()
+        //    {
+        //        Id = articleId,
+        //        Title = currentArticle.Title,
+        //        ImageUrl = currentArticle.ImageUrl,
+        //        ViewsCount = currentArticle.ViewsCount
+        //    };
 
-            return deleteForm;
-        }
+        //    return deleteForm;
+        //}
 
-        public async Task<int> DeleteConfirmedAsync(int articleId)
-        {
-            var currentArticle = await repository.GetByIdAsync<Article>(articleId);
+        //public async Task<int> DeleteConfirmedAsync(int articleId)
+        //{
+        //    var currentArticle = await repository.GetByIdAsync<Article>(articleId);
 
-            var articleComments = await repository.All<ArticleComment>()
-            .Where(ac => ac.ArticleId == articleId)
-                .ToListAsync();
+        //    var articleComments = await repository.All<ArticleComment>()
+        //    .Where(ac => ac.ArticleId == articleId)
+        //        .ToListAsync();
 
-            if (articleComments != null && articleComments.Any())
-            {
-                await repository.RemoveRangeAsync<ArticleComment>(articleComments);
-            }
+        //    if (articleComments != null && articleComments.Any())
+        //    {
+        //        await repository.RemoveRangeAsync<ArticleComment>(articleComments);
+        //    }
 
-            await repository.RemoveAsync<Article>(currentArticle);
-            await repository.SaveChangesAsync();
+        //    await repository.RemoveAsync<Article>(currentArticle);
+        //    await repository.SaveChangesAsync();
 
-            return currentArticle.Id;
-        }
+        //    return currentArticle.Id;
+        //}
 
         public async Task<ArticleCommentQueryServiceModel> AllArticleCommentsAsync(
             int articleId,

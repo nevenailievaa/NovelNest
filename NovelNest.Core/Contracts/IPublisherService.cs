@@ -1,5 +1,6 @@
 ﻿using NovelNest.Core.Enums;
 using NovelNest.Core.Models.QueryModels.Book;
+using NovelNest.Core.Models.ViewModels.Article;
 using NovelNest.Core.Models.ViewModels.Book;
 using NovelNest.Core.Models.ViewModels.BookStore;
 using NovelNest.Infrastructure.Data.Models.Mappings;
@@ -36,5 +37,12 @@ namespace NovelNest.Core.Contracts
         Task<BookBookStore> AddBookToBookStoreAsync(int bookId, int bookStoreId);
         Task<BookBookStoreDeleteViewModel> RemoveBookFromBookStoreAsync(int bookId, int bookStoreId);
         Task RemoveBookFromBookStoreConfirmedAsync(int bookId, int bookStoreId);
+
+        //Article
+        Task<int> AddArticleAsync(ArticleAddViewModel articleForm);
+        Task<ArticleEditViewModel> EditArticleGetAsync(int articleId);
+        Task<int> EditArticlePostAsync(ArticleEditViewModel articleForm);
+        Task<ArticleDeleteViewModel> DeleteArticleAsync(int articleId);
+        Task<int> DeleteArticleConfirmedAsync(int articleId);
     }
 }
