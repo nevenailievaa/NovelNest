@@ -50,5 +50,15 @@
         {
             return await DbSet<T>().FindAsync(id);
         }
+
+        public void Detach<TEntity>(TEntity entity) where TEntity : class
+        {
+            var entry = dbContext.Entry(entity);
+            if (entry.State != EntityState.Detached)
+            {
+                entry.State = EntityState.Detached;
+            }
+        }
+
     }
 }

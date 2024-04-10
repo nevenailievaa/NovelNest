@@ -438,26 +438,29 @@
 
         public async Task<int> RemoveBookFromAllCollectionsAsync(int bookId, string userId)
         {
-            var wantToReadBook = await repository.AllAsReadOnly<BookUserWantToRead>()
+            var wantToReadBook = await repository.All<BookUserWantToRead>()
                 .FirstOrDefaultAsync(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId);
 
-            var currentlyReadingBook = await repository.AllAsReadOnly<BookUserCurrentlyReading>()
+            var currentlyReadingBook = await repository.All<BookUserCurrentlyReading>()
                 .FirstOrDefaultAsync(bucr => bucr.UserId == userId && bucr.BookId == bookId);
 
-            var readBook = await repository.AllAsReadOnly<BookUserRead>()
+            var readBook = await repository.All<BookUserRead>()
                 .FirstOrDefaultAsync(bur => bur.UserId == userId && bur.BookId == bookId);
 
             if (wantToReadBook != null)
             {
                 await repository.RemoveAsync<BookUserWantToRead>(wantToReadBook);
+                repository.Detach(wantToReadBook);
             }
             else if (currentlyReadingBook != null)
             {
                 await repository.RemoveAsync<BookUserCurrentlyReading>(currentlyReadingBook);
+                repository.Detach(currentlyReadingBook);
             }
             else if (readBook != null)
             {
                 await repository.RemoveAsync<BookUserRead>(readBook);
+                repository.Detach(readBook);
             }
 
             return await repository.SaveChangesAsync();
@@ -555,7 +558,7 @@
 
         public async Task<int> RemoveWantToReadBookAsync(int bookId, string userId)
         {
-            var currentUserBook = repository.AllAsReadOnly<BookUserWantToRead>()
+            var currentUserBook = repository.All<BookUserWantToRead>()
                 .Where(buwtr => buwtr.UserId == userId && buwtr.BookId == bookId)
                 .FirstOrDefault();
 
@@ -566,7 +569,7 @@
 
         public async Task<int> RemoveCurrentlyReadingBookAsync(int bookId, string userId)
         {
-            var currentUserBook = repository.AllAsReadOnly<BookUserCurrentlyReading>()
+            var currentUserBook = repository.All<BookUserCurrentlyReading>()
                 .Where(bucr => bucr.UserId == userId && bucr.BookId == bookId)
                 .FirstOrDefault();
 
@@ -577,7 +580,7 @@
 
         public async Task<int> RemoveReadBookAsync(int bookId, string userId)
         {
-            var currentUserBook = repository.AllAsReadOnly<BookUserRead>()
+            var currentUserBook = repository.All<BookUserRead>()
                 .Where(bur => bur.UserId == userId && bur.BookId == bookId)
                 .FirstOrDefault();
 

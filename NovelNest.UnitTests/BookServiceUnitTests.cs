@@ -1,10 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NovelNest.Core.Contracts;
 using NovelNest.Core.Enums;
+using NovelNest.Core.Models.QueryModels.Book;
+using NovelNest.Core.Models.ViewModels.Book;
 using NovelNest.Core.Services;
 using NovelNest.Infrastructure.Common;
 using NovelNest.Infrastructure.Data;
 using NovelNest.Infrastructure.Data.Models.Books;
+using NovelNest.Infrastructure.Data.Models.BookUserActions;
+using System.ComponentModel.DataAnnotations;
 
 namespace NovelNest.UnitTests
 {
@@ -16,22 +22,34 @@ namespace NovelNest.UnitTests
         private IEnumerable<Genre> genres;
         private IEnumerable<CoverType> coverTypes;
 
-        private Book AnnaKarenina = new Book();
-        private Book Hannibal = new Book();
-        private Book MenWhoHateWomen = new Book();
-        private Book MeBeforeYou = new Book();
-        private Book TheDiaryOfAYoungGirl = new Book();
+        private IRepository repository;
+        private IBookService service;
 
-        private CoverType SoftCover = new CoverType();
-        private CoverType HardCover = new CoverType();
+        //Books
+        private Book AnnaKarenina;
+        private Book Hannibal;
+        private Book MenWhoHateWomen;
+        private Book MeBeforeYou;
+        private Book TheDiaryOfAYoungGirl;
 
-        private Genre Romance = new Genre();
-        private Genre ClassicLiterature = new Genre();
-        private Genre Autobiography = new Genre();
-        private Genre Crime = new Genre();
+        //Covers
+        private CoverType SoftCover;
+        private CoverType HardCover;
 
-        IRepository repository;
-        IBookService service;
+        //Genres
+        private Genre Romance;
+        private Genre ClassicLiterature;
+        private Genre Autobiography;
+        private Genre Crime;
+
+        //Book Collections
+        private BookUserWantToRead bookUserWantToRead;
+        private BookUserCurrentlyReading bookUserCurrentlyReading;
+        private BookUserRead bookUserRead;
+
+        //Book Reviews
+        private BookReview bookReview;
+
 
         [SetUp]
         public async Task Setup()
@@ -155,6 +173,38 @@ namespace NovelNest.UnitTests
                 SoftCover, HardCover
             };
 
+            //Book Collections
+            bookUserWantToRead = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 1,
+                TimeAdded = DateTime.Now
+            };
+            bookUserCurrentlyReading = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 2,
+                TimeAdded = DateTime.Now
+            };
+            bookUserRead = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 3,
+                TimeAdded = DateTime.Now
+            };
+
+            //Book Reviews
+            bookReview = new BookReview()
+            {
+                Id = 1,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title",
+                Description = "Review Description",
+                Rate = 10
+            };
+
+            //Databases
             var options = new DbContextOptionsBuilder<NovelNestDbContext>()
                 .UseInMemoryDatabase(databaseName: "NovelNestInMemoryDb" + Guid.NewGuid().ToString())
                 .Options;
@@ -164,6 +214,10 @@ namespace NovelNest.UnitTests
             dbContext.AddRangeAsync(books);
             dbContext.AddRangeAsync(coverTypes);
             dbContext.AddRangeAsync(genres);
+            dbContext.AddAsync(bookUserWantToRead);
+            dbContext.AddAsync(bookUserCurrentlyReading);
+            dbContext.AddAsync(bookUserRead);
+            dbContext.AddAsync(bookReview);
             dbContext.SaveChanges();
 
             repository = new Repository(dbContext);
@@ -185,10 +239,10 @@ namespace NovelNest.UnitTests
             var resultTwo = await service.AllAsync("NotAnExistingBook");
 
             // Assert
-            Assert.AreEqual(result.TotalBooksCount, 1);
+            Assert.AreEqual(1, result.TotalBooksCount);
             Assert.IsTrue(result.Books.First().Id == 1);
 
-            Assert.AreEqual(resultTwo.TotalBooksCount, 0);
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
             Assert.IsEmpty(resultTwo.Books);
         }
 
@@ -200,11 +254,11 @@ namespace NovelNest.UnitTests
             var resultTwo = await service.AllAsync(null, "NotAnExistingCoverType");
 
             // Assert
-            Assert.AreEqual(result.TotalBooksCount, 2);
+            Assert.AreEqual(2, result.TotalBooksCount);
             Assert.IsTrue(result.Books.First().Id == 5);
             Assert.IsTrue(result.Books.Skip(1).First().Id == 1);
 
-            Assert.AreEqual(resultTwo.TotalBooksCount, 0);
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
             Assert.IsEmpty(resultTwo.Books);
         }
 
@@ -216,10 +270,10 @@ namespace NovelNest.UnitTests
             var resultTwo = await service.AllAsync(null, null, "NotAValidSearchTerm");
 
             // Assert
-            Assert.AreEqual(result.TotalBooksCount, 1);
+            Assert.AreEqual(1, result.TotalBooksCount);
             Assert.IsTrue(result.Books.First().Id == 1);
 
-            Assert.AreEqual(resultTwo.TotalBooksCount, 0);
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
             Assert.IsEmpty(resultTwo.Books);
         }
 
@@ -239,8 +293,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 5, 4, 3, 2, 1});
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 3, 2, 1 }, booksIds);
         }
 
         [Test]
@@ -259,8 +313,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 1, 2, 3, 4, 5 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 2, 3, 4, 5 }, booksIds);
         }
 
         [Test]
@@ -279,8 +333,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 1, 2, 4, 3, 5 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 2, 4, 3, 5 }, booksIds);
         }
 
         [Test]
@@ -299,8 +353,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 5, 3, 4, 2, 1 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 3, 4, 2, 1 }, booksIds);
         }
 
         [Test]
@@ -319,8 +373,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 5, 4, 1, 3, 2 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 1, 3, 2 }, booksIds);
         }
 
         [Test]
@@ -339,8 +393,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 2, 3, 1, 4, 5 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 2, 3, 1, 4, 5 }, booksIds);
         }
 
         [Test]
@@ -359,8 +413,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 3, 4, 5, 2, 1 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 3, 4, 5, 2, 1 }, booksIds);
         }
 
         [Test]
@@ -379,8 +433,8 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.IsNotNull(booksNewestSorting.Books);
-            Assert.AreEqual(booksNewestSorting.Books.Count(), 5);
-            Assert.AreEqual(booksIds, new List<int>() { 1, 5, 2, 4, 3 });
+            Assert.AreEqual(5, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 5, 2, 4, 3 }, booksIds);
         }
 
         [Test]
@@ -440,11 +494,11 @@ namespace NovelNest.UnitTests
             var result = await service.AllGenresAsync();
 
             // Assert
-            Assert.AreEqual(result.Count(), 4);
-            Assert.AreEqual(result.First().Name, "Romance");
-            Assert.AreEqual(result.Skip(1).First().Name, "ClassicLiterature");
-            Assert.AreEqual(result.Skip(2).First().Name, "Autobiography");
-            Assert.AreEqual(result.Skip(3).First().Name, "Crime");
+            Assert.AreEqual(4, result.Count());
+            Assert.AreEqual("Romance", result.First().Name);
+            Assert.AreEqual("ClassicLiterature", result.Skip(1).First().Name);
+            Assert.AreEqual("Autobiography", result.Skip(2).First().Name);
+            Assert.AreEqual("Crime", result.Skip(3).First().Name);
         }
 
         [Test]
@@ -455,8 +509,8 @@ namespace NovelNest.UnitTests
             var expectedResult = new List<string>() { "Romance", "ClassicLiterature", "Autobiography", "Crime" };
 
             // Assert
-            Assert.AreEqual(result.Count(), 4);
-            Assert.AreEqual(result, expectedResult);
+            Assert.AreEqual(4, result.Count());
+            Assert.AreEqual(expectedResult, result);
         }
 
         [Test]
@@ -476,27 +530,1591 @@ namespace NovelNest.UnitTests
         }
 
         [Test]
+        public async Task Test_DetailsAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var currentBookDetails = new BookViewModel()
+            {
+                Id = AnnaKarenina.Id,
+                Title = AnnaKarenina.Title,
+                Author = AnnaKarenina.Author,
+                Genre = AnnaKarenina.Genre.Name,
+                Description = AnnaKarenina.Description,
+                Pages = AnnaKarenina.Pages,
+                PublishingHouse = AnnaKarenina.PublishingHouse,
+                YearPublished = AnnaKarenina.YearPublished,
+                CoverType = AnnaKarenina.CoverType.Name,
+                Price = AnnaKarenina.Price,
+                ImageUrl = AnnaKarenina.ImageUrl,
+                Reviews = new List<BookReview>() { bookReview }
+            };
+
+            // Act
+            var result = await service.DetailsAsync(AnnaKarenina.Id);
+
+            // Assert
+            Assert.AreEqual(currentBookDetails.Id, result.Id);
+            Assert.AreEqual(currentBookDetails.Title, result.Title);
+            Assert.AreEqual(currentBookDetails.Author, result.Author);
+            Assert.AreEqual(currentBookDetails.Genre, result.Genre);
+            Assert.AreEqual(currentBookDetails.Description, result.Description);
+            Assert.AreEqual(currentBookDetails.Pages, result.Pages);
+            Assert.AreEqual(currentBookDetails.PublishingHouse, result.PublishingHouse);
+            Assert.AreEqual(currentBookDetails.YearPublished, result.YearPublished);
+            Assert.AreEqual(currentBookDetails.CoverType, result.CoverType);
+            Assert.AreEqual(currentBookDetails.Price, result.Price);
+            Assert.AreEqual(currentBookDetails.ImageUrl, result.ImageUrl);
+            Assert.AreEqual(currentBookDetails.Reviews.Count, result.Reviews.Count);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_FiltersByGenre()
+        {
+            // Act
+            var result = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", "ClassicLiterature");
+            var resultTwo = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", "NotAnExistingBook");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 1);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_FiltersByCoverType()
+        {
+            // Act
+            var result = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, "Hard");
+            var resultTwo = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, "Soft");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 1);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_FiltersBySearchTerm()
+        {
+            // Act
+            var result = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, "Ana");
+            var resultTwo = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, "NotAValidSearchTerm");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 1);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByNewest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksNewestSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser");
+            var booksIds = new List<int>()
+            {
+                booksNewestSorting.Books.First().Id,
+                booksNewestSorting.Books.Skip(1).First().Id,
+                booksNewestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksNewestSorting.Books);
+            Assert.AreEqual(3, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByOldest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksOldestSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.Oldest);
+            var booksIds = new List<int>()
+            {
+                booksOldestSorting.Books.First().Id,
+                booksOldestSorting.Books.Skip(1).First().Id,
+                booksOldestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksOldestSorting.Books);
+            Assert.AreEqual(3, booksOldestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByTitleAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleAscendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleAscending);
+            var booksIds = new List<int>()
+            {
+                booksTitleAscendingSorting.Books.First().Id,
+                booksTitleAscendingSorting.Books.Skip(1).First().Id,
+                booksTitleAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleAscendingSorting.Books);
+            Assert.AreEqual(3, booksTitleAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByTitleDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleDescendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleDescending);
+            var booksIds = new List<int>()
+            {
+                booksTitleDescendingSorting.Books.First().Id,
+                booksTitleDescendingSorting.Books.Skip(1).First().Id,
+                booksTitleDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleDescendingSorting.Books);
+            Assert.AreEqual(3, booksTitleDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByAuthorAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorAscendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorAscending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorAscendingSorting.Books.First().Id,
+                booksAuthorAscendingSorting.Books.Skip(1).First().Id,
+                booksAuthorAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorAscendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByAuthorDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorDescendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorDescending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorDescendingSorting.Books.First().Id,
+                booksAuthorDescendingSorting.Books.Skip(1).First().Id,
+                booksAuthorDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorDescendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByPriceAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceAscendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceAscending);
+            var booksIds = new List<int>()
+            {
+                booksPriceAscendingSorting.Books.First().Id,
+                booksPriceAscendingSorting.Books.Skip(1).First().Id,
+                booksPriceAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceAscendingSorting.Books);
+            Assert.AreEqual(3, booksPriceAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 4, 5, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllWantToReadBooksIdsByUserIdAsync_SortsByPriceDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserWantToRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceDescendingSorting = await service.AllWantToReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceDescending);
+            var booksIds = new List<int>()
+            {
+                booksPriceDescendingSorting.Books.First().Id,
+                booksPriceDescendingSorting.Books.Skip(1).First().Id,
+                booksPriceDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceDescendingSorting.Books);
+            Assert.AreEqual(3, booksPriceDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 1, 5, 4 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_FiltersByGenre()
+        {
+            // Act
+            var result = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", "Crime");
+            var resultTwo = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", "NotAnExistingBook");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 2);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_FiltersByCoverType()
+        {
+            // Act
+            var result = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, "Soft");
+            var resultTwo = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, "Hard");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 2);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_FiltersBySearchTerm()
+        {
+            // Act
+            var result = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, "Hann");
+            var resultTwo = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, "NotAValidSearchTerm");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 2);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByNewest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksNewestSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser");
+            var booksIds = new List<int>()
+            {
+                booksNewestSorting.Books.First().Id,
+                booksNewestSorting.Books.Skip(1).First().Id,
+                booksNewestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksNewestSorting.Books);
+            Assert.AreEqual(3, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 2 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByOldest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksOldestSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.Oldest);
+            var booksIds = new List<int>()
+            {
+                booksOldestSorting.Books.First().Id,
+                booksOldestSorting.Books.Skip(1).First().Id,
+                booksOldestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksOldestSorting.Books);
+            Assert.AreEqual(3, booksOldestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 2, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByTitleAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleAscendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleAscending);
+            var booksIds = new List<int>()
+            {
+                booksTitleAscendingSorting.Books.First().Id,
+                booksTitleAscendingSorting.Books.Skip(1).First().Id,
+                booksTitleAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleAscendingSorting.Books);
+            Assert.AreEqual(3, booksTitleAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 2, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByTitleDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleDescendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleDescending);
+            var booksIds = new List<int>()
+            {
+                booksTitleDescendingSorting.Books.First().Id,
+                booksTitleDescendingSorting.Books.Skip(1).First().Id,
+                booksTitleDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleDescendingSorting.Books);
+            Assert.AreEqual(3, booksTitleDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 2 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByAuthorAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorAscendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorAscending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorAscendingSorting.Books.First().Id,
+                booksAuthorAscendingSorting.Books.Skip(1).First().Id,
+                booksAuthorAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorAscendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 2 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByAuthorDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorDescendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorDescending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorDescendingSorting.Books.First().Id,
+                booksAuthorDescendingSorting.Books.Skip(1).First().Id,
+                booksAuthorDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorDescendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 2, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByPriceAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceAscendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceAscending);
+            var booksIds = new List<int>()
+            {
+                booksPriceAscendingSorting.Books.First().Id,
+                booksPriceAscendingSorting.Books.Skip(1).First().Id,
+                booksPriceAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceAscendingSorting.Books);
+            Assert.AreEqual(3, booksPriceAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 4, 5, 2 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllCurrentlyReadingBooksIdsByUserIdAsync_SortsByPriceDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserCurrentlyReading()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceDescendingSorting = await service.AllCurrentlyReadingBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceDescending);
+            var booksIds = new List<int>()
+            {
+                booksPriceDescendingSorting.Books.First().Id,
+                booksPriceDescendingSorting.Books.Skip(1).First().Id,
+                booksPriceDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceDescendingSorting.Books);
+            Assert.AreEqual(3, booksPriceDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 2, 4 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_FiltersByGenre()
+        {
+            // Act
+            var result = await service.AllReadBooksIdsByUserIdAsync("testUser", "Crime");
+            var resultTwo = await service.AllReadBooksIdsByUserIdAsync("testUser", "NotAnExistingBook");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 3);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_FiltersByCoverType()
+        {
+            // Act
+            var result = await service.AllReadBooksIdsByUserIdAsync("testUser", null, "Soft");
+            var resultTwo = await service.AllReadBooksIdsByUserIdAsync("testUser", null, "Hard");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 3);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_FiltersBySearchTerm()
+        {
+            // Act
+            var result = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, "Men Who");
+            var resultTwo = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, "NotAValidSearchTerm");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalBooksCount);
+            Assert.IsTrue(result.Books.First().Id == 3);
+
+            Assert.AreEqual(0, resultTwo.TotalBooksCount);
+            Assert.IsEmpty(resultTwo.Books);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByNewest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksNewestSorting = await service.AllReadBooksIdsByUserIdAsync("testUser");
+            var booksIds = new List<int>()
+            {
+                booksNewestSorting.Books.First().Id,
+                booksNewestSorting.Books.Skip(1).First().Id,
+                booksNewestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksNewestSorting.Books);
+            Assert.AreEqual(3, booksNewestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 3 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByOldest()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksOldestSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.Oldest);
+            var booksIds = new List<int>()
+            {
+                booksOldestSorting.Books.First().Id,
+                booksOldestSorting.Books.Skip(1).First().Id,
+                booksOldestSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksOldestSorting.Books);
+            Assert.AreEqual(3, booksOldestSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 3, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByTitleAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleAscendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleAscending);
+            var booksIds = new List<int>()
+            {
+                booksTitleAscendingSorting.Books.First().Id,
+                booksTitleAscendingSorting.Books.Skip(1).First().Id,
+                booksTitleAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleAscendingSorting.Books);
+            Assert.AreEqual(3, booksTitleAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 4, 3, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByTitleDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksTitleDescendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.TitleDescending);
+            var booksIds = new List<int>()
+            {
+                booksTitleDescendingSorting.Books.First().Id,
+                booksTitleDescendingSorting.Books.Skip(1).First().Id,
+                booksTitleDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksTitleDescendingSorting.Books);
+            Assert.AreEqual(3, booksTitleDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 3, 4 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByAuthorAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorAscendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorAscending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorAscendingSorting.Books.First().Id,
+                booksAuthorAscendingSorting.Books.Skip(1).First().Id,
+                booksAuthorAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorAscendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 3 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByAuthorDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksAuthorDescendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.AuthorDescending);
+            var booksIds = new List<int>()
+            {
+                booksAuthorDescendingSorting.Books.First().Id,
+                booksAuthorDescendingSorting.Books.Skip(1).First().Id,
+                booksAuthorDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksAuthorDescendingSorting.Books);
+            Assert.AreEqual(3, booksAuthorDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 3, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByPriceAscending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceAscendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceAscending);
+            var booksIds = new List<int>()
+            {
+                booksPriceAscendingSorting.Books.First().Id,
+                booksPriceAscendingSorting.Books.Skip(1).First().Id,
+                booksPriceAscendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceAscendingSorting.Books);
+            Assert.AreEqual(3, booksPriceAscendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 3, 4, 5 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllReadBooksIdsByUserIdAsync_SortsByPriceDescending()
+        {
+            //Arrange 
+            var bookUserWantToReadTwo = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 4,
+                TimeAdded = DateTime.Now
+            };
+            var bookUserWantToReadThree = new BookUserRead()
+            {
+                UserId = "testUser",
+                BookId = 5,
+                TimeAdded = DateTime.Now
+            };
+            dbContext.AddAsync(bookUserWantToReadTwo);
+            dbContext.AddAsync(bookUserWantToReadThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var booksPriceDescendingSorting = await service.AllReadBooksIdsByUserIdAsync("testUser", null, null, null, BookSorting.PriceDescending);
+            var booksIds = new List<int>()
+            {
+                booksPriceDescendingSorting.Books.First().Id,
+                booksPriceDescendingSorting.Books.Skip(1).First().Id,
+                booksPriceDescendingSorting.Books.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(booksPriceDescendingSorting.Books);
+            Assert.AreEqual(3, booksPriceDescendingSorting.Books.Count());
+            Assert.AreEqual(new List<int>() { 5, 4, 3 }, booksIds);
+        }
+
+        [Test]
         public async Task Test_AllCoverTypesAsync_ReturnsTheCorrectResult()
         {
             // Act
             var result = await service.AllCoverTypesAsync();
 
             // Assert
-            Assert.AreEqual(result.Count(), 2);
-            Assert.AreEqual(result.First().Name, "Soft");
-            Assert.AreEqual(result.Skip(1).First().Name, "Hard");
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual("Soft", result.First().Name);
+            Assert.AreEqual("Hard", result.Skip(1).First().Name);
         }
 
         [Test]
-        public async Task Test_AllCoverTypesNamesAsync_ReturnsTheCorrectResult()
+        public async Task Test_BookIsInAnotherCollectionAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await service.AllCoverTypesNamesAsync();
-            var expectedResult = new List<string>() { "Soft", "Hard" };
+            var resultWantToRead = await service.BookIsInAnotherCollectionAsync(1, "testUser");
+            var resultCurrentlyReading = await service.BookIsInAnotherCollectionAsync(2, "testUser");
+            var resultRead = await service.BookIsInAnotherCollectionAsync(3, "testUser");
+            var resultNotInCollection = await service.BookIsInAnotherCollectionAsync(4, "testUser");
 
             // Assert
-            Assert.AreEqual(result.Count(), 2);
-            Assert.AreEqual(result, expectedResult);
+            Assert.IsTrue(resultWantToRead);
+            Assert.IsTrue(resultCurrentlyReading);
+            Assert.IsTrue(resultRead);
+            Assert.IsFalse(resultNotInCollection);
+        }
+
+        [Test]
+        public async Task Test_RemoveBookFromAllCollectionsAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var resultWantToRead = await service.RemoveBookFromAllCollectionsAsync(1, "testUser");
+            var resultCurrentlyReading = await service.RemoveBookFromAllCollectionsAsync(2, "testUser");
+            var resultRead = await service.RemoveBookFromAllCollectionsAsync(3, "testUser");
+
+            // Assert
+            Assert.AreEqual(0, resultWantToRead);
+            Assert.AreEqual(0, resultCurrentlyReading);
+            Assert.AreEqual(0, resultRead);
+        }
+
+        [Test]
+        public async Task Test_BookIsWantToReadAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var resultWantToRead = await service.BookIsWantToReadAsync(1, "testUser");
+            var resultNotWantToRead = await service.BookIsWantToReadAsync(2, "testUser");
+
+            // Assert
+            Assert.IsTrue(resultWantToRead);
+            Assert.IsFalse(resultNotWantToRead);
+        }
+
+        [Test]
+        public async Task Test_BookIsCurrentlyReadingAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var resultCurrentlyReading = await service.BookIsCurrentlyReadingAsync(2, "testUser");
+            var resultNotCurrentlyReading = await service.BookIsCurrentlyReadingAsync(1, "testUser");
+
+            // Assert
+            Assert.IsTrue(resultCurrentlyReading);
+            Assert.IsFalse(resultNotCurrentlyReading);
+        }
+
+        [Test]
+        public async Task Test_BookIsReadAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var resultRead = await service.BookIsReadAsync(3, "testUser");
+            var resultNotRead = await service.BookIsReadAsync(1, "testUser");
+
+            // Assert
+            Assert.IsTrue(resultRead);
+            Assert.IsFalse(resultNotRead);
+        }
+
+        [Test]
+        public async Task Test_AddWantToReadBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testSecondUser";
+
+            // Act
+            var result = await service.AddWantToReadBookAsync(1, userId);
+            var expectedResult = await service.BookIsWantToReadAsync(1, userId);
+
+            // Assert
+            Assert.AreEqual(1, result);
+            Assert.IsTrue(expectedResult);
+        }
+
+        [Test]
+        public async Task Test_AddCurrentlyReadingBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testSecondUser";
+
+            // Act
+            var result = await service.AddCurrentlyReadingBookAsync(2, userId);
+            var expectedResult = await service.BookIsCurrentlyReadingAsync(2, userId);
+            var book = await service.FindBookCurrentlyReadingAsync(2, userId);
+
+            // Assert
+            Assert.AreEqual(2, result);
+            Assert.IsTrue(expectedResult);
+            Assert.AreEqual(1, book.CurrentPage);
+        }
+
+        [Test]
+        public async Task Test_AddReadBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testSecondUser";
+
+            // Act
+            var result = await service.AddReadBookAsync(3, userId);
+            var expectedResult = await service.BookIsReadAsync(3, userId);
+
+            // Assert
+            Assert.AreEqual(3, result);
+            Assert.IsTrue(expectedResult);
+        }
+
+        [Test]
+        public async Task Test_RemoveWantToReadBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testUser";
+
+            // Act
+            var result = await service.RemoveWantToReadBookAsync(1, userId);
+            var expectedResult = await service.BookIsWantToReadAsync(1, userId);
+
+            // Assert
+            Assert.AreEqual(1, result);
+            Assert.IsFalse(expectedResult);
+        }
+
+        [Test]
+        public async Task Test_RemoveCurrentlyReadingBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testUser";
+
+            // Act
+            var result = await service.RemoveCurrentlyReadingBookAsync(2, userId);
+            var expectedResult = await service.BookIsCurrentlyReadingAsync(2, userId);
+
+            // Assert
+            Assert.AreEqual(2, result);
+            Assert.IsFalse(expectedResult);
+        }
+
+        [Test]
+        public async Task Test_RemoveReadBookAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            string userId = "testUser";
+
+            // Act
+            var result = await service.RemoveReadBookAsync(3, userId);
+            var expectedResult = await service.BookIsReadAsync(3, userId);
+
+            // Assert
+            Assert.AreEqual(3, result);
+            Assert.IsFalse(expectedResult);
+        }
+        
+        [Test]
+        public async Task Test_AllBookReviewsAsync_FiltersBySearchTerm()
+        {
+            // Act
+            var result = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title, "Review Title");
+            var resultTwo = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title, "Not a valid search");
+
+            // Assert
+            Assert.AreEqual(1, result.TotalReviewsCount);
+            Assert.IsTrue(result.BookReviews.First().Id == 1);
+
+            Assert.AreEqual(0, resultTwo.TotalReviewsCount);
+            Assert.IsEmpty(resultTwo.BookReviews);
+        }
+
+        [Test]
+        public async Task Test_AllBookReviewsAsync_SortsByNewest()
+        {
+            //Arrange 
+            var bookReviewTwo = new BookReview()
+            {
+                Id = 2,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Two",
+                Description = "Review Description Two",
+                Rate = 10
+            };
+            var bookReviewThree = new BookReview()
+            {
+                Id = 3,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Three",
+                Description = "Review Description Three",
+                Rate = 10
+            };
+            dbContext.AddAsync(bookReviewTwo);
+            dbContext.AddAsync(bookReviewThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var bookReviewsNewestSorting = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title);
+            var booksIds = new List<int>()
+            {
+                bookReviewsNewestSorting.BookReviews.First().Id,
+                bookReviewsNewestSorting.BookReviews.Skip(1).First().Id,
+                bookReviewsNewestSorting.BookReviews.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(bookReviewsNewestSorting.BookReviews);
+            Assert.AreEqual(3, bookReviewsNewestSorting.BookReviews.Count());
+            Assert.AreEqual(new List<int>() { 3, 2, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllBookReviewsAsync_SortsByOldest()
+        {
+            //Arrange 
+            var bookReviewTwo = new BookReview()
+            {
+                Id = 2,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Two",
+                Description = "Review Description Two",
+                Rate = 10
+            };
+            var bookReviewThree = new BookReview()
+            {
+                Id = 3,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Three",
+                Description = "Review Description Three",
+                Rate = 10
+            };
+            dbContext.AddAsync(bookReviewTwo);
+            dbContext.AddAsync(bookReviewThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var bookReviewsOldestSorting = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title, null, BookReviewSorting.Oldest);
+            var booksIds = new List<int>()
+            {
+                bookReviewsOldestSorting.BookReviews.First().Id,
+                bookReviewsOldestSorting.BookReviews.Skip(1).First().Id,
+                bookReviewsOldestSorting.BookReviews.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(bookReviewsOldestSorting.BookReviews);
+            Assert.AreEqual(3, bookReviewsOldestSorting.BookReviews.Count());
+            Assert.AreEqual(new List<int>() { 1, 2, 3 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllBookReviewsAsync_SortsByRateAscending()
+        {
+            //Arrange 
+            var bookReviewTwo = new BookReview()
+            {
+                Id = 2,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Two",
+                Description = "Review Description Two",
+                Rate = 9
+            };
+            var bookReviewThree = new BookReview()
+            {
+                Id = 3,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Three",
+                Description = "Review Description Three",
+                Rate = 8
+            };
+            dbContext.AddAsync(bookReviewTwo);
+            dbContext.AddAsync(bookReviewThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var bookReviewsRateAscendingSorting = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title, null, BookReviewSorting.RateAscending);
+            var booksIds = new List<int>()
+            {
+                bookReviewsRateAscendingSorting.BookReviews.First().Id,
+                bookReviewsRateAscendingSorting.BookReviews.Skip(1).First().Id,
+                bookReviewsRateAscendingSorting.BookReviews.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(bookReviewsRateAscendingSorting.BookReviews);
+            Assert.AreEqual(3, bookReviewsRateAscendingSorting.BookReviews.Count());
+            Assert.AreEqual(new List<int>() { 3, 2, 1 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AllBookReviewsAsync_SortsByRateDescending()
+        {
+            //Arrange 
+            var bookReviewTwo = new BookReview()
+            {
+                Id = 2,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Two",
+                Description = "Review Description Two",
+                Rate = 9
+            };
+            var bookReviewThree = new BookReview()
+            {
+                Id = 3,
+                UserId = "testUser",
+                BookId = 1,
+                Title = "Review Title Three",
+                Description = "Review Description Three",
+                Rate = 8
+            };
+            dbContext.AddAsync(bookReviewTwo);
+            dbContext.AddAsync(bookReviewThree);
+            dbContext.SaveChanges();
+
+            // Act
+            var bookReviewsRateDescendingSorting = await service.AllBookReviewsAsync(AnnaKarenina.Id, AnnaKarenina.Title, null, BookReviewSorting.RateDescending);
+            var booksIds = new List<int>()
+            {
+                bookReviewsRateDescendingSorting.BookReviews.First().Id,
+                bookReviewsRateDescendingSorting.BookReviews.Skip(1).First().Id,
+                bookReviewsRateDescendingSorting.BookReviews.Skip(2).First().Id,
+            };
+
+            // Assert
+            Assert.IsNotNull(bookReviewsRateDescendingSorting.BookReviews);
+            Assert.AreEqual(3, bookReviewsRateDescendingSorting.BookReviews.Count());
+            Assert.AreEqual(new List<int>() { 1, 2, 3 }, booksIds);
+        }
+
+        [Test]
+        public async Task Test_AddBookReviewAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var addForm = new BookReviewAddViewModel()
+            {
+                UserId = "testUser",
+                BookId = 2,
+                Title = "Review Title",
+                Description = "Review Description",
+                Rate = 10
+            };
+
+            // Act
+            var result = await service.AddBookReviewAsync(addForm, "testUser", 2);
+            var expectedResult = await service.FindBookReviewAsync(result);
+
+            // Assert
+            Assert.AreEqual(2, result);
+            Assert.IsNotNull(expectedResult);
+        }
+
+        [Test]
+        public async Task Test_FindBookReviewAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var resultExistingReview = await service.FindBookReviewAsync(1);
+
+            // Assert
+            Assert.IsNotNull(resultExistingReview);
+            Assert.AreEqual(bookReview.Id, resultExistingReview.Id);
+        }
+
+        [Test]
+        public async Task Test_DeleteBookReviewAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var deleteModel = new BookReviewDeleteViewModel()
+            {
+                ReviewId = bookReview.Id,
+                BookId = bookReview.BookId,
+                BookTitle = AnnaKarenina.Title
+            };
+
+            // Act
+            var result = await service.DeleteBookReviewAsync(1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(deleteModel.ReviewId, result.ReviewId);
+            Assert.AreEqual(deleteModel.BookId, result.BookId);
+            Assert.AreEqual(deleteModel.BookTitle, result.BookTitle);
+        }
+
+        [Test]
+        public async Task Test_DeleteBookReviewConfirmedAsync_ReturnsTheCorrectResult()
+        {
+            // Act
+            var result = await service.DeleteBookReviewConfirmedAsync(1);
+
+            // Assert
+            Assert.AreEqual(1, result);
+            Assert.IsNull(await service.FindBookReviewAsync(1));
+        }
+
+        [Test]
+        public async Task Test_BookReviewDetailsAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var bookReviewDetails = new BookReviewDetailsViewModel()
+            {
+                Id = bookReview.Id,
+                BookId = bookReview.BookId,
+                Title = bookReview.Title,
+                Description = bookReview.Description,
+                Rate = bookReview.Rate,
+                AuthorId = bookReview.UserId
+            };
+
+            // Act
+            var result = await service.BookReviewDetailsAsync(1);
+
+            // Assert
+            Assert.AreEqual(bookReviewDetails.Id, result.Id);
+            Assert.AreEqual(bookReviewDetails.BookId, result.BookId);
+            Assert.AreEqual(bookReviewDetails.Title, result.Title);
+            Assert.AreEqual(bookReviewDetails.Description, result.Description);
+            Assert.AreEqual(bookReviewDetails.Rate, result.Rate);
+            Assert.AreEqual(bookReviewDetails.AuthorId, result.AuthorId);
+        }
+
+        [Test]
+        public async Task Test_EditBookReviewGetAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var bookReviewDetails = new BookReviewEditViewModel()
+            {
+                Id = bookReview.Id,
+                BookId = bookReview.BookId,
+                Title = bookReview.Title,
+                Description = bookReview.Description,
+                Rate = bookReview.Rate,
+                UserId = bookReview.UserId
+            };
+
+            // Act
+            var result = await service.EditBookReviewGetAsync(1);
+
+            // Assert
+            Assert.AreEqual(bookReviewDetails.Id, result.Id);
+            Assert.AreEqual(bookReviewDetails.BookId, result.BookId);
+            Assert.AreEqual(bookReviewDetails.Title, result.Title);
+            Assert.AreEqual(bookReviewDetails.Description, result.Description);
+            Assert.AreEqual(bookReviewDetails.Rate, result.Rate);
+            Assert.AreEqual(bookReviewDetails.UserId, result.UserId);
+        }
+
+        [Test]
+        public async Task Test_EditBookReviewPostAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var bookReviewDetails = new BookReviewEditViewModel()
+            {
+                Id = bookReview.Id,
+                BookId = bookReview.BookId,
+                Title = bookReview.Title + " Changed",
+                Description = bookReview.Description + " Changed",
+                Rate = bookReview.Rate - 1,
+                UserId = bookReview.UserId
+            };
+
+            // Act
+            var result = await service.EditBookReviewPostAsync(bookReviewDetails);
+            var editedReview = await service.FindBookReviewAsync(bookReview.Id);
+
+            // Assert
+            Assert.AreEqual(bookReview.Id, result);
+
+            Assert.AreEqual(bookReviewDetails.Id, editedReview.Id);
+            Assert.AreEqual(bookReviewDetails.BookId, editedReview.BookId);
+            Assert.AreEqual(bookReviewDetails.Title, editedReview.Title);
+            Assert.AreEqual(bookReviewDetails.Description, editedReview.Description);
+            Assert.AreEqual(bookReviewDetails.Rate, editedReview.Rate);
+            Assert.AreEqual(bookReviewDetails.UserId, editedReview.UserId);
+        }
+
+        [Test]
+        public async Task Test_BookReviewQuestionAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var bookReviewQuestion = new BookReviewQuestionViewModel()
+            {
+                Title = MenWhoHateWomen.Title,
+                Id = MenWhoHateWomen.Id
+            };
+
+            // Act
+            var result = await service.BookReviewQuestionAsync(3);
+
+            // Assert
+            Assert.AreEqual(bookReviewQuestion.Title, result.Title);
+            Assert.AreEqual(bookReviewQuestion.Id, result.Id);
+        }
+
+        [Test]
+        public async Task Test_ChangePageGetAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var changePageForm = new ChangePageViewModel()
+            {
+                BookId = Hannibal.Id,
+                UserId = "testUser",
+                BookPages = Hannibal.Pages,
+                CurrentPage = 0
+            };
+
+            // Act
+            var result = await service.ChangePageGetAsync(Hannibal.Id, "testUser");
+
+            // Assert
+            Assert.AreEqual(changePageForm.BookId, result.BookId);
+            Assert.AreEqual(changePageForm.UserId, result.UserId);
+            Assert.AreEqual(changePageForm.BookPages, result.BookPages);
+            Assert.AreEqual(changePageForm.CurrentPage, result.CurrentPage);
+        }
+
+        [Test]
+        public async Task Test_ChangePagePostAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            var changePageForm = new ChangePageViewModel()
+            {
+                BookId = Hannibal.Id,
+                UserId = "testUser",
+                BookPages = Hannibal.Pages,
+                CurrentPage = 30
+            };
+
+            // Act
+            var result = await service.ChangePagePostAsync(changePageForm);
+            var book = await service.FindBookCurrentlyReadingAsync(Hannibal.Id, "testUser");
+
+            // Assert
+            Assert.AreEqual(changePageForm.BookId, result);
+            Assert.AreEqual(book.CurrentPage, changePageForm.CurrentPage);
+        }
+
+        [Test]
+        public async Task Test_FindBookCurrentlyReadingAsync_ReturnsTheCorrectResult()
+        {
+            // Arrange
+            int currentlyReadingBookId = 2;
+            int nonExistingCurrentlyReadingBookId = -2;
+
+            // Act
+            var resultOne = await service.FindBookCurrentlyReadingAsync(currentlyReadingBookId, "testUser");
+            var resultTwo = await service.FindBookCurrentlyReadingAsync(nonExistingCurrentlyReadingBookId, "testUser");
+
+            // Assert
+            Assert.IsNotNull(resultOne);
+            Assert.AreEqual(currentlyReadingBookId, resultOne.BookId);
+            Assert.AreEqual("testUser", resultOne.UserId);
+
+            Assert.IsNull(resultTwo);
         }
     }
 }
