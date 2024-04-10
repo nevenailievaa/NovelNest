@@ -8,6 +8,7 @@
     using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Core.Models.ViewModels.BookStore;
+    using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Core.Services;
     using System.Security.Claims;
 
@@ -422,6 +423,108 @@
             await publisherService.DeleteArticleConfirmedAsync(id);
 
             return RedirectToAction("All", "Article");
+        }
+
+        //Events
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> AddEvent()
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var eventForm = new EventAddViewModel();
+
+            return View(eventForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> AddEvent(EventAddViewModel eventForm)
+        {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            {
+                return Unauthorized();
+            }
+            if (eventForm.StartDate >= eventForm.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Invalid timespan!");
+                ModelState.AddModelError("EndDate", "Invalid timespan!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(eventForm);
+            }
+
+            await publisherService.AddEventAsync(eventForm);
+            return RedirectToAction("All", "Event");
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> EditEvent(int id)
+        {
+            if (!await eventService.EventExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var eventForm = await publisherService.EditEventGetAsync(id);
+            return View(eventForm);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> EditEvent(EventEditViewModel eventForm)
+        {
+            if (eventForm == null)
+            {
+                return BadRequest();
+            }
+            if (eventForm.StartDate >= eventForm.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Invalid timespan!");
+                ModelState.AddModelError("EndDate", "Invalid timespan!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(eventForm);
+            }
+
+            int id = eventForm.Id;
+            await publisherService.EditEventPostAsync(eventForm);
+            return RedirectToAction("Details", "Event", new { id, information = eventForm.GetInformation() });
+        }
+
+        [HttpGet]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            if (!await eventService.EventExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var searchedEvent = await publisherService.DeleteEventAsync(id);
+
+            return View(searchedEvent);
+        }
+
+        [HttpPost]
+        [MustBePublisher]
+        public async Task<IActionResult> DeleteEventConfirmed(int id)
+        {
+            if (!await eventService.EventExistsAsync(id))
+            {
+                return BadRequest();
+            }
+
+            await publisherService.DeleteEventConfirmedAsync(id);
+
+            return RedirectToAction("All", "Event");
         }
     }
 }

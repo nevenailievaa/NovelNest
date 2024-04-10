@@ -15,7 +15,7 @@
                     <p class="text-danger mt-3">Сигурен ли си, че искаш да изтриеш тази статия?</p>
                 </div>
                 <div class="card-footer d-flex justify-content-center">
-                    <form asp-action="DeleteConfirmed" method="post" class="col-12">
+                    <form asp-action="DeleteArticleConfirmed" method="post" class="col-12">
                         <input type="hidden" asp-for="Id" />
                         <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetArticleInformation()" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
                         <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Изтрий</button>

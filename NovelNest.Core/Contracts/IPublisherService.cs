@@ -3,6 +3,7 @@ using NovelNest.Core.Models.QueryModels.Book;
 using NovelNest.Core.Models.ViewModels.Article;
 using NovelNest.Core.Models.ViewModels.Book;
 using NovelNest.Core.Models.ViewModels.BookStore;
+using NovelNest.Core.Models.ViewModels.Event;
 using NovelNest.Infrastructure.Data.Models.Mappings;
 
 namespace NovelNest.Core.Contracts
@@ -44,5 +45,12 @@ namespace NovelNest.Core.Contracts
         Task<int> EditArticlePostAsync(ArticleEditViewModel articleForm);
         Task<ArticleDeleteViewModel> DeleteArticleAsync(int articleId);
         Task<int> DeleteArticleConfirmedAsync(int articleId);
+
+        //Event
+        Task<int> AddEventAsync(EventAddViewModel eventForm);
+        Task<EventEditViewModel> EditEventGetAsync(int eventId);
+        Task<int> EditEventPostAsync(EventEditViewModel eventForm);
+        Task<EventDeleteViewModel> DeleteEventAsync(int eventId);
+        Task<int> DeleteEventConfirmedAsync(int eventId);
     }
 }

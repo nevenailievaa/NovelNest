@@ -55,105 +55,105 @@
             return View(currentEvent);
         }
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Add()
-        {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
-            {
-                return Unauthorized();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Add()
+        //{
+        //    if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+        //    {
+        //        return Unauthorized();
+        //    }
 
-            var eventForm = new EventAddViewModel();
+        //    var eventForm = new EventAddViewModel();
 
-            return View(eventForm);
-        }
+        //    return View(eventForm);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> Add(EventAddViewModel eventForm)
-        {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
-            {
-                return Unauthorized();
-            }
-            if (eventForm.StartDate >= eventForm.EndDate)
-            {
-                ModelState.AddModelError("StartDate", "Invalid timespan!");
-                ModelState.AddModelError("EndDate", "Invalid timespan!");
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Add(EventAddViewModel eventForm)
+        //{
+        //    if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    if (eventForm.StartDate >= eventForm.EndDate)
+        //    {
+        //        ModelState.AddModelError("StartDate", "Invalid timespan!");
+        //        ModelState.AddModelError("EndDate", "Invalid timespan!");
+        //    }
 
-            if (!ModelState.IsValid)
-            {
-                return View(eventForm);
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(eventForm);
+        //    }
 
-            await eventService.AddAsync(eventForm);
-            return RedirectToAction(nameof(All));
-        }
+        //    await eventService.AddAsync(eventForm);
+        //    return RedirectToAction(nameof(All));
+        //}
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Edit(int id)
-        {
-            if (!await eventService.EventExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    if (!await eventService.EventExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            var eventForm = await eventService.EditGetAsync(id);
-            return View(eventForm);
-        }
+        //    var eventForm = await eventService.EditGetAsync(id);
+        //    return View(eventForm);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> Edit(EventEditViewModel eventForm)
-        {
-            if (eventForm == null)
-            {
-                return BadRequest();
-            }
-            if (eventForm.StartDate >= eventForm.EndDate)
-            {
-                ModelState.AddModelError("StartDate", "Invalid timespan!");
-                ModelState.AddModelError("EndDate", "Invalid timespan!");
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(eventForm);
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Edit(EventEditViewModel eventForm)
+        //{
+        //    if (eventForm == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    if (eventForm.StartDate >= eventForm.EndDate)
+        //    {
+        //        ModelState.AddModelError("StartDate", "Invalid timespan!");
+        //        ModelState.AddModelError("EndDate", "Invalid timespan!");
+        //    }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(eventForm);
+        //    }
 
-            int id = eventForm.Id;
-            await eventService.EditPostAsync(eventForm);
-            return RedirectToAction(nameof(Details), new { id, information = eventForm.GetInformation() });
-        }
+        //    int id = eventForm.Id;
+        //    await eventService.EditPostAsync(eventForm);
+        //    return RedirectToAction(nameof(Details), new { id, information = eventForm.GetInformation() });
+        //}
 
-        [HttpGet]
-        [MustBePublisher]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (!await eventService.EventExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //[MustBePublisher]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    if (!await eventService.EventExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            var searchedEvent = await eventService.DeleteAsync(id);
+        //    var searchedEvent = await eventService.DeleteAsync(id);
 
-            return View(searchedEvent);
-        }
+        //    return View(searchedEvent);
+        //}
 
-        [HttpPost]
-        [MustBePublisher]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!await eventService.EventExistsAsync(id))
-            {
-                return BadRequest();
-            }
+        //[HttpPost]
+        //[MustBePublisher]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (!await eventService.EventExistsAsync(id))
+        //    {
+        //        return BadRequest();
+        //    }
 
-            await eventService.DeleteConfirmedAsync(id);
+        //    await eventService.DeleteConfirmedAsync(id);
 
-            return RedirectToAction(nameof(All));
-        }
+        //    return RedirectToAction(nameof(All));
+        //}
     }
 }

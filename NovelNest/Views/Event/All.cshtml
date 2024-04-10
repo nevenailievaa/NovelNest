@@ -11,7 +11,7 @@
 @if (await publisherService.ExistsByIdAsync(User.Id()))
 {
     <div class="text-center mb-4">
-        <a asp-controller="Event" asp-action="Add" class="btn btn-primary btn-lg">Добави Събитие</a>
+        <a asp-controller="Publisher" asp-action="AddEvent" class="btn btn-primary btn-lg">Добави Събитие</a>
     </div>
 }
 

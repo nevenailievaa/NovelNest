@@ -18,10 +18,5 @@
         Task<bool> EventExistsAsync(int eventId);
         Task<Event> FindEventByIdAsync(int eventId);
         Task<EventDetailsViewModel> DetailsAsync(int eventId);
-        Task<int> AddAsync(EventAddViewModel eventForm);
-        Task<EventEditViewModel> EditGetAsync(int eventId);
-        Task<int> EditPostAsync(EventEditViewModel eventForm);
-        Task<EventDeleteViewModel> DeleteAsync(int eventId);
-        Task<int> DeleteConfirmedAsync(int eventId);
     }
 }

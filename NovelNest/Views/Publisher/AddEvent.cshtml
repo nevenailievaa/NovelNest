@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Add" method="post">
+        <form asp-action="AddEvent" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Topic" class="form-label-add-edit"><bold>Тема</bold></label>
                 <input asp-for="@Model.Topic" class="form-control" aria-required="true" />
@@ -37,12 +37,12 @@
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Seats" class="form-label-add-edit"><bold>Свободни Места</bold></label>
-                <input asp-for="@Model.Seats" class="form-control"/>
+                <input asp-for="@Model.Seats" class="form-control" />
                 <span asp-validation-for="@Model.Seats" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.TicketPrice" class="form-label-add-edit"><bold>Цена за Билет</bold></label>
-                <input asp-for="@Model.TicketPrice" class="form-control"/>
+                <input asp-for="@Model.TicketPrice" class="form-control" />
                 <span asp-validation-for="@Model.TicketPrice" class="text-danger"></span>
             </div>
 
@@ -53,7 +53,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Добави" />
-                <a asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
+                <a asp-controller="Event" asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към Всички</a>
             </div>
         </form>
     </div>

@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Edit" method="post">
+        <form asp-action="EditEvent" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Topic" class="form-label-add-edit"><bold>Тема</bold></label>
                 <input asp-for="@Model.Topic" class="form-control" aria-required="true" />
@@ -39,12 +39,12 @@
 
             <div class="mb-3">
                 <label asp-for="@Model.Seats" class="form-label-add-edit"><bold>Свободни Места</bold></label>
-                <input asp-for="@Model.Seats" class="form-control"/>
+                <input asp-for="@Model.Seats" class="form-control" />
                 <span asp-validation-for="@Model.Seats" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.TicketPrice" class="form-label-add-edit"><bold>Цена за Билет</bold></label>
-                <input asp-for="@Model.TicketPrice" class="form-control"/>
+                <input asp-for="@Model.TicketPrice" class="form-control" />
                 <span asp-validation-for="@Model.TicketPrice" class="text-danger"></span>
             </div>
 
@@ -55,7 +55,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-success mb-2 w-100 p-3 fw-bold" type="submit" value="Редактирай" />
-                <a asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
+                <a asp-controller="Event" asp-action="Details" asp-route-information="@Model.GetInformation()" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
             </div>
         </form>
     </div>

@@ -4,12 +4,9 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Event;
-    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Infrastructure.Common;
-    using NovelNest.Infrastructure.Data.Models.Articles;
     using NovelNest.Infrastructure.Data.Models.Events;
-    using NovelNest.Infrastructure.Data.Models.Mappings;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -120,97 +117,6 @@
             };
 
             return currentEventDetails;
-        }
-
-        public async Task<int> AddAsync(EventAddViewModel eventForm)
-        {
-            Event currentEvent = new Event()
-            {
-                Topic = eventForm.Topic,
-                Description = eventForm.Description,
-                Location = eventForm.Location,
-                StartDate = eventForm.StartDate,
-                EndDate = eventForm.EndDate,
-                ImageUrl = eventForm.ImageUrl,
-                Seats = eventForm.Seats,
-                TicketPrice = eventForm.TicketPrice
-            };
-
-            await repository.AddAsync(currentEvent);
-            await repository.SaveChangesAsync();
-
-            return currentEvent.Id;
-        }
-
-        public async Task<EventEditViewModel> EditGetAsync(int eventId)
-        {
-            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
-
-            var eventForm = new EventEditViewModel()
-            {
-                Id = eventId,
-                Topic =  currentEvent.Topic,
-                Description= currentEvent.Description,
-                Location= currentEvent.Location,
-                Seats= currentEvent.Seats,
-                TicketPrice = currentEvent.TicketPrice,
-                StartDate = currentEvent.StartDate,
-                EndDate = currentEvent.EndDate,
-                ImageUrl = currentEvent.ImageUrl
-            };
-
-            return eventForm;
-        }
-
-        public async Task<int> EditPostAsync(EventEditViewModel eventForm)
-        {
-            var currentEvent = await repository.GetByIdAsync<Event>(eventForm.Id);
-
-            currentEvent.Topic = eventForm.Topic;
-            currentEvent.Description = eventForm.Description;
-            currentEvent.Location = eventForm.Location;
-            currentEvent.Seats = eventForm.Seats;
-            currentEvent.TicketPrice = eventForm.TicketPrice;
-            currentEvent.StartDate = eventForm.StartDate;
-            currentEvent.EndDate = eventForm.EndDate;
-            currentEvent.ImageUrl = eventForm.ImageUrl;
-
-            await repository.SaveChangesAsync();
-
-            return currentEvent.Id;
-        }
-
-        public async Task<EventDeleteViewModel> DeleteAsync(int eventId)
-        {
-            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
-
-            var deleteForm = new EventDeleteViewModel()
-            {
-                Id = currentEvent.Id,
-                Topic = currentEvent.Topic,
-                Location = currentEvent.Location,
-                ImageUrl = currentEvent.ImageUrl
-            };
-
-            return deleteForm;
-        }
-
-        public async Task<int> DeleteConfirmedAsync(int eventId)
-        {
-            var currentEvent = await repository.GetByIdAsync<Event>(eventId);
-
-            var eventCarts = await repository.All<EventCart>()
-            .Where(ec => ec.EventId == eventId).ToListAsync();
-
-            if (eventCarts != null && eventCarts.Any())
-            {
-                await repository.RemoveRangeAsync<EventCart>(eventCarts);
-            }
-
-            await repository.RemoveAsync<Event>(currentEvent);
-            await repository.SaveChangesAsync();
-
-            return currentEvent.Id;
         }
     }
 }

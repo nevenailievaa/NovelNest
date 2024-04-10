@@ -15,11 +15,6 @@
             int currentPage = 1,
             int articlesPerPage = 4);
         Task<ArticleViewModel> DetailsAsync(int articleId);
-        //Task<int> AddAsync(ArticleAddViewModel articleForm);
-        //Task<ArticleEditViewModel> EditGetAsync(int articleId);
-        //Task<int> EditPostAsync(ArticleEditViewModel articleForm);
-        //Task<ArticleDeleteViewModel> DeleteAsync(int articleId);
-        //Task<int> DeleteConfirmedAsync(int articleId);
         Task<ArticleCommentQueryServiceModel> AllArticleCommentsAsync(
             int articleId,
             string articleTitle,
