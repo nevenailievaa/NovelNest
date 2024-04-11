@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NovelNest.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = builder.Configuration.GetConnectionString("NovelNestDbContextConnection") ?? throw new InvalidOperationException("Connection string 'NovelNestDbContextConnection' not found.");
 
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity(builder.Configuration);
