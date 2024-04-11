@@ -27,8 +27,8 @@
         }
 
         //Users
-        public IdentityUser PublisherUser { get; set; } = null!;
-        public IdentityUser GuestUser { get; set; } = null!;
+        public ApplicationUser PublisherUser { get; set; } = null!;
+        public ApplicationUser GuestUser { get; set; } = null!;
 
         //Roles
         public Publisher Publisher { get; set; } = null!;
@@ -76,9 +76,9 @@
 
         private void SeedUsers()
         {
-            var hasher = new PasswordHasher<IdentityUser>();
+            var hasher = new PasswordHasher<ApplicationUser>();
 
-            PublisherUser = new IdentityUser()
+            PublisherUser = new ApplicationUser()
             {
                 Id = "dea12856-c198-4129-b3f3-b893d8395082",
                 UserName = "Publisher",
@@ -89,7 +89,7 @@
 
             PublisherUser.PasswordHash = hasher.HashPassword(PublisherUser, "publisher420");
 
-            GuestUser = new IdentityUser()
+            GuestUser = new ApplicationUser()
             {
                 Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                 UserName = "Guest",

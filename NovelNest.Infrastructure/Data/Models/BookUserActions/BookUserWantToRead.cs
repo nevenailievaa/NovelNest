@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Identity;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.Roles;
 
     public class BookUserWantToRead
     {
@@ -23,7 +24,7 @@
 
         [ForeignKey(nameof(UserId))]
         [Comment("The current User")]
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         [Comment("The time when the entity was added")]

@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.Roles;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,7 +24,7 @@
 
         [ForeignKey(nameof(UserId))]
         [Comment("The current User")]
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         [Comment("The Page the User is on to")]

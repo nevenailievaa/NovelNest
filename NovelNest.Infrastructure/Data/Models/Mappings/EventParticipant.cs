@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using NovelNest.Infrastructure.Data.Models.Events;
+    using NovelNest.Infrastructure.Data.Models.Roles;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +24,6 @@
 
         [ForeignKey(nameof(ParticipantId))]
         [Comment("The current Participant")]
-        public IdentityUser Participant { get; set; } = null!;
+        public ApplicationUser Participant { get; set; } = null!;
     }
 }

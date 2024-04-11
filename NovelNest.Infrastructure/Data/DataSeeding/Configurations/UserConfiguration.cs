@@ -3,14 +3,15 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using NovelNest.Infrastructure.Data.Models.Roles;
 
-    internal class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
+    internal class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<IdentityUser> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             var data = new DataSeed();
 
-            builder.HasData(new IdentityUser[] { data.GuestUser, data.PublisherUser });
+            builder.HasData(new ApplicationUser[] { data.GuestUser, data.PublisherUser });
         }
     }
 }

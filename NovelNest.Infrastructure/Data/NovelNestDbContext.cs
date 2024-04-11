@@ -13,7 +13,7 @@
     using NovelNest.Infrastructure.Data.Models.Roles;
     using System.Reflection.Emit;
 
-    public class NovelNestDbContext : IdentityDbContext
+    public class NovelNestDbContext : IdentityDbContext<ApplicationUser>
     {
         public NovelNestDbContext(DbContextOptions<NovelNestDbContext> options)
             : base(options) { }

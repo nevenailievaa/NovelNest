@@ -6,6 +6,7 @@
     using NovelNest.Core.Services;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data;
+    using NovelNest.Infrastructure.Data.Models.Roles;
 
     public static class ServiceCollectionExtension
     {
@@ -35,7 +36,7 @@
 
         public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
         {
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireNonAlphanumeric = false;
