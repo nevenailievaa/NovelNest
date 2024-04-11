@@ -27,11 +27,13 @@
         }
 
         //Users
+        public ApplicationUser AdminUser { get; set; } = null!;
         public ApplicationUser PublisherUser { get; set; } = null!;
         public ApplicationUser GuestUser { get; set; } = null!;
 
         //Roles
         public Publisher Publisher { get; set; } = null!;
+        public Publisher PublisherAdmin { get; set; } = null!;
 
         //Genres
         public Genre Poetry { get; set; } = null!;
@@ -78,13 +80,28 @@
         {
             var hasher = new PasswordHasher<ApplicationUser>();
 
+            AdminUser = new ApplicationUser()
+            {
+                Id = "c2f14bf7-ffdd-47a4-90b3-f2309486fae9",
+                UserName = "Admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                FirstName = "Admin",
+                LastName = "Adminov"
+            };
+
+            AdminUser.PasswordHash = hasher.HashPassword(AdminUser, "admin420");
+
             PublisherUser = new ApplicationUser()
             {
                 Id = "dea12856-c198-4129-b3f3-b893d8395082",
                 UserName = "Publisher",
-                NormalizedUserName = "publisher",
+                NormalizedUserName = "PUBLISHER",
                 Email = "publisher@gmail.com",
-                NormalizedEmail = "publisher@gmail.com"
+                NormalizedEmail = "PUBLISHER@GMAIL.COM",
+                FirstName = "Publisher",
+                LastName = "Publishov"
             };
 
             PublisherUser.PasswordHash = hasher.HashPassword(PublisherUser, "publisher420");
@@ -93,9 +110,11 @@
             {
                 Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                 UserName = "Guest",
-                NormalizedUserName = "guest",
+                NormalizedUserName = "GUEST",
                 Email = "guest@gmail.com",
-                NormalizedEmail = "guest@gmail.com"
+                NormalizedEmail = "GUEST@GMAIL.COM",
+                FirstName = "Guest",
+                LastName = "Guestov"
             };
 
             GuestUser.PasswordHash = hasher.HashPassword(GuestUser, "guest420");
@@ -107,6 +126,11 @@
             {
                 Id = 1,
                 UserId = PublisherUser.Id
+            };
+            PublisherAdmin = new Publisher()
+            {
+                Id = 2,
+                UserId = AdminUser.Id
             };
         }
 

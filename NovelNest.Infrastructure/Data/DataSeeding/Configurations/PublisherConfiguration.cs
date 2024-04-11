@@ -10,7 +10,7 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new Publisher[] { data.Publisher });
+            builder.HasData(new Publisher[] { data.Publisher, data.PublisherAdmin });
         }
     }
 }

@@ -11,7 +11,7 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new ApplicationUser[] { data.GuestUser, data.PublisherUser });
+            builder.HasData(new ApplicationUser[] { data.GuestUser, data.PublisherUser, data.AdminUser });
         }
     }
 }
