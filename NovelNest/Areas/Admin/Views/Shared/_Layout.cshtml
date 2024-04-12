@@ -1,5 +1,4 @@
-﻿@using NovelNest.Components
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -23,22 +22,13 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @await Component.InvokeAsync(nameof(MainMenuComponent))
+                    @await Component.InvokeAsync(nameof(AdminMenuComponent))
                     <ul class="navbar-nav">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="All" asp-route-id="@UserManager.GetUserId(User)">Количка</a>
-                            </li>
-                        }
-                        @if (User.IsAdmin())
-                        {
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Actions" title="Back">Действия</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" title="Back">Към Сайта</a>
+                        </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <partial name="_AdminPartial" />
                 </div>
             </div>
         </nav>
@@ -51,7 +41,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.UtcNow.Year - NovelNest
+            &copy; @DateTime.UtcNow.Year - NovelNest <span class="text-danger">This area is only for Administrators!</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

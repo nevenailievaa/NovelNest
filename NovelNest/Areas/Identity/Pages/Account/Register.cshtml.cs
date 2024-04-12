@@ -56,16 +56,6 @@ namespace NovelNest.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [Display(Name = "First Name")]
-            [StringLength(ApplicationUserFirstNameMaxLength, MinimumLength = ApplicationUserFirstNameMinLength, ErrorMessage = LengthErrorMessage)]
-            public string FirstName { get; set; }
-
-            [Required]
-            [Display(Name = "Last Name")]
-            [StringLength(ApplicationUserLastNameMaxLength, MinimumLength = ApplicationUserLastNameMinLength, ErrorMessage = LengthErrorMessage)]
-            public string LastName { get; set; }
-
-            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -80,6 +70,16 @@ namespace NovelNest.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            [StringLength(ApplicationUserFirstNameMaxLength, MinimumLength = ApplicationUserFirstNameMinLength, ErrorMessage = LengthErrorMessage)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(ApplicationUserLastNameMaxLength, MinimumLength = ApplicationUserLastNameMinLength, ErrorMessage = LengthErrorMessage)]
+            public string LastName { get; set; }
         }
 
 
