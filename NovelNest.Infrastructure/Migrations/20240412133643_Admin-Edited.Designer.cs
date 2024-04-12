@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240412133643_Admin-Edited")]
+    partial class AdminEdited
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -966,55 +968,55 @@ namespace NovelNest.Infrastructure.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6a724c20-fa08-448e-870d-bb7100d8f2c3",
+                            ConcurrencyStamp = "fa338669-b58c-4e42-8d31-4062875ec6d1",
                             Email = "guest@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Guest",
                             LastName = "Guestov",
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@GMAIL.COM",
-                            NormalizedUserName = "GUEST@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOKJOgPYRYCGyAx71xbURXRhgYhufnUnt/FiZpFshiEFYLZHPBcaJXyMd70em3oK+Q==",
+                            NormalizedUserName = "GUEST",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK+MAsHQe5LDFBwxQL8DlZpFjAHmNLMtRubbFfvLfULxTgDkmMgd+E6tsqM4K5voWg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f7adb999-1ab8-423d-b91f-658a907647c6",
+                            SecurityStamp = "e9e3b6ea-4a14-4cb8-8db8-a54a6c231afc",
                             TwoFactorEnabled = false,
-                            UserName = "guest@gmail.com"
+                            UserName = "Guest"
                         },
                         new
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "81b61a75-f376-4081-9751-a52156672960",
+                            ConcurrencyStamp = "3fba7de3-d47f-4fbf-ba7d-a7bc9e12b1b8",
                             Email = "publisher@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Publisher",
                             LastName = "Publishov",
                             LockoutEnabled = false,
                             NormalizedEmail = "PUBLISHER@GMAIL.COM",
-                            NormalizedUserName = "PUBLISHER@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGLehkkvrJDNMOp/omR0ifDDkiVimNGEjfOKzLOJH4jNighsLkyNqUBtXjB+I0o6sw==",
+                            NormalizedUserName = "PUBLISHER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFJHuXrSK9htUucSuwixIWrNbNpKHX0mXI6hq4oZ3GXl4kamOqArTlcnfgBx1rk1LQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0d15ff89-ae1e-4af4-8c72-57fe1e5397e3",
+                            SecurityStamp = "26122028-1d0d-4135-8e56-e0af63d9c4df",
                             TwoFactorEnabled = false,
-                            UserName = "publisher@gmail.com"
+                            UserName = "Publisher"
                         },
                         new
                         {
                             Id = "c2f14bf7-ffdd-47a4-90b3-f2309486fae9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5df97f94-d628-44ab-8d9b-1d0a72ff59ce",
+                            ConcurrencyStamp = "5dabc723-5f09-4783-98b8-fb69675439ba",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
                             LastName = "Adminov",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMrAUnsH896/9c4tDPW+/zMn/yBYMnlQUyP+SjzHCgWOl4tlBJWM/LOT/5Av5SYKLg==",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEME7pPxbbUSqMjw4ZQxSOt6RZ4YFGWNYLBmNepZ2P40YRur8mrqnnD0QZ0n/PKpapA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7a874a54-40aa-4ed3-9a63-46d8f190247b",
+                            SecurityStamp = "5ec90344-afe5-4a87-aa3c-5adc14266fdb",
                             TwoFactorEnabled = false,
-                            UserName = "admin@gmail.com"
+                            UserName = "Admin"
                         });
                 });
 

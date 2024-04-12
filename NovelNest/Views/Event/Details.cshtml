@@ -30,7 +30,7 @@
                 
             </div>
 
-            @if (await publisherService.ExistsByIdAsync(User.Id()))
+            @if (await publisherService.ExistsByIdAsync(User.Id()) || User.IsAdmin())
             {
                 <hr />
                 <div class="d-flex justify-content-center mt-1">

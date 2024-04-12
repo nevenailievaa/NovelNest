@@ -27,13 +27,13 @@
         }
 
         //Users
-        public ApplicationUser AdminUser { get; set; } = null!;
-        public ApplicationUser PublisherUser { get; set; } = null!;
-        public ApplicationUser GuestUser { get; set; } = null!;
+        public ApplicationUser AdminUser { get; set; }
+        public ApplicationUser PublisherUser { get; set; }
+        public ApplicationUser GuestUser { get; set; }
 
         //Roles
-        public Publisher Publisher { get; set; } = null!;
-        public Publisher PublisherAdmin { get; set; } = null!;
+        public Publisher Publisher { get; set; }
+        public Publisher PublisherAdmin { get; set; }
 
         //Genres
         public Genre Poetry { get; set; } = null!;
@@ -83,8 +83,8 @@
             AdminUser = new ApplicationUser()
             {
                 Id = "c2f14bf7-ffdd-47a4-90b3-f2309486fae9",
-                UserName = "Admin",
-                NormalizedUserName = "ADMIN",
+                UserName = "admin@gmail.com",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
                 Email = "admin@gmail.com",
                 NormalizedEmail = "ADMIN@GMAIL.COM",
                 FirstName = "Admin",
@@ -96,8 +96,8 @@
             PublisherUser = new ApplicationUser()
             {
                 Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                UserName = "Publisher",
-                NormalizedUserName = "PUBLISHER",
+                UserName = "publisher@gmail.com",
+                NormalizedUserName = "PUBLISHER@GMAIL.COM",
                 Email = "publisher@gmail.com",
                 NormalizedEmail = "PUBLISHER@GMAIL.COM",
                 FirstName = "Publisher",
@@ -109,8 +109,8 @@
             GuestUser = new ApplicationUser()
             {
                 Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
-                UserName = "Guest",
-                NormalizedUserName = "GUEST",
+                UserName = "guest@gmail.com",
+                NormalizedUserName = "GUEST@GMAIL.COM",
                 Email = "guest@gmail.com",
                 NormalizedEmail = "GUEST@GMAIL.COM",
                 FirstName = "Guest",

@@ -35,7 +35,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddBook()
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -53,7 +53,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddBook(BookAddViewModel bookForm)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -81,6 +81,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditBook(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await bookService.BookExistsAsync(id))
             {
                 return BadRequest();
@@ -94,6 +98,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditBook(BookEditViewModel bookForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (bookForm == null)
             {
                 return BadRequest();
@@ -116,6 +124,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteBook(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await bookService.BookExistsAsync(id))
             {
                 return BadRequest();
@@ -130,6 +142,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteBookConfirmed(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await bookService.BookExistsAsync(id))
             {
                 return BadRequest();
@@ -145,7 +161,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddBookStore()
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -159,7 +175,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddBookStore(BookStoreAddViewModel bookStoreForm)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -176,7 +192,7 @@
         [MustBePublisher]
         public async Task<IActionResult> EditBookStore(int id)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -193,7 +209,7 @@
         [MustBePublisher]
         public async Task<IActionResult> EditBookStore(BookStoreEditViewModel bookStoreForm)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -217,7 +233,7 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteBookStore(int id)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -235,7 +251,7 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteBookStoreConfirmed(int id)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -253,7 +269,7 @@
         [MustBePublisher]
         public async Task<IActionResult> SelectBookFromBookStore([FromQuery] AllBooksQueryModel model, int id)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -284,7 +300,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddBookToBookStore(int id, int secondId)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -301,7 +317,7 @@
         [MustBePublisher]
         public async Task<IActionResult> RemoveBookFromBookStore(int id, int secondId)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -319,7 +335,7 @@
         [MustBePublisher]
         public async Task<IActionResult> RemoveBookFromBookStoreConfirmed(int bookId, int bookStoreId)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -338,7 +354,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddArticle()
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -352,7 +368,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddArticle(ArticleAddViewModel articleForm)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -369,6 +385,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditArticle(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await articleService.ArticleExistsAsync(id))
             {
                 return BadRequest();
@@ -382,6 +402,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditArticle(ArticleEditViewModel articleForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (articleForm == null)
             {
                 return BadRequest();
@@ -401,6 +425,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteArticle(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await articleService.ArticleExistsAsync(id))
             {
                 return BadRequest();
@@ -415,6 +443,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteArticleConfirmed(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await articleService.ArticleExistsAsync(id))
             {
                 return BadRequest();
@@ -430,7 +462,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddEvent()
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -444,7 +476,7 @@
         [MustBePublisher]
         public async Task<IActionResult> AddEvent(EventAddViewModel eventForm)
         {
-            if (await publisherService.ExistsByIdAsync(User.Id()) == false)
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -467,6 +499,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditEvent(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await eventService.EventExistsAsync(id))
             {
                 return BadRequest();
@@ -480,6 +516,10 @@
         [MustBePublisher]
         public async Task<IActionResult> EditEvent(EventEditViewModel eventForm)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (eventForm == null)
             {
                 return BadRequest();
@@ -503,6 +543,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteEvent(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await eventService.EventExistsAsync(id))
             {
                 return BadRequest();
@@ -517,6 +561,10 @@
         [MustBePublisher]
         public async Task<IActionResult> DeleteEventConfirmed(int id)
         {
+            if (await publisherService.ExistsByIdAsync(User.Id()) == false && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
             if (!await eventService.EventExistsAsync(id))
             {
                 return BadRequest();
