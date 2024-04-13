@@ -10,6 +10,7 @@
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.ArticleConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.BookStoreConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
+    using static NovelNest.Infrastructure.Data.Constants.CustomClaims;
 
     internal class DataSeed
     {
@@ -34,6 +35,11 @@
         //Roles
         public Publisher Publisher { get; set; }
         public Publisher PublisherAdmin { get; set; }
+
+        //Claims
+        public IdentityUserClaim<string> AdminUserClaim { get; set; }
+        public IdentityUserClaim<string> PublisherUserClaim { get; set; }
+        public IdentityUserClaim<string> GuestUserClaim { get; set; }
 
         //Genres
         public Genre Poetry { get; set; } = null!;
@@ -90,8 +96,15 @@
                 FirstName = "Admin",
                 LastName = "Adminov"
             };
-
+            AdminUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 1,
+                ClaimType = UserFullNameClaim,
+                ClaimValue = "Admin Adminov",
+                UserId = "c2f14bf7-ffdd-47a4-90b3-f2309486fae9"
+            };
             AdminUser.PasswordHash = hasher.HashPassword(AdminUser, "admin420");
+
 
             PublisherUser = new ApplicationUser()
             {
@@ -103,8 +116,15 @@
                 FirstName = "Publisher",
                 LastName = "Publishov"
             };
-
+            PublisherUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 2,
+                ClaimType = UserFullNameClaim,
+                ClaimValue = "Publisher Publishov",
+                UserId = "dea12856-c198-4129-b3f3-b893d8395082"
+            };
             PublisherUser.PasswordHash = hasher.HashPassword(PublisherUser, "publisher420");
+
 
             GuestUser = new ApplicationUser()
             {
@@ -116,7 +136,13 @@
                 FirstName = "Guest",
                 LastName = "Guestov"
             };
-
+            GuestUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 3,
+                ClaimType = UserFullNameClaim,
+                ClaimValue = "Guest Guestov",
+                UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
+            };
             GuestUser.PasswordHash = hasher.HashPassword(GuestUser, "guest420");
         }
 

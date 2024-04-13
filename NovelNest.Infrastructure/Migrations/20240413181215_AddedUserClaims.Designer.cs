@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240413181215_AddedUserClaims")]
+    partial class AddedUserClaims
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

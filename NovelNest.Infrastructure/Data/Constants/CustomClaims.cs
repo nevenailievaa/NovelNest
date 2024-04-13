@@ -1,4 +1,4 @@
-﻿namespace NovelNest.Core.Constants
+﻿namespace NovelNest.Infrastructure.Data.Constants
 {
     public static class CustomClaims
     {

@@ -11,7 +11,6 @@
     using NovelNest.Infrastructure.Data.Models.Events;
     using NovelNest.Infrastructure.Data.Models.Mappings;
     using NovelNest.Infrastructure.Data.Models.Roles;
-    using System.Reflection.Emit;
 
     public class NovelNestDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -69,6 +68,7 @@
 
             //Configuration (Data Seeding)
             builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new UserClaimsConfiguration());
             builder.ApplyConfiguration(new PublisherConfiguration());
             builder.ApplyConfiguration(new GenreConfiguration());
             builder.ApplyConfiguration(new CoverTypeConfiguration());

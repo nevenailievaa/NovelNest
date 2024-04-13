@@ -7,7 +7,7 @@
 
     if (SignInManager.IsSignedIn(User))
     {
-        userName = User.FindFirstValue(NovelNest.Core.Constants.CustomClaims.UserFullNameClaim) ?? string.Empty;
+        userName = User.FindFirstValue(CustomClaims.UserFullNameClaim) ?? string.Empty;
     }
 }
 

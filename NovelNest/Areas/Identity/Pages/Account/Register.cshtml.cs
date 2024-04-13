@@ -20,7 +20,7 @@ namespace NovelNest.Areas.Identity.Pages.Account
     using System.Threading.Tasks;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.ApplicationUserConstants;
-    using static NovelNest.Core.Constants.CustomClaims;
+    using static NovelNest.Infrastructure.Data.Constants.CustomClaims;
 
     public class RegisterModel : PageModel
     {
