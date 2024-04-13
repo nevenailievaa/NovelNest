@@ -2,9 +2,9 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using static NovelNest.Core.Constants.RoleConstants;
+    using static NovelNest.Core.Constants.AdminConstants;
 
-    [Area("Admin")]
+    [Area(AdminAreaName)]
     [Authorize(Roles = AdminRole)]
     public class AdminBaseController : Controller
     {

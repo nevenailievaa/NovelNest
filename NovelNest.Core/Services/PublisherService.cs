@@ -32,11 +32,28 @@
             this.bookService = bookService;
         }
 
-        public async Task<bool> ExistsByIdAsync(string userId)
+        public async Task<bool> ExistsByPublisherIdAsync(int publisherId)
+        {
+            return await repository
+                .AllAsReadOnly<Publisher>()
+                .AnyAsync(p => p.Id == publisherId);
+        }
+
+        public async Task<bool> ExistsByUserIdAsync(string userId)
         {
             return await repository
                 .AllAsReadOnly<Publisher>()
                 .AnyAsync(p => p.UserId == userId);
+        }
+
+        public async Task<bool> ExistsByEmailAsync(string publisherEmail)
+        {
+            return await repository.AllAsReadOnly<Publisher>().AnyAsync(u => u.User.Email.ToLower() == publisherEmail.ToLower());
+        }
+
+        public async Task<Publisher> GetPublisherByEmailAsync(string publisherEmail)
+        {
+            return await repository.All<Publisher>().FirstOrDefaultAsync(u => u.User.Email.ToLower() == publisherEmail.ToLower());
         }
 
         public async Task<int?> GetPublisherIdAsync(string userId)

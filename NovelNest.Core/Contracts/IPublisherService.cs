@@ -5,12 +5,16 @@ using NovelNest.Core.Models.ViewModels.Book;
 using NovelNest.Core.Models.ViewModels.BookStore;
 using NovelNest.Core.Models.ViewModels.Event;
 using NovelNest.Infrastructure.Data.Models.Mappings;
+using NovelNest.Infrastructure.Data.Models.Roles;
 
 namespace NovelNest.Core.Contracts
 {
     public interface IPublisherService
     {
-        Task<bool> ExistsByIdAsync(string userId);
+        Task<bool> ExistsByPublisherIdAsync(int publisherId);
+        Task<bool> ExistsByUserIdAsync(string userId);
+        Task<bool> ExistsByEmailAsync(string publisherEmail);
+        Task<Publisher> GetPublisherByEmailAsync(string publisherEmail);
         Task<int?> GetPublisherIdAsync(string UserId);
 
         //Book

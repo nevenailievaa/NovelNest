@@ -1,6 +1,7 @@
 ﻿namespace System.Security.Claims
 {
-    using static NovelNest.Core.Constants.RoleConstants;
+    using Microsoft.AspNetCore.Identity;
+    using static NovelNest.Core.Constants.AdminConstants;
 
     public static class ClaimsPrincipalExtensions
     {
@@ -13,5 +14,11 @@
         {
             return user.IsInRole(AdminRole);
         }
+
+        //public static async Task<bool> IsAdminAsync(this IdentityUser user, UserManager<IdentityUser> userManager)
+        //{
+        //    // Check if the user is in the Admin role
+        //    return await userManager.IsInRoleAsync(user, "Admin");
+        //}
     }
 }

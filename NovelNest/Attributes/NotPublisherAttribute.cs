@@ -17,7 +17,7 @@
                 context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
-            if (publisherService != null && publisherService.ExistsByIdAsync(context.HttpContext.User.Id()).Result)
+            if (publisherService != null && publisherService.ExistsByUserIdAsync(context.HttpContext.User.Id()).Result)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
             }

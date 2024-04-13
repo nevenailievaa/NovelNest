@@ -16,7 +16,10 @@
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPublisherService, PublisherService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<UserManager<ApplicationUser>>();
             return services;
         }
 

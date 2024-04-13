@@ -8,7 +8,7 @@
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-@if (await publisherService.ExistsByIdAsync(User.Id()) || User.IsAdmin())
+@if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
 {
     <div class="text-center mb-4">
         <a asp-controller="Publisher" asp-action="SelectBookFromBookStore" asp-route-id="@Model.BookStoreId" class="btn btn-primary btn-lg">Добави Книга</a>
@@ -83,7 +83,7 @@ else
                     </div>
                     <a asp-controller="Book" asp-action="Details" asp-route-information="@book.GetInformation()" asp-route-id="@book.Id" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Виж Повече</a>
 
-                    @if (await publisherService.ExistsByIdAsync(User.Id()) || User.IsAdmin())
+                    @if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
                     {
                         <a asp-controller="Publisher" asp-action="RemoveBookFromBookStore" asp-route-id="@book.Id" asp-route-secondId="@Model.BookStoreId" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни от Книжарница</a>
                     }

@@ -14,6 +14,10 @@
             public const int ApplicationUserLastNameMinLength = 1;
             public const int ApplicationUserLastNameMaxLength = 30;
         }
+        public static class PublisherConstants
+        {
+            public const string PublisherEmailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        }
 
         public static class BookConstants
         {

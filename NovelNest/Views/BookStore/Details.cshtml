@@ -37,7 +37,7 @@
         <a asp-controller="BookStore" asp-action="AllBooks" asp-route-id="@Model.Id" class="btn btn-success mb-2 w-100 p-3 fw-bold">Виж всички налични книги</a>
     </div>
 
-    @if (await publisherService.ExistsByIdAsync(User.Id()) || User.IsAdmin())
+    @if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
     {
         <hr />
         <div class="d-flex justify-content-center mt-1">

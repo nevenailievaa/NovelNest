@@ -1,0 +1,28 @@
+﻿@model UserViewModel
+
+@{
+    ViewBag.Title = "Премахни Publisher";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="RemovePublisherConfirmed" asp-route-email="@Model.Email" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.Email" class="form-label-add-edit"><bold>Имейл</bold></label>
+                <input asp-for="@Model.Email" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-danger mb-2 w-100 p-3 fw-bold" type="submit" value="Премахни" />
+                <a asp-area="Admin" asp-controller="Home" asp-action="Actions" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

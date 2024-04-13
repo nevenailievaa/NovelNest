@@ -12,7 +12,7 @@ namespace NovelNest.Areas.Identity.Pages.Account
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using static NovelNest.Core.Constants.RoleConstants;
+    using static NovelNest.Core.Constants.AdminConstants;
 
     public class LoginModel : PageModel
     {

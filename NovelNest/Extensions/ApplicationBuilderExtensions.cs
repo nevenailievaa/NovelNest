@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
     using NovelNest.Infrastructure.Data.Models.Roles;
-    using static NovelNest.Core.Constants.RoleConstants;
+    using static NovelNest.Core.Constants.AdminConstants;
 
     public static class ApplicationBuilderExtensions
     {

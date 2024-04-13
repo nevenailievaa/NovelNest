@@ -41,7 +41,7 @@
         <a asp-controller="Book" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary mb-2 w-100 p-3 fw-bold">Добави в Количката</a>
     </div>
     
-    @if (await publisherService.ExistsByIdAsync(User.Id()) || User.IsAdmin())
+    @if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
     {
         <hr />
         <div class="d-flex justify-content-center mt-1">
