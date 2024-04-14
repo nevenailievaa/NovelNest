@@ -9,19 +9,26 @@
     using static NovelNest.Core.Constants.AdminConstants;
     using static System.Security.Claims.ClaimsPrincipalExtensions;
 
-    public class AdminController : AdminBaseController
+    public class UserController : AdminBaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         private readonly IPublisherService publisherService;
         private readonly IAdminService adminService;
 
-        public AdminController(IPublisherService publisherService, IUserService userService, IAdminService adminService, UserManager<ApplicationUser> userManager)
+        public UserController(IPublisherService publisherService, IUserService userService, IAdminService adminService, UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.publisherService = publisherService;
             this.adminService = adminService;
             this.userManager = userManager;
+        }
+
+        public async Task<IActionResult> All()
+        {
+            var model = await userService.AllAsync();
+
+            return View(model);
         }
 
         //Publisher

@@ -22,9 +22,6 @@
     {
         private readonly IRepository repository;
         private readonly IBookService bookService;
-        private readonly IBookStoreService bookStoreService;
-        private readonly IArticleService articleService;
-        private readonly IEventService eventService;
 
         public PublisherService(IRepository repository, IBookService bookService)
         {
