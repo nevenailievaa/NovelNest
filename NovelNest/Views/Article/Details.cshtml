@@ -23,7 +23,7 @@
                 <a asp-controller="Article" asp-action="All" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Обратно към Всички Статии</a>
             </div>
 
-            @if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
+            @if (await publisherService.ExistsByUserIdAsync(User.Id()))
             {
                 <hr />
                 <div class="d-flex justify-content-center mt-1">

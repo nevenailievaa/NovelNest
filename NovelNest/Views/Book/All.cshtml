@@ -8,7 +8,7 @@
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-@if (await publisherService.ExistsByUserIdAsync(User.Id()) || User.IsAdmin())
+@if (await publisherService.ExistsByUserIdAsync(User.Id()))
 {
     <div class="text-center mb-4">
         <a asp-controller="Publisher" asp-action="AddBook" class="btn btn-primary btn-lg">Добави книга</a>
