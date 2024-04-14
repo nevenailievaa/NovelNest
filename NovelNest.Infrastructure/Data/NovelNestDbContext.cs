@@ -73,6 +73,7 @@
             builder.ApplyConfiguration(new GenreConfiguration());
             builder.ApplyConfiguration(new CoverTypeConfiguration());
             builder.ApplyConfiguration(new BookConfiguration());
+            builder.ApplyConfiguration(new BookReviewConfiguration());
             builder.ApplyConfiguration(new BookStoreConfiguration());
             builder.ApplyConfiguration(new ArticleConfiguration());
             builder.ApplyConfiguration(new EventConfiguration());

@@ -70,13 +70,13 @@ else
         }
         else
         {
+            <h2 class="text-center">Други Ревюта</h2>
             @foreach (var currentReview in Model.BookReviews)
             {
                 @if (currentReview.UserId == User.Id())
                 {
                     continue;
                 }
-                <h2 class="text-center">Други Ревюта</h2>
                 <partial name="_BookReviewPartial" model="@currentReview" />
             }
             <partial name="_BookReviewPagesPartial" model="@Model" />

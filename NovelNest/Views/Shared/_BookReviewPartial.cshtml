@@ -3,7 +3,7 @@
 
 @{
     var user = await UserManager.FindByIdAsync(Model.UserId);
-    var currentUserName = user?.UserName;
+    var currentUserName = user?.FirstName + " " + user.LastName;
 }
 
 <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">

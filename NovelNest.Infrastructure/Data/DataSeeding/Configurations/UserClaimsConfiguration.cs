@@ -10,7 +10,7 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(data.AdminUserClaim, data.PublisherUserClaim, data.GuestUserClaim);
+            builder.HasData(data.AdminUserClaim, data.PublisherUserClaim, data.GuestUserClaim, data.RandomUserOneClaim, data.RandomUserTwoClaim);
         }
     }
 }
