@@ -30,6 +30,7 @@
         public async Task<IActionResult> All([FromQuery] AllUsersQueryModel model)
         {
             var allUsers = await userService.AllAsync(
+                User.Id(),
                 model.SearchTerm,
                 model.RoleStatus,
                 model.CurrentPage,

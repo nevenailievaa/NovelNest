@@ -30,6 +30,7 @@
         }
 
         public async Task<UserQueryServiceModel> AllAsync(
+            string currentUserId,
             string? searchTerm = null,
             UserRoleStatus roleSorting = UserRoleStatus.All,
             int currentPage = 1,
@@ -52,6 +53,7 @@
             }
 
             var currentUsers = usersToShow
+                .Where(u => u.Email != "admin@gmail.com" && u.Id != currentUserId)
                 .Select(u => new UserServiceModel()
                 {
                     Id = u.Id,
@@ -61,6 +63,8 @@
                     IsAdmin = userManager.IsInRoleAsync(u, AdminRole).Result
                 })
                 .ToList();
+
+
 
             if (roleSorting == UserRoleStatus.Publisher)
             {

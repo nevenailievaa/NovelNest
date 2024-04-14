@@ -10,6 +10,7 @@
         Task<string> UserFullNameAsync(string userId);
 
         Task<UserQueryServiceModel> AllAsync(
+            string currentUserId,
             string? searchTerm = null,
             UserRoleStatus roleSorting = UserRoleStatus.All,
             int currentPage = 1,
