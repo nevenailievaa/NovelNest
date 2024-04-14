@@ -1,9 +1,13 @@
 ﻿namespace NovelNest.Areas.Admin.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
+    using NovelNest.Core.Models.QueryModels.Admin;
+    using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Admin;
+    using NovelNest.Core.Services;
     using NovelNest.Infrastructure.Data.Models.Roles;
     using System.Security.Claims;
     using static NovelNest.Core.Constants.AdminConstants;
@@ -24,12 +28,27 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> All()
+        //public async Task<IActionResult> All()
+        //{
+        //    var model = await userService.AllAsync();
+
+        //    return View(model);
+        //}
+        [HttpGet]
+        public async Task<IActionResult> All([FromQuery] AllUsersQueryModel model)
         {
-            var model = await userService.AllAsync();
+            var allUsers = await userService.AllAsync(
+                model.SearchTerm,
+                model.RoleStatus,
+                model.CurrentPage,
+                model.UsersPerPage);
+
+            model.TotalUsersCount = allUsers.TotalUsersCount;
+            model.Users = allUsers.Users;
 
             return View(model);
         }
+
 
         //Publisher
         [HttpGet]

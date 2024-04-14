@@ -1,4 +1,5 @@
-﻿@model IEnumerable<UserServiceModel>
+﻿@model AllUsersQueryModel
+@*@inject IPublisherService publisherService*@
 
 @{
     ViewBag.Title = "Всички Потребители";
@@ -6,46 +7,91 @@
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th><label>Име</label></th>
-            <th><label>Имейл</label></th>
-            <th><label>Publisher</label></th>
-            <th><label>Admin</label></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+
+@*@if (await publisherService.ExistsByUserIdAsync(User.Id()))
+{
+    <div class="text-center mb-4">
+        <a asp-controller="Publisher" asp-action="AddBookStore" class="btn btn-primary btn-lg">Добави Книжарница</a>
+    </div>
+}*@
+
+<form method="get">
+    <div class="row justify-content-center align-items-end">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="RoleStatus"></label>
+                <select asp-for="RoleStatus" class="form-control">
+                    <option value="0">Всички</option>
+                    <option value="1">Publisher-и</option>
+                    <option value="2">Admin-и</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.Users.Any())
+{
+    <h2 class="text-center mt-5">Няма намерени потребители!</h2>
+}
+else
+{
+    <table class="table table-striped mt-4">
+        <thead>
             <tr>
-                <td>
-                    <label>@user.FullName</label>
-                </td>
-                <td>
-                    <label>@user.Email</label>
-                </td>
-                <td>
-                    @if (user.IsPublisher)
-                    {
-                        <label>✔</label>
-                    }
-                    else
-                    {
-                        <label class="text-center">❌</label>
-                    }
-                </td>
-                <td>
-                    @if (user.IsAdmin)
-                    {
-                        <label>✔</label>
-                    }
-                    else
-                    {
-                        <label class="text-center">❌</label>
-                    }
-                </td>
+                <th><label>Име</label></th>
+                <th><label>Имейл</label></th>
+                <th><label>Publisher</label></th>
+                <th><label>Admin</label></th>
+                <th><label>Действия</label></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        <label>@user.FullName</label>
+                    </td>
+                    <td>
+                        <label>@user.Email</label>
+                    </td>
+                    <td>
+                        @if (user.IsPublisher)
+                        {
+                            <label>✔</label>
+                        }
+                        else
+                        {
+                            <label class="text-center">❌</label>
+                        }
+                    </td>
+                    <td>
+                        @if (user.IsAdmin)
+                        {
+                            <label>✔</label>
+                        }
+                        else
+                        {
+                            <label class="text-center">❌</label>
+                        }
+                    </td>
+                    <td>
+                        <a asp-area="Admin" asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="btn btn-outline-danger">Действия</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_UserPagesPartial" model="@Model" />
+}

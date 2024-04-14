@@ -1,0 +1,36 @@
+﻿@model AllUsersQueryModel
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalUsersCount /
+        Model.UsersPerPage);
+}
+
+@{
+    var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Users.Any();
+}
+
+<div class="row justify-content-center mt-2">
+    <div class="col-md-6 d-flex justify-content-between">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-area="Admin"
+           asp-controller="User"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-searchTerm="@Model.SearchTerm"><<</a>
+
+        <p class="align-self-center">Страница @Model.CurrentPage от @maxPage</p>
+
+        <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-area="Admin" 
+           asp-controller="User"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-searchTerm="@Model.SearchTerm">>></a>
+    </div>
+</div>

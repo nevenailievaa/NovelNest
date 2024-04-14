@@ -1,9 +1,11 @@
-﻿namespace NovelNest.Core.Models.ViewModels.Admin
+﻿namespace NovelNest.Core.Models.QueryModels.Admin
 {
     using System.ComponentModel.DataAnnotations;
 
     public class UserServiceModel
     {
+        public string Id { get; set; } = null!;
+
         public string Email { get; set; } = null!;
 
         [Display(Name = "Full Name")]
