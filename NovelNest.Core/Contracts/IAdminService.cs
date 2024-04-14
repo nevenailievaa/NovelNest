@@ -1,15 +1,17 @@
 ﻿namespace NovelNest.Core.Contracts
 {
+    using NovelNest.Core.Models.QueryModels.Admin;
     using NovelNest.Core.Models.ViewModels.Admin;
 
-    public interface  IAdminService
+    public interface IAdminService
     {
-        Task<int> AddPublisherAsync(UserViewModel form);
-        Task<UserRemoveViewModel> RemovePublisherAsync(int publisherId);
-        Task<int> RemovePublisherConfirmedAsync(int publisherId);
+        Task<int> AddPublisherAsync(string userId);
+        Task<UserServiceModel> RemovePublisherAsync(string userId);
+        Task<int> RemovePublisherConfirmedAsync(string userId);
 
-        Task<int> AddAdminAsync(UserViewModel form);
-        Task<UserViewModel> RemoveAdminAsync(int userId);
-        Task<int> RemoveAdminConfirmedAsync(int userId);
+
+        Task<string> AddAdminAsync(string userId);
+        Task<UserServiceModel> RemoveAdminAsync(string userId);
+        Task<string> RemoveAdminConfirmedAsync(string userId);
     }
 }

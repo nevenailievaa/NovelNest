@@ -5,9 +5,7 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Admin;
-    using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Infrastructure.Common;
-    using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.Roles;
     using static NovelNest.Core.Constants.AdminConstants;
 
@@ -108,7 +106,7 @@
             return await repository.GetByIdAsync<ApplicationUser>(userId);
         }
 
-        public async Task<UserServiceModel> DetailsAsync(int userId)
+        public async Task<UserServiceModel> DetailsAsync(string userId)
         {
             ApplicationUser? currentUser = await repository.GetByIdAsync<ApplicationUser>(userId);
 

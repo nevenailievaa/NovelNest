@@ -5,9 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Models.QueryModels.Admin;
-    using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Admin;
-    using NovelNest.Core.Services;
     using NovelNest.Infrastructure.Data.Models.Roles;
     using System.Security.Claims;
     using static NovelNest.Core.Constants.AdminConstants;
@@ -28,12 +26,6 @@
             this.userManager = userManager;
         }
 
-        //public async Task<IActionResult> All()
-        //{
-        //    var model = await userService.AllAsync();
-
-        //    return View(model);
-        //}
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] AllUsersQueryModel model)
         {
@@ -49,223 +41,236 @@
             return View(model);
         }
 
-
-        //Publisher
         [HttpGet]
-        public async Task<IActionResult> AddPublisher()
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(string userId)
         {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            var publisherForm = new UserViewModel();
-
-            return View(publisherForm);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddPublisher(UserViewModel form)
-        {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-            if (!await userService.ExistsByEmailAsync(form.Email))
-            {
-                ModelState.AddModelError("Email", "User with this email doesn't exist!");
-            }
-            else if (await publisherService.ExistsByEmailAsync(form.Email))
-            {
-                ModelState.AddModelError("Email", "User is already a Publisher.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(form);
-            }
-
-            int newPublisherId = await adminService.AddPublisherAsync(form);
-            return RedirectToAction("Actions", "Home");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> RemovePublisher(UserViewModel? model)
-        {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            var publisherForm = new UserViewModel();
-            if (model != null)
-            {
-                publisherForm.Email = model.Email;
-            }
-
-            return View(publisherForm);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemovePublisher(string email)
-        {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            //User doesn't exist
-            var user = await userService.GetUserByEmailAsync(email);
+            var user = await userService.GetUserByIdAsync(userId);
 
             if (user == null)
             {
-                ModelState.AddModelError("Email", "User with this email doesn't exist!");
-            }
-            if (!ModelState.IsValid)
-            {
-                var publisherForm = new UserViewModel();
-                publisherForm.Email = email;
-                return View(nameof(RemovePublisher), publisherForm);
+                return BadRequest();
             }
 
-            //Publisher doesn't exist
-            if (!publisherService.ExistsByEmailAsync(email).Result)
+            var currentUserDetails = await userService.DetailsAsync(userId);
+
+            return View(currentUserDetails);
+        }
+
+        //Publisher
+        [HttpGet]
+        public async Task<IActionResult> AddPublisher(string id)
+        {
+            if (!User.IsAdmin())
             {
-                ModelState.AddModelError("Email", "Publisher with this email doesn't exist!");
+                return Unauthorized();
             }
-            if (!ModelState.IsValid)
+            if (!await userService.ExistsByIdAsync(id))
             {
-                var publisherForm = new UserViewModel();
-                publisherForm.Email = email;
-                return View(nameof(RemovePublisher), publisherForm);
+                return BadRequest();
+            }
+            else if (await publisherService.ExistsByUserIdAsync(id))
+            {
+                return RedirectToAction(nameof(All));
             }
 
-            //Removing
-            var publisher = await publisherService.GetPublisherByEmailAsync(email);
-            var model = await adminService.RemovePublisherConfirmedAsync(publisher.Id);
+            var user = await userService.GetUserByIdAsync(id);
 
-            return RedirectToAction("Actions", "Home");
+            var publisherForm = new UserServiceModel()
+            {
+                Id = id,
+                FullName = userService.UserFullNameAsync(id).Result,
+                Email = user.Email,
+                IsPublisher = publisherService.ExistsByUserIdAsync(id).Result,
+                IsAdmin = userManager.IsInRoleAsync(user, AdminRole).Result
+            };
+
+            return View(publisherForm);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddPublisherConfirmed(string id)
+        {
+            if (!User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+            if (!await userService.ExistsByIdAsync(id))
+            {
+                return BadRequest();
+            }
+            else if (await publisherService.ExistsByUserIdAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            await adminService.AddPublisherAsync(id);
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemovePublisher(string id)
+        {
+            if (!User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+            if (!await userService.ExistsByIdAsync(id))
+            {
+                return BadRequest();
+            }
+            else if (!await publisherService.ExistsByUserIdAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            var user = await userService.GetUserByIdAsync(id);
+
+            var publisherForm = new UserServiceModel()
+            {
+                Id = id,
+                FullName = userService.UserFullNameAsync(id).Result,
+                Email = user.Email,
+                IsPublisher = publisherService.ExistsByUserIdAsync(id).Result,
+                IsAdmin = userManager.IsInRoleAsync(user, AdminRole).Result
+            };
+
+            return View(publisherForm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemovePublisherConfirmed(string id)
+        {
+            if (!User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+            if (!await userService.ExistsByIdAsync(id))
+            {
+                return BadRequest();
+            }
+            else if (!await publisherService.ExistsByUserIdAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            await adminService.RemovePublisherConfirmedAsync(id);
+
+            return RedirectToAction(nameof(All));
         }
 
         //Admin
         [HttpGet]
-        public async Task<IActionResult> AddAdmin()
+        public async Task<IActionResult> AddAdmin(string id)
         {
             if (!User.IsAdmin())
             {
                 return Unauthorized();
             }
+            if (!await userService.ExistsByIdAsync(id))
+            {
+                return BadRequest();
+            }
 
-            var adminForm = new UserViewModel();
+            var user = await userService.GetUserByIdAsync(id);
+
+            if (await userManager.IsInRoleAsync(user, AdminRole))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            var adminForm = new UserServiceModel()
+            {
+                Id = id,
+                FullName = userService.UserFullNameAsync(id).Result,
+                Email = user.Email,
+                IsPublisher = publisherService.ExistsByUserIdAsync(id).Result,
+                IsAdmin = userManager.IsInRoleAsync(user, AdminRole).Result
+            };
 
             return View(adminForm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAdmin(UserViewModel form)
+        public async Task<IActionResult> AddAdminConfirmed(string id)
         {
             if (!User.IsAdmin())
             {
                 return Unauthorized();
             }
-
-            var user = await userService.GetUserByEmailAsync(form.Email);
-
-            if (user == null)
+            if (!await userService.ExistsByIdAsync(id))
             {
-                ModelState.AddModelError("Email", "User with this email doesn't exist!");
-            }
-            else if (await userManager.IsInRoleAsync(user, AdminRole))
-            {
-                ModelState.AddModelError("Email", "User is already an Admin.");
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(form);
+                return BadRequest();
             }
 
-            var result = await userManager.AddToRoleAsync(user, AdminRole);
+            var user = await userService.GetUserByIdAsync(id);
 
-            if (!result.Succeeded)
+            if (await userManager.IsInRoleAsync(user, AdminRole))
             {
-                ModelState.AddModelError("Email", "Failed to add user to the Admin role!");
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(form);
+                return RedirectToAction(nameof(All));
             }
 
-            await AddPublisher(form);
-            return RedirectToAction("Actions", "Home");
+            if (!await publisherService.ExistsByUserIdAsync(id))
+            {
+                await adminService.AddPublisherAsync(id);
+            }
+            await adminService.AddAdminAsync(id);
+            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
-        public async Task<IActionResult> RemoveAdmin(UserViewModel? model)
+        public async Task<IActionResult> RemoveAdmin(string id)
         {
             if (!User.IsAdmin())
             {
                 return Unauthorized();
             }
-
-            var adminForm = new UserViewModel();
-            if (model != null)
+            if (!await userService.ExistsByIdAsync(id))
             {
-                adminForm.Email = model.Email;
+                return BadRequest();
             }
+
+            var user = await userService.GetUserByIdAsync(id);
+
+            if (!await userManager.IsInRoleAsync(user, AdminRole))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            var adminForm = new UserServiceModel()
+            {
+                Id = id,
+                FullName = userService.UserFullNameAsync(id).Result,
+                Email = user.Email,
+                IsPublisher = publisherService.ExistsByUserIdAsync(id).Result,
+                IsAdmin = userManager.IsInRoleAsync(user, AdminRole).Result
+            };
 
             return View(adminForm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveAdmin(string email)
+        public async Task<IActionResult> RemoveAdminConfirmed(string id)
         {
             if (!User.IsAdmin())
             {
                 return Unauthorized();
             }
-
-            //User doesn't exist
-            var user = await userService.GetUserByEmailAsync(email);
-
-            if (user == null)
+            if (!await userService.ExistsByIdAsync(id))
             {
-                ModelState.AddModelError("Email", "User with this email doesn't exist!");
-            }
-            if (!ModelState.IsValid)
-            {
-                var publisherForm = new UserViewModel();
-                publisherForm.Email = email;
-                return View(nameof(RemoveAdmin), publisherForm);
+                return BadRequest();
             }
 
-            //Already an Admin
+            var user = await userService.GetUserByIdAsync(id);
+
             if (!await userManager.IsInRoleAsync(user, AdminRole))
             {
-                ModelState.AddModelError("Email", "Admin with this email doesn't exist!");
-            }
-            if (!ModelState.IsValid)
-            {
-                var publisherForm = new UserViewModel();
-                publisherForm.Email = email;
-                return View(nameof(RemoveAdmin), publisherForm);
+                return RedirectToAction(nameof(All));
             }
 
-            //Removing
-            var result = await userManager.RemoveFromRoleAsync(user, AdminRole);
+            await adminService.RemoveAdminConfirmedAsync(id);
 
-            if (!result.Succeeded)
-            {
-                ModelState.AddModelError("Email", "Failed to remove user from the Admin role!");
-            }
-            if (!ModelState.IsValid)
-            {
-                var publisherForm = new UserViewModel();
-                publisherForm.Email = email;
-                return View(nameof(RemoveAdmin), publisherForm);
-            }
-
-            await RemovePublisher(email);
-            return RedirectToAction("Actions", "Home");
+            return RedirectToAction(nameof(All));
         }
     }
 }

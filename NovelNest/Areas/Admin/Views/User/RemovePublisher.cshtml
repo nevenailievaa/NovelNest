@@ -1,28 +1,55 @@
-﻿@model UserViewModel
+﻿@model UserServiceModel
 
 @{
     ViewBag.Title = "Премахни Publisher";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
-
-<div class="row">
-    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="RemovePublisher" asp-route-email="@Model.Email" method="post">
-            <div class="mb-3">
-                <label asp-for="@Model.Email" class="form-label-add-edit"><bold>Имейл</bold></label>
-                <input asp-for="@Model.Email" class="form-control" aria-required="true" />
-                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTii3hM5abJEj_Zu0wumINDLGvHaT-MZaesc9dj-gXSUg&s" alt="User Image" style="max-width: 200px; height: auto;">
+                    <h2 class="card-title" style="margin-top: 15px;">@Model.FullName</h2>
+                    <p class="text-danger mt-3">Сигурен ли си, че искаш да премахнеш този потребител като Publisher?</p>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <form asp-action="RemovePublisherConfirmed" method="post" class="col-12">
+                        <input type="hidden" asp-for="Id" />
+                        <a asp-area="Admin" asp-controller="User" asp-action="All" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно към всички</a>
+                        <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Премахни</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <input class="btn btn-danger mb-2 w-100 p-3 fw-bold" type="submit" value="Премахни" />
-                <a asp-area="Admin" asp-controller="Home" asp-action="Actions" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
