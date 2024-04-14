@@ -89,7 +89,7 @@ namespace NovelNest.Areas.Identity.Pages.Account
 
                     if (await _userManager.IsInRoleAsync(user, AdminRole))
                     {
-                        return RedirectToAction("Actions", "Home", new { area = "Admin" });
+                        return RedirectToAction("All", "User", new { area = "Admin" });
                     }
 
                     return LocalRedirect(returnUrl);
