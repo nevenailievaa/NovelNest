@@ -23,7 +23,17 @@
                 data.Biography,
                 data.Autobiography,
                 data.Crime,
-                data.Humor
+                data.Humor,
+                data.Fiction,
+                data.Drama,
+                data.Military,
+                data.History,
+                data.Philosophy,
+                data.Business,
+                data.Science,
+                data.Health,
+                data.Cooking,
+                data.Travel
             });
         }
     }

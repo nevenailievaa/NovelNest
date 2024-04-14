@@ -10,7 +10,26 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new Book[] { data.AnnaKarenina, data.Hannibal, data.MenWhoHateWomen, data.MeBeforeYou, data.TheDiaryOfAYoungGirl });
+            builder.HasData(new Book[]
+            { 
+                data.AnnaKarenina,
+                data.Hannibal,
+                data.MenWhoHateWomen,
+                data.MeBeforeYou,
+                data.TheDiaryOfAYoungGirl,
+                data.Searched,
+                data.QuoVadis,
+                data.Tobacco,
+                data.WomanInMe,
+                data.AtMothers,
+                data.TheWitcherOne,
+                data.ImStillCountingTheDays,
+                data.TheLettersWar,
+                data.TheHungerGamesOne,
+                data.TheHungerGamesTwo,
+                data.TheHungerGamesThree,
+                data.TheHungerGamesBalad
+            });
         }
     }
 }
