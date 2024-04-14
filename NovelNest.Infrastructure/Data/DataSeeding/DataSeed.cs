@@ -31,6 +31,8 @@
         public ApplicationUser AdminUser { get; set; }
         public ApplicationUser PublisherUser { get; set; }
         public ApplicationUser GuestUser { get; set; }
+        public ApplicationUser RandomUserOne { get; set; }
+        public ApplicationUser RandomUserTwo { get; set; }
 
         //Roles
         public Publisher Publisher { get; set; }
@@ -40,6 +42,8 @@
         public IdentityUserClaim<string> AdminUserClaim { get; set; }
         public IdentityUserClaim<string> PublisherUserClaim { get; set; }
         public IdentityUserClaim<string> GuestUserClaim { get; set; }
+        public IdentityUserClaim<string> RandomUserOneClaim { get; set; }
+        public IdentityUserClaim<string> RandomUserTwoClaim { get; set; }
 
         //Genres
         public Genre Poetry { get; set; }
@@ -166,6 +170,44 @@
                 UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
             };
             GuestUser.PasswordHash = hasher.HashPassword(GuestUser, "guest420");
+
+            RandomUserOne = new ApplicationUser()
+            {
+                Id = "64ce3106-ec7d-44cb-b167-bf946b88bb1b",
+                UserName = "nevena@gmail.com",
+                NormalizedUserName = "NEVENA@GMAIL.COM",
+                Email = "nevena@gmail.com",
+                NormalizedEmail = "NEVENA@GMAIL.COM",
+                FirstName = "Nevena",
+                LastName = "Ilieva"
+            };
+            RandomUserOneClaim = new IdentityUserClaim<string>()
+            {
+                Id = 4,
+                ClaimType = UserFullNameClaim,
+                ClaimValue = "Nevena Ilieva",
+                UserId = "64ce3106-ec7d-44cb-b167-bf946b88bb1b"
+            };
+            RandomUserOne.PasswordHash = hasher.HashPassword(GuestUser, "nevena420");
+
+            RandomUserTwo = new ApplicationUser()
+            {
+                Id = "cabfd9b8-4411-47f6-9639-df70d753c275",
+                UserName = "boris@gmail.com",
+                NormalizedUserName = "BORIS@GMAIL.COM",
+                Email = "boris@gmail.com",
+                NormalizedEmail = "BORIS@GMAIL.COM",
+                FirstName = "Nevena",
+                LastName = "Ilieva"
+            };
+            RandomUserTwoClaim = new IdentityUserClaim<string>()
+            {
+                Id = 5,
+                ClaimType = UserFullNameClaim,
+                ClaimValue = "Boris Vladov",
+                UserId = "cabfd9b8-4411-47f6-9639-df70d753c275"
+            };
+            RandomUserTwo.PasswordHash = hasher.HashPassword(GuestUser, "boris420");
         }
 
         private void SeedPublisher()

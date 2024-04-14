@@ -1,6 +1,5 @@
 ﻿namespace NovelNest.Infrastructure.Data.DataSeeding.Configurations
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using NovelNest.Infrastructure.Data.Models.Roles;
@@ -11,7 +10,7 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new ApplicationUser[] { data.GuestUser, data.PublisherUser, data.AdminUser });
+            builder.HasData(new ApplicationUser[] { data.GuestUser, data.PublisherUser, data.AdminUser, data.RandomUserOne, data.RandomUserTwo });
         }
     }
 }
