@@ -70,13 +70,13 @@ else
             }
             else
             {
+                <h2 class="text-center">Други Коментари</h2>
                 @foreach (var currentComment in Model.ArticleComments)
                 {
                     @if (currentComment.UserId == User.Id())
                     {
                         continue;
                     }
-                    <h2 class="text-center">Други Коментари</h2>
                     <partial name="_ArticleCommentPartial" model="@currentComment" />
                 }
                 <partial name="_ArticleCommentPagesPartial" model="@Model" />

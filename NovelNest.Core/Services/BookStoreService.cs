@@ -60,7 +60,7 @@
                 || bs.ClosingTime.ToString().ToLower().Contains(normalizedSearchTerm));
             }
 
-            var currentBookStores = await bookStoresToShow.ToListAsync();
+            var currentBookStores = await bookStoresToShow.OrderByDescending(bs => bs.Id).ToListAsync();
             if (status == BookStoreStatus.Open)
             {
                 currentBookStores = currentBookStores.Where(bs => IsBookstoreOpen(bs.OpeningTime, bs.ClosingTime).Result == true).ToList();
