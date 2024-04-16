@@ -11,6 +11,7 @@
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.BookStoreConstants;
     using static NovelNest.Infrastructure.Data.Constants.DataConstants.EventConstants;
     using static NovelNest.Infrastructure.Data.Constants.CustomClaims;
+    using NovelNest.Infrastructure.Data.Models.Mappings;
 
     internal class DataSeed
     {
@@ -103,6 +104,12 @@
         public BookStore BookStoreOne { get; set; }
         public BookStore BookStoreTwo { get; set; }
         public BookStore BookStoreThree { get; set; }
+        public BookStore BookStoreFour { get; set; }
+        public BookStore BookStoreFive { get; set; }
+        public BookStore BookStoreSix { get; set; }
+        public BookStore BookStoreSeven { get; set; }
+        public BookStore BookStoreEight { get; set; }
+        public BookStore BookStoreNine { get; set; }
 
         //Articles
         public Article ArticleOne { get; set; }
@@ -700,6 +707,76 @@
                 OpeningTime = DateTime.ParseExact("10:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 ClosingTime = DateTime.ParseExact("22:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 Contact = "0892414935",
+            };
+            BookStoreFour = new BookStore()
+            {
+                Id = 4,
+                Name = "Helikon - Пловдив Център",
+                Location = "ул. „Княз Александър I-ви“ 29, Пловдив",
+                ImageUrl = "https://cdn.oink.bg/gallery/23010/05adf581-0397-4f92-a9fa-65a087cd918f_large.webp",
+                OpeningTime = DateTime.ParseExact("09:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("20:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "032 207 621",
+            };
+            BookStoreFive = new BookStore()
+            {
+                Id = 5,
+                Name = "Hermes - Стамболийски",
+                Location = "София център, бул. „Александър Стамболийски“ № 27А, 1000 София",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipM6sAeCcik9kS-GHs0pAigNGtXReSFIrBZmMVdy=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("09:30", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("19:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0899997719",
+            };
+            BookStoreFive = new BookStore()
+            {
+                Id = 5,
+                Name = "От А до Я - София Център",
+                Location = "ж.к. Лозенец, ул. „Драгалевска“ 1, 1407 София",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipPgXofDl2u9d6h6aNNQ6Phs0i7mzeVYEwU5ssQX=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("09:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("20:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0878929358",
+            };
+            BookStoreSix = new BookStore()
+            {
+                Id = 6,
+                Name = "Ciela Books & Music - Пловдив",
+                Location = "Казарми Източен, ул. „Д-р Георги Странски“ №3, етаж 2, 4019 Пловдив",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipNKR7OEDjOL8kyn96Fz8P-EFTLP5VQvpi0i1CSi=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("10:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("21:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0876211144",
+            };
+            BookStoreSeven = new BookStore()
+            {
+                Id = 7,
+                Name = "Bookpoint - Варна",
+                Location = "Варна Център Одесос, ул. „Цар Симеон I“ 1, 9000 Варна",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipOoQHzIG3B8LxmxLjyoCSlDD93L6ftaFLVYFWzX=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("10:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("19:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0879228009",
+            };
+            BookStoreEight = new BookStore()
+            {
+                Id = 8,
+                Name = "Ciela - Русе",
+                Location = "бул. Липник 121 Д, 7000 Русе",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipPbLF_2y5KAuPxHse21tPodoOooVGlsa1R5gJ4p=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("10:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("20:30", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0882560013",
+            };
+            BookStoreNine = new BookStore()
+            {
+                Id = 9,
+                Name = "Ciela - Бургас",
+                Location = "Северна промишлена зона, бул. „Янко Комитов“, 8001 Бургас",
+                ImageUrl = "https://lh3.googleusercontent.com/p/AF1QipONKzh539ObWS-NI_g3XohjjChkUr2khxVk7bP6=s680-w680-h510-rw",
+                OpeningTime = DateTime.ParseExact("10:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ClosingTime = DateTime.ParseExact("21:00", DateTimeBookStoreFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                Contact = "0877257199",
             };
         }
 

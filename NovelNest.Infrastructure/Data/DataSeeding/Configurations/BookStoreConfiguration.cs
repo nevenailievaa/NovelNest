@@ -10,7 +10,18 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new BookStore[] { data.BookStoreOne, data.BookStoreTwo, data.BookStoreThree });
+            builder.HasData(new BookStore[]
+            {
+                data.BookStoreOne,
+                data.BookStoreTwo,
+                data.BookStoreThree,
+                data.BookStoreFour,
+                data.BookStoreFive,
+                data.BookStoreSix,
+                data.BookStoreSeven,
+                data.BookStoreEight,
+                data.BookStoreNine,
+            });
         }
     }
 }

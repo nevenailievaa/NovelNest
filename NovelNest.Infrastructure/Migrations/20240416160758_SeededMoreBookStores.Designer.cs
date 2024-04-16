@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovelNest.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using NovelNest.Infrastructure.Data;
 namespace NovelNest.Infrastructure.Migrations
 {
     [DbContext(typeof(NovelNestDbContext))]
-    partial class NovelNestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416160758_SeededMoreBookStores")]
+    partial class SeededMoreBookStores
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,7 +235,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
 
                     b.HasData(
                         new
@@ -355,7 +357,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ArticleComments", (string)null);
+                    b.ToTable("ArticleComments");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Books.Book", b =>
@@ -424,7 +426,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
 
                     b.HasData(
                         new
@@ -707,7 +709,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BookReviews", (string)null);
+                    b.ToTable("BookReviews");
 
                     b.HasData(
                         new
@@ -762,7 +764,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoverTypes", (string)null);
+                    b.ToTable("CoverTypes");
 
                     b.HasData(
                         new
@@ -794,7 +796,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
 
                     b.HasData(
                         new
@@ -951,7 +953,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookStores", (string)null);
+                    b.ToTable("BookStores");
 
                     b.HasData(
                         new
@@ -1068,7 +1070,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BooksUsersCurrentlyReading", (string)null);
+                    b.ToTable("BooksUsersCurrentlyReading");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.BookUserActions.BookUserRead", b =>
@@ -1089,7 +1091,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BooksUsersRead", (string)null);
+                    b.ToTable("BooksUsersRead");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.BookUserActions.BookUserWantToRead", b =>
@@ -1110,7 +1112,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BooksUsersWantToRead", (string)null);
+                    b.ToTable("BooksUsersWantToRead");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Carts.Cart", b =>
@@ -1130,7 +1132,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Events.Event", b =>
@@ -1185,7 +1187,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
 
                     b.HasData(
                         new
@@ -1312,7 +1314,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("BookStoreId");
 
-                    b.ToTable("BooksBookStores", (string)null);
+                    b.ToTable("BooksBookStores");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Mappings.BookCart", b =>
@@ -1329,7 +1331,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("BooksCarts", (string)null);
+                    b.ToTable("BooksCarts");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Mappings.EventCart", b =>
@@ -1346,7 +1348,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("EventsCarts", (string)null);
+                    b.ToTable("EventsCarts");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Mappings.EventParticipant", b =>
@@ -1363,7 +1365,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("EventsParticipants", (string)null);
+                    b.ToTable("EventsParticipants");
                 });
 
             modelBuilder.Entity("NovelNest.Infrastructure.Data.Models.Roles.ApplicationUser", b =>
@@ -1551,7 +1553,7 @@ namespace NovelNest.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
 
                     b.HasData(
                         new
