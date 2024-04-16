@@ -10,7 +10,18 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new Article[] { data.ArticleMenWhoHateWomen, data.ArticleHarryPotter, data.ArticleBaiTosho });
+            builder.HasData(new Article[]
+            {
+                data.ArticleOne,
+                data.ArticleTwo,
+                data.ArticleThree,
+                data.ArticleFour,
+                data.ArticleFive,
+                data.ArticleSix,
+                data.ArticleSeven,
+                data.ArticleEight,
+                data.ArticleNine,
+            });
         }
     }
 }

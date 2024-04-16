@@ -10,7 +10,7 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new BookStore[] { data.Ciela, data.Helikon, data.Orange });
+            builder.HasData(new BookStore[] { data.BookStoreOne, data.BookStoreTwo, data.BookStoreThree });
         }
     }
 }

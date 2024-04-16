@@ -12,15 +12,15 @@
 
             builder.HasData(new Event[]
             {
-                data.EventSofiasEtudes,
-                data.EventAlbertBenbasat,
-                data.EventTotalitarism,
-                data.WhiteFoxDeath,
-                data.PastUnfinished,
-                data.AutographMeet,
-                data.SelyaAhavaMeet,
-                data.ForBooksAndReading,
-                data.Fairytales
+                data.EventOne,
+                data.EventTwo,
+                data.EventThree,
+                data.EventFour,
+                data.EventFive,
+                data.EventSix,
+                data.EventSeven,
+                data.EventEight,
+                data.EventNine
             });
         }
     }

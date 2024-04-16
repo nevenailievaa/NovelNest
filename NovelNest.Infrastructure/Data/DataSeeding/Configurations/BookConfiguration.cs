@@ -12,23 +12,23 @@
 
             builder.HasData(new Book[]
             { 
-                data.AnnaKarenina,
-                data.Hannibal,
-                data.MenWhoHateWomen,
-                data.MeBeforeYou,
-                data.TheDiaryOfAYoungGirl,
-                data.Searched,
-                data.QuoVadis,
-                data.Tobacco,
-                data.WomanInMe,
-                data.AtMothers,
-                data.TheWitcherOne,
-                data.ImStillCountingTheDays,
-                data.TheLettersWar,
-                data.TheHungerGamesOne,
-                data.TheHungerGamesTwo,
-                data.TheHungerGamesThree,
-                data.TheHungerGamesBalad
+                data.BookOne,
+                data.BookTwo,
+                data.BookThree,
+                data.BookFour,
+                data.BookFive,
+                data.BookSix,
+                data.BookSeven,
+                data.BookEight,
+                data.BookNine,
+                data.BookTen,
+                data.BookEleven,
+                data.BookTwelve,
+                data.BookThirteen,
+                data.BookFourteen,
+                data.BookFiveteen,
+                data.BookSixteen,
+                data.BookSeventeen
             });
         }
     }
