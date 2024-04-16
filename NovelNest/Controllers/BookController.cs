@@ -5,7 +5,9 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Extensions;
     using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class BookController : BaseController
@@ -35,6 +37,23 @@
             model.Books = allBooks.Books;
             model.Genres = await bookService.AllGenresNamesAsync();
             model.CoverTypes = await bookService.AllCoverTypesNamesAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> AllBookstoresWithBook(int id, [FromQuery] AllBookStoresQueryModel model)
+        {
+            var allEvents = await bookService.AllBookstoresWithBook(
+                id,
+                model.SearchTerm,
+                model.Status,
+                model.CurrentPage,
+                model.BookStoresPerPage);
+
+            model.TotalBookStoresCount = allEvents.TotalBookStoresCount;
+            model.BookStores = allEvents.BookStores;
 
             return View(model);
         }
@@ -201,7 +220,7 @@
 
 
             await bookService.AddWantToReadBookAsync(id, userId);
-            return RedirectToAction(nameof(WantToRead));
+            return RedirectToAction(nameof(Mine), new { id = userId });
         }
 
         [HttpGet]
@@ -219,7 +238,7 @@
             }
 
             await bookService.AddCurrentlyReadingBookAsync(id, userId);
-            return RedirectToAction(nameof(CurrentlyReading));
+            return RedirectToAction(nameof(Mine), new { id = userId });
         }
 
         [HttpGet]
@@ -237,6 +256,12 @@
             }
 
             await bookService.AddReadBookAsync(id, userId);
+
+            if (await bookService.FindBookReviewAsync(User.Id(), id) != null)
+            {
+                return RedirectToAction(nameof(Mine), new { id = userId });
+            }
+
             return RedirectToAction(nameof(BookReviewQuestion), new { id });
         }
 
@@ -298,13 +323,13 @@
         [HttpGet]
         public async Task<IActionResult> DeleteBookReview(int id)
         {
-            var bookReview = await bookService.FindBookReviewAsync(id);
+            var bookReview = await bookService.FindBookReviewByIdAsync(id);
 
             if (bookReview == null)
             {
                 return BadRequest();
             }
-            if (bookReview.UserId != User.Id())
+            if (bookReview.UserId != User.Id() && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -317,13 +342,13 @@
         [HttpPost]
         public async Task<IActionResult> DeleteBookReviewConfirmed(int reviewId)
         {
-            var bookReview = await bookService.FindBookReviewAsync(reviewId);
+            var bookReview = await bookService.FindBookReviewByIdAsync(reviewId);
 
             if (bookReview == null)
             {
                 return BadRequest();
             }
-            if (bookReview.UserId != User.Id())
+            if (bookReview.UserId != User.Id() && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -389,7 +414,7 @@
         [HttpGet]
         public async Task<IActionResult> BookReviewDetails(int id)
         {
-            if (await bookService.FindBookReviewAsync(id) == null)
+            if (await bookService.FindBookReviewByIdAsync(id) == null)
             {
                 return BadRequest();
             }
@@ -401,7 +426,7 @@
         [HttpGet]
         public async Task<IActionResult> EditBookReview(int id)
         {
-            var bookReview = await bookService.FindBookReviewAsync(id);
+            var bookReview = await bookService.FindBookReviewByIdAsync(id);
 
             if (bookReview == null)
             {
@@ -485,7 +510,11 @@
                 await RemoveCurrentlyReading(id);
                 await AddRead(id);
 
-                return RedirectToAction(nameof(DetailsRead), new { id });
+                if (await bookService.FindBookReviewAsync(User.Id(), id) == null)
+                {
+                    return RedirectToAction(nameof(BookReviewQuestion), new { id });
+                }
+                return RedirectToAction(nameof(Mine), new { id = User.Id() });
             }
 
             await bookService.ChangePagePostAsync(changePageForm);

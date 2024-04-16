@@ -2,6 +2,7 @@
 {
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Data.Models.Books;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
@@ -15,6 +16,14 @@
             BookSorting sorting = BookSorting.Newest,
             int currentPage = 1,
             int booksPerPage = 8);
+
+        Task<BookStoreQueryServiceModel> AllBookstoresWithBook(
+            int bookId,
+            string? searchTerm = null,
+            BookStoreStatus status = BookStoreStatus.All,
+            int currentPage = 1,
+            int bookStoresPerPage = 4);
+
         Task<IEnumerable<GenreViewModel>> AllGenresAsync();
         Task<IEnumerable<string>> AllGenresNamesAsync();
         Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync();
@@ -66,7 +75,8 @@
             BookReviewSorting sorting = BookReviewSorting.Newest,
             int currentPage = 1,
             int reviewsPerPage = 8);
-        Task<BookReview> FindBookReviewAsync(int reviewId);
+        Task<BookReview> FindBookReviewAsync(string userId, int bookId);
+        Task<BookReview> FindBookReviewByIdAsync(int reviewId);
         Task<BookReviewDeleteViewModel> DeleteBookReviewAsync(int reviewId);
         Task<int> DeleteBookReviewConfirmedAsync(int reviewId);
         Task<BookReviewDetailsViewModel> BookReviewDetailsAsync(int reviewId);

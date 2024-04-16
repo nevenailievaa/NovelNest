@@ -95,7 +95,7 @@
             };
         }
 
-        private async Task<bool> IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
+        public static async Task<bool> IsBookstoreOpen(DateTime openingTime, DateTime closingTime)
         {
             var now = DateTime.Now;
 

@@ -58,6 +58,24 @@ else
         <div class="text-center mb-4 mt-4">
             <a asp-controller="Book" asp-action="AddReview" asp-route-id="@Model.BookId" class="btn btn-primary btn-lg">Добави Ревю</a>
         </div>
+
+            if (Model.BookReviews.Count() == 0)
+            {
+                <h4 class="text-center">За момента никой друг не е добавял ревю за тази книга!</h4>
+            }
+            else
+            {
+                <h2 class="text-center">Други Ревюта</h2>
+                @foreach (var currentReview in Model.BookReviews)
+                {
+                    @if (currentReview.UserId == User.Id())
+                    {
+                        continue;
+                    }
+                    <partial name="_BookReviewPartial" model="@currentReview" />
+                }
+                <partial name="_BookReviewPagesPartial" model="@Model" />
+            }
     }
     else
     {

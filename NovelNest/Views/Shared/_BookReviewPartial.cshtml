@@ -24,7 +24,17 @@
         {
             <a asp-controller="Book" asp-action="BookReviewDetails" asp-route-id="@Model.Id" class="btn btn-warning px-2 fw-bold me-2">Виж Цялото Ревю</a>
         }
-        @if (Model.UserId == UserManager.GetUserId(User))
+
+        @if (Model.UserId == UserManager.GetUserId(User) && User.IsAdmin())
+        {
+            <a asp-controller="Book" asp-action="EditBookReview" asp-route-id="@Model.Id" class="btn btn-secondary px-2 fw-bold me-2">Редактирай</a>
+            <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
+        }
+        else if (User.IsAdmin())
+        {
+            <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
+        }
+        else if (Model.UserId == UserManager.GetUserId(User))
         {
             <a asp-controller="Book" asp-action="EditBookReview" asp-route-id="@Model.Id" class="btn btn-secondary px-2 fw-bold me-2">Редактирай</a>
             <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>

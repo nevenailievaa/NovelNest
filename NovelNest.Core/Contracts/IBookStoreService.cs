@@ -14,6 +14,7 @@
             BookStoreStatus status = BookStoreStatus.All,
             int currentPage = 1,
             int bookStoresPerPage = 4);
+        //Task<bool> IsBookstoreOpen(DateTime openingTime, DateTime closingTime);
         Task<bool> BookStoreExistsAsync(int bookStoreId);
         Task<BookStore> FindBookStoreByIdAsync(int bookStoreId);
         Task<BookStoreDetailsViewModel> DetailsAsync(int bookStoreId);

@@ -1906,7 +1906,7 @@ namespace NovelNest.UnitTests
 
             // Act
             var result = await service.AddBookReviewAsync(addForm, "testUser", 2);
-            var expectedResult = await service.FindBookReviewAsync(result);
+            var expectedResult = await service.FindBookReviewByIdAsync(result);
 
             // Assert
             Assert.AreEqual(2, result);
@@ -1917,7 +1917,7 @@ namespace NovelNest.UnitTests
         public async Task Test_FindBookReviewAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var resultExistingReview = await service.FindBookReviewAsync(1);
+            var resultExistingReview = await service.FindBookReviewByIdAsync(1);
 
             // Assert
             Assert.IsNotNull(resultExistingReview);
@@ -1953,7 +1953,7 @@ namespace NovelNest.UnitTests
 
             // Assert
             Assert.AreEqual(1, result);
-            Assert.IsNull(await service.FindBookReviewAsync(1));
+            Assert.IsNull(await service.FindBookReviewByIdAsync(1));
         }
 
         [Test]
@@ -2024,7 +2024,7 @@ namespace NovelNest.UnitTests
 
             // Act
             var result = await service.EditBookReviewPostAsync(bookReviewDetails);
-            var editedReview = await service.FindBookReviewAsync(bookReview.Id);
+            var editedReview = await service.FindBookReviewByIdAsync(bookReview.Id);
 
             // Assert
             Assert.AreEqual(bookReview.Id, result);

@@ -4,9 +4,11 @@
     using NovelNest.Core.Contracts;
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Book;
+    using NovelNest.Core.Models.QueryModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Infrastructure.Common;
     using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookStores;
     using NovelNest.Infrastructure.Data.Models.BookUserActions;
     using System.Collections.Generic;
     using System.Linq;
@@ -86,6 +88,67 @@
                 TotalBooksCount = totalBooks
             };
         }
+
+        public async Task<BookStoreQueryServiceModel> AllBookstoresWithBook(
+            int bookId,
+            string? searchTerm = null,
+            BookStoreStatus status = BookStoreStatus.All,
+            int currentPage = 1,
+            int bookStoresPerPage = 4)
+        {
+            var bookStoresToShow = repository.AllAsReadOnly<BookStore>();
+
+            if (searchTerm != null)
+            {
+                string normalizedSearchTerm = searchTerm.ToLower();
+
+                bookStoresToShow = bookStoresToShow
+                .Where(bs => normalizedSearchTerm.Contains(bs.Name.ToLower())
+                || normalizedSearchTerm.Contains(bs.Location.ToLower())
+                || normalizedSearchTerm.Contains(bs.OpeningTime.ToString().ToLower())
+                || normalizedSearchTerm.Contains(bs.ClosingTime.ToString().ToLower())
+
+                || bs.Name.ToLower().Contains(normalizedSearchTerm)
+                || bs.Location.ToLower().Contains(normalizedSearchTerm)
+                || bs.OpeningTime.ToString().ToLower().Contains(normalizedSearchTerm)
+                || bs.ClosingTime.ToString().ToLower().Contains(normalizedSearchTerm));
+            }
+
+            var currentBookStores = await bookStoresToShow.Where(bs => bs.BooksBookStores.Any(bbs => bbs.BookId == bookId)).OrderByDescending(bs => bs.Id).ToListAsync();
+            if (status == BookStoreStatus.Open)
+            {
+                currentBookStores = currentBookStores.Where(bs => BookStoreService.IsBookstoreOpen(bs.OpeningTime, bs.ClosingTime).Result == true).ToList();
+            }
+            else if (status == BookStoreStatus.Closed)
+            {
+                currentBookStores = currentBookStores.Where(bs => BookStoreService.IsBookstoreOpen(bs.OpeningTime, bs.ClosingTime).Result == false).ToList();
+            }
+
+            var bookStores = currentBookStores
+                .Skip((currentPage - 1) * bookStoresPerPage)
+                .Take(bookStoresPerPage)
+                .ToList();
+
+            int totalBookStores = currentBookStores.Count();
+
+            var bookStoreServiceModels = bookStores.Select(bs => new BookStoreServiceModel()
+            {
+                Id = bs.Id,
+                Name = bs.Name,
+                Location = bs.Location,
+                OpeningTime = bs.OpeningTime,
+                ClosingTime = bs.ClosingTime,
+                ImageUrl = bs.ImageUrl,
+                Status = BookStoreService.IsBookstoreOpen(bs.OpeningTime, bs.ClosingTime).Result
+            }).ToList();
+
+            return new BookStoreQueryServiceModel()
+            {
+                BookStores = bookStoreServiceModels,
+                TotalBookStoresCount = totalBookStores
+            };
+        }
+
 
         public async Task<IEnumerable<CoverTypeViewModel>> AllCoverTypesAsync()
         {
@@ -450,17 +513,14 @@
             if (wantToReadBook != null)
             {
                 await repository.RemoveAsync<BookUserWantToRead>(wantToReadBook);
-                repository.Detach(wantToReadBook);
             }
             else if (currentlyReadingBook != null)
             {
                 await repository.RemoveAsync<BookUserCurrentlyReading>(currentlyReadingBook);
-                repository.Detach(currentlyReadingBook);
             }
             else if (readBook != null)
             {
                 await repository.RemoveAsync<BookUserRead>(readBook);
-                repository.Detach(readBook);
             }
 
             return await repository.SaveChangesAsync();
@@ -656,7 +716,13 @@
             };
         }
 
-        public async Task<BookReview> FindBookReviewAsync(int reviewId)
+        public async Task<BookReview> FindBookReviewAsync(string userId, int bookId)
+        {
+            return await repository.AllAsReadOnly<BookReview>()
+                .FirstOrDefaultAsync(r => r.BookId == bookId && r.UserId == userId);
+        }
+
+        public async Task<BookReview> FindBookReviewByIdAsync(int reviewId)
         {
             return await repository.AllAsReadOnly<BookReview>()
                 .FirstOrDefaultAsync(r => r.Id == reviewId);

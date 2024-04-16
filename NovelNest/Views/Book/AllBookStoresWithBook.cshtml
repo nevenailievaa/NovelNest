@@ -1,0 +1,48 @@
+﻿@model AllBookStoresQueryModel
+@inject IPublisherService publisherService
+
+@{
+    ViewBag.Title = "Всички Книжарници";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<form method="get">
+    <div class="row justify-content-center align-items-end">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Търси...">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="0">Всички</option>
+                    <option value="1">Отворени</option>
+                    <option value="2">Затворени</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" value="Търси" class="btn btn-success w-100" />
+        </div>
+    </div>
+</form>
+
+@if (!Model.BookStores.Any())
+{
+    <h2 class="text-center mt-5">Няма намерени книжарници!</h2>
+}
+else
+{
+    <div class="row justify-content-center mt-5">
+        @foreach (var bookStore in Model.BookStores)
+        {
+            <partial name="_BookStorePartial" model="@bookStore" />
+        }
+    </div>
+    <partial name="_BookStoresWithBookPagesPartial" model="@Model" />
+}

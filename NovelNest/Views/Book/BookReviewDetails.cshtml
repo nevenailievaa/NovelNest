@@ -33,7 +33,20 @@
                 <a asp-controller="Book" asp-action="AllReviews" asp-route-id="@Model.BookId" class="btn btn-warning mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Обратно към Всички Ревюта</a>
             </div>
 
-            @if (User.Id() == Model.AuthorId)
+            @if (User.Id() == Model.AuthorId && User.IsAdmin())
+            {
+                <div class="d-flex justify-content-center mt-1">
+                    <a asp-controller="Book" asp-action="EditBookReview" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Редактирай</a>
+                    <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Изтрий</a>
+                </div>
+            }
+            else if (User.IsAdmin())
+            {
+                <div class="d-flex justify-content-center mt-1">
+                    <a asp-controller="Book" asp-action="DeleteBookReview" asp-route-id="@Model.Id" class="btn btn-danger mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Изтрий</a>
+                </div>
+            }
+            else if (User.Id() == Model.AuthorId)
             {
                 <div class="d-flex justify-content-center mt-1">
                     <a asp-controller="Book" asp-action="EditBookReview" asp-route-id="@Model.Id" class="btn btn-secondary mb-1 me-1 me-md-2 w-100 p-3 fw-bold">Редактирай</a>
