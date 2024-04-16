@@ -113,6 +113,12 @@
         public Event EventSofiasEtudes { get; set; }
         public Event EventAlbertBenbasat { get; set; }
         public Event EventTotalitarism { get; set; }
+        public Event WhiteFoxDeath { get; set; }
+        public Event PastUnfinished { get; set; }
+        public Event AutographMeet { get; set; }
+        public Event SelyaAhavaMeet { get; set; }
+        public Event ForBooksAndReading { get; set; }
+        public Event Fairytales { get; set; }
 
 
         private void SeedUsers()
@@ -204,8 +210,8 @@
                 NormalizedUserName = "BORIS@GMAIL.COM",
                 Email = "boris@gmail.com",
                 NormalizedEmail = "BORIS@GMAIL.COM",
-                FirstName = "Nevena",
-                LastName = "Ilieva"
+                FirstName = "Boris",
+                LastName = "Vladov"
             };
             RandomUserTwoClaim = new IdentityUserClaim<string>()
             {
@@ -734,7 +740,9 @@
                 Location = "Площад Славейков, София",
                 StartDate = DateTime.ParseExact("05/09/2023 12:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 EndDate = DateTime.ParseExact("30/09/2023 23:59", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
-                ImageUrl = "https://www.colibri.bg/uploads/2023/09/shishiev_event3.jpg"
+                ImageUrl = "https://www.colibri.bg/uploads/2023/09/shishiev_event3.jpg",
+                Seats = 5,
+                TicketPrice = 20
             };
             EventAlbertBenbasat = new Event()
             { 
@@ -744,7 +752,9 @@
                 Location = "Каза Либри (Casa Libri), ул. Цар Асен",
                 StartDate = DateTime.ParseExact("12/12/2023 18:30", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 EndDate = DateTime.ParseExact("12/12/2023 21:30", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
-                ImageUrl = "https://www.colibri.bg/uploads/2023/12/benbasat_event.jpg"
+                ImageUrl = "https://www.colibri.bg/uploads/2023/12/benbasat_event.jpg",
+                Seats = 200,
+                TicketPrice = 5
             };
             EventTotalitarism = new Event()
             {
@@ -754,7 +764,81 @@
                 Location = "Топлоцентрала, Сцена бар, София",
                 StartDate = DateTime.ParseExact("06/06/2024 19:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 EndDate = DateTime.ParseExact("06/06/2024 22:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
-                ImageUrl = "https://www.colibri.bg/uploads/2023/05/arendt_event.jpg"
+                ImageUrl = "https://www.colibri.bg/uploads/2023/05/arendt_event.jpg",
+                Seats = 10,
+                TicketPrice = 15
+            };
+            WhiteFoxDeath = new Event()
+            {
+                Id = 4,
+                Topic = "ПРЕМИЕРА | Смъртта на Бялата лисица",
+                Description = "На 17 април от 19:00 ч. в \"Червената къща\" (ул. Любен Каравелов 15) ще представим \"Смъртта на Бялата лисица\". Повече ще разкаже самата Анна Заркова. Модератор на събитието: Светлозар Желев Какво да очаквате от книгата? На 2 октомври 1996 г. пред дома му е застрелян Андрей Луканов – знаков политик на българския преход, министър-председател в две правителства, депутат. От кого и защо? И до днес нито една от версиите не е отречена или потвърдена. Делото „Луканов” е прекратено.",
+                Location = "\"Червената къща\" (ул. Любен Каравелов 15)",
+                StartDate = DateTime.ParseExact("17/04/2025 19:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("17/04/2025 22:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2024/04/zarkova_event.jpg",
+                Seats = 100,
+                TicketPrice = 10
+            };
+            PastUnfinished = new Event()
+            {
+                Id = 5,
+                Topic = "Премиера: „Минало несвършено“",
+                Description = "На 21 март в 19:00 ч. ще отбележим появата на „Минало несвършено“ - криминален психологически роман по култовия сериал на NOVA „Отдел „Издирване“. Майсторски замислена, динамична и завладяваща история, която разширява света на героите от екрана и позволява на читателя да надникне в най-съкровените им мисли! С нас ще бъдат Александър Чобанов, Владимир Полеганов, Юлиан Вергов и Ана Пападопулу. Специално участие ще вземе и криминалният психолог Росен Йорданов.",
+                Location = "Сцена Дерида",
+                StartDate = DateTime.ParseExact("21/03/2024 19:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("21/03/2024 22:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2024/03/minalonesvarsheno_event.jpg",
+                Seats = 7,
+                TicketPrice = 10
+            };
+            AutographMeet = new Event()
+            {
+                Id = 6,
+                Topic = "Среща с автограф с авторите на „Колибри“",
+                Description = "На 8 декември от 18:00 ч. ви очакваме на щанд 315 в НДК за среща с авторите, които ни зарадваха с творбите си през 2023 г. Ще ви очакват Светлозар Желев, Божидар Манов, Селя Ахава, Милена Кирова, Искрен Красимиров, Мария Касимова-Моасе, Иван Шишиев, Алберт Бенбасат! Вземете книгите им с отстъпка и получете автограф! Проектът е реализиран с финансовата подкрепа на Национален фонд „Култура“ по програма „Програма за възстановяване и развитие на частни културни организации“.",
+                Location = "Щанд 315, НДК",
+                StartDate = DateTime.ParseExact("08/12/2024 18:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("08/12/2024 21:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2023/12/sreshta-s-avtograf.jpg",
+                Seats = 200,
+                TicketPrice = 0
+            };
+            SelyaAhavaMeet = new Event()
+            {
+                Id = 7,
+                Topic = "Среща с автограф с авторите на „Колибри“",
+                Description = "Софийски международен литературен фестивал и издателство „Колибри“ ви канят на среща със Селя Ахава в разговор с Егил Бяртнасон на 8 декември, петък, от 14:00 ч. в НДК, етаж 2, мраморно фоайе. Модератор на събитието ще бъде Силвия Недкова. Финландската писателка Селя Ахава (1974 г.) придобива известност с романа „Неща, които падат от небето“, който печели наградата за литература на ЕС и наградата за разпространение на финландска литература „Факлоносци“. С логото на „Колибри“ в България е издадена и шокиращата автофикция „Преди да изчезне мъжът ми“. „Жената, която обичаше насекоми“ (превод: Росица Цветанова ) е четвъртият роман на Ахава, в който тя изследва връзката между човека и природата. Това е завладяваща творба за съвършенството на мирозданието, написана с изключително майсторство и оригинален подход към необичайното. Книгите ѝ могат да бъдат намерени и на щанд 315 в рамките на Коледния панаир на книгата с отстъпка! Очакваме ви!",
+                Location = "НДК, етаж 2, мраморно фоайе",
+                StartDate = DateTime.ParseExact("08/12/2023 14:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("08/12/2023 19:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2023/12/ahava_event.jpg",
+                Seats = 44,
+                TicketPrice = 5
+            };
+            ForBooksAndReading = new Event()
+            {
+                Id = 8,
+                Topic = "Премиера: От авторите и читателите ЗА КНИГИТЕ И ЧЕТЕНЕТО",
+                Description = "Имаме удоволствието да ви поканим на премиерата на „От авторите и читателите ЗА КНИГИТЕ И ЧЕТЕНЕТО“ със съставители Анна Лазарова и Светлозар Желев. Събитието ще се състои на 29 ноември (сряда) от 19:00 ч. в Литературния клуб на Столична библиотека (етаж -1). Носете си доброто настроение и любовта към книгите! Вход свободен! ЗА КНИГАТА: Още през 1978 година в „Пътеводител на галактическия стопаджия“ Дъглъс Адамс дава отговор на „Великия въпрос за Живота, Вселената и Всичко останало“. Четиридесет и две. Това число обикаля света, бива разнищвано и изследвано, анализирано и свръхинтерпретирано. То се превръща в разпознавам белег на книгата, а чрез него единствено литературата измежду изкуствата и науките дръзва да застане зад отговор на неотговоримото.",
+                Location = "Литературen клуб на Столична библиотека (етаж -1)",
+                StartDate = DateTime.ParseExact("29/11/2023 19:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("29/11/2023 22:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2023/11/za-knigite-i-cheteneto-sofia.jpg",
+                Seats = 27,
+                TicketPrice = 2
+            };
+            Fairytales = new Event()
+            {
+                Id = 9,
+                Topic = "Премиера в София | „Приказки от Горната и Долната земя“",
+                Description = "След лепкавата жега на Буенос Айрес тук всичко е чисто, свежо и хрупкаво като прясно изпрани чаршафи, уютно като планинско селце, пролетно като лютиче, цветно като шепа бонбони, усмихнато като слънчев лъч, синенебо като детски сън. Добродушно и смайващо самотно. Далече, далече от глъчката и шумотевицата, от тълпите и цивилизацията, от бързането и стреса, чак най-отдолу, най-на юг, най-накрая на земята. Fin del Mundo. Краят на света. Така Изабела Шопова описва Ушуая, градчето в най-южната част на Земята, краят на света, който със сигурност няма да сложи край на пътешествията ѝ.След „На изток – в рая“, „На запад от рая“, „На юг от разума“, „Подир сянката на кондора“ и съвсем между другото, „Самоучител за преднамерено убийство на скуката“, Изабела ни предлага поредната си завладяваща сага – „Приказки от Горната и Долната земя“.",
+                Location = "Casa Libri",
+                StartDate = DateTime.ParseExact("05/07/2024 09:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                EndDate = DateTime.ParseExact("05/07/2024 22:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
+                ImageUrl = "https://www.colibri.bg/uploads/2023/06/shopova_event_sofia.jpg",
+                Seats = 200,
+                TicketPrice = 3
             };
         }
     }

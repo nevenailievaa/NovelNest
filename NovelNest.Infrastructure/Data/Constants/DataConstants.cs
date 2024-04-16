@@ -119,7 +119,7 @@
 
             //Description
             public const int EventDescriptionMinLength = 50;
-            public const int EventDescriptionMaxLength = 1000;
+            public const int EventDescriptionMaxLength = 5000;
 
             //Location
             public const int EventLocationMinLength = 10;
@@ -134,7 +134,7 @@
             public const uint EventSeatsMaxRange = uint.MaxValue;
 
             //Ticket Price
-            public const int EventTicketPriceMinRange = 1;
+            public const int EventTicketPriceMinRange = 0;
             public const uint EventTicketPriceMaxRange = uint.MaxValue;
         }
 

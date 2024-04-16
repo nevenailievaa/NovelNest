@@ -10,7 +10,18 @@
         {
             var data = new DataSeed();
 
-            builder.HasData(new Event[] { data.EventSofiasEtudes, data.EventAlbertBenbasat, data.EventTotalitarism });
+            builder.HasData(new Event[]
+            {
+                data.EventSofiasEtudes,
+                data.EventAlbertBenbasat,
+                data.EventTotalitarism,
+                data.WhiteFoxDeath,
+                data.PastUnfinished,
+                data.AutographMeet,
+                data.SelyaAhavaMeet,
+                data.ForBooksAndReading,
+                data.Fairytales
+            });
         }
     }
 }
