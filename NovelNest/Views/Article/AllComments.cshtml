@@ -58,6 +58,24 @@ else
             <div class="text-center mb-4 mt-4">
                 <a asp-controller="Article" asp-action="AddComment" asp-route-id="@Model.ArticleId" class="btn btn-primary btn-lg">Добави Коментар</a>
             </div>
+
+            if (Model.ArticleComments.Count() == 0)
+            {
+                <h4 class="text-center text-secondary" style="margin-top: 50px;">За момента никой не е добавял коментар за тази статия!</h4>
+            }
+            else
+            {
+                <h2 class="text-center">Други Коментари</h2>
+                @foreach (var currentComment in Model.ArticleComments)
+                {
+                    @if (currentComment.UserId == User.Id())
+                    {
+                        continue;
+                    }
+                    <partial name="_ArticleCommentPartial" model="@currentComment" />
+                }
+                <partial name="_ArticleCommentPagesPartial" model="@Model" />
+            }
         }
         else
         {

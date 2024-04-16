@@ -244,7 +244,7 @@
             {
                 return BadRequest();
             }
-            if (articleComment.UserId != User.Id())
+            if (articleComment.UserId != User.Id() && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -263,7 +263,7 @@
             {
                 return BadRequest();
             }
-            if (bookReview.UserId != User.Id())
+            if (bookReview.UserId != User.Id() && !User.IsAdmin())
             {
                 return Unauthorized();
             }

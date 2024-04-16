@@ -7,12 +7,21 @@
 }
 
 <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-    <div class="text-center"><strong>@currentUserName</strong></div>
+    <div><strong>@currentUserName</strong></div>
     <div><strong>Заглавие:</strong> @Model.Title</div>
     <div><strong>Описание:</strong> @Model.Description</div>
 
     <div class="d-flex justify-content-center mt-3">
-        @if (Model.UserId == UserManager.GetUserId(User))
+        @if (Model.UserId == UserManager.GetUserId(User) && User.IsAdmin())
+        {
+            <a asp-controller="Article" asp-action="EditComment" asp-route-id="@Model.Id" class="btn btn-secondary px-2 fw-bold me-2">Редактирай</a>
+            <a asp-controller="Article" asp-action="DeleteComment" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
+        }
+        else if (User.IsAdmin())
+        {
+            <a asp-controller="Article" asp-action="DeleteComment" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
+        }
+        else if (Model.UserId == UserManager.GetUserId(User))
         {
             <a asp-controller="Article" asp-action="EditComment" asp-route-id="@Model.Id" class="btn btn-secondary px-2 fw-bold me-2">Редактирай</a>
             <a asp-controller="Article" asp-action="DeleteComment" asp-route-id="@Model.Id" class="btn btn-danger px-2 fw-bold">Изтрий</a>
