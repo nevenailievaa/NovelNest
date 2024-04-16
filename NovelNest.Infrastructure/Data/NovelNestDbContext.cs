@@ -76,6 +76,7 @@
             builder.ApplyConfiguration(new BookReviewConfiguration());
             builder.ApplyConfiguration(new BookStoreConfiguration());
             builder.ApplyConfiguration(new ArticleConfiguration());
+            builder.ApplyConfiguration(new ArticleCommentConfiguration());
             builder.ApplyConfiguration(new EventConfiguration());
 
             base.OnModelCreating(builder);

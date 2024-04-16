@@ -26,6 +26,7 @@
             SeedBookReviews();
             SeedBookStores();
             SeedArticles();
+            SeedArticleComments();
             SeedEvents();
         }
 
@@ -121,6 +122,12 @@
         public Article ArticleSeven { get; set; }
         public Article ArticleEight { get; set; }
         public Article ArticleNine { get; set; }
+
+        //Article Comments
+        public ArticleComment CommentOne;
+        public ArticleComment CommentTwo;
+        public ArticleComment CommentThree;
+        public ArticleComment CommentFour;
 
         //Events
         public Event EventOne { get; set; }
@@ -870,6 +877,42 @@
                 ImageUrl = "https://www.colibri.bg/news_img/20220616_1.jpg",
                 DatePublished = DateTime.ParseExact("12/03/2024 16:20", DateTimeArticleFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 ViewsCount = 0
+            };
+        }
+
+        private void SeedArticleComments()
+        {
+            CommentOne = new ArticleComment()
+            {
+                Id = 1,
+                Title = "Там сме!",
+                Description = "Цялото ми семейство сме фенове на сиромахов. Най-накрая дойде в Бургас!",
+                ArticleId = 3,
+                UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
+            };
+            CommentTwo = new ArticleComment()
+            {
+                Id = 2,
+                Title = "Очакван с нетърпение!",
+                Description = "Доста чаках да публикува новата си книга. Сега ще отида и за автограф!",
+                ArticleId = 3,
+                UserId = "dea12856-c198-4129-b3f3-b893d8395082"
+            };
+            CommentThree = new ArticleComment()
+            {
+                Id = 3,
+                Title = "Не разбирам",
+                Description = "Изобщо не разбирам как може толкова хора да му се кефят на този човек, та чак и да ходят на събития свързани с него.",
+                ArticleId = 3,
+                UserId = "64ce3106-ec7d-44cb-b167-bf946b88bb1b"
+            };
+            CommentFour = new ArticleComment()
+            {
+                Id = 4,
+                Title = "Отивам",
+                Description = "Творчеството на Сиромахов винаги ми е било от любимите. Тази книга няма да е изключение.",
+                ArticleId = 3,
+                UserId = "cabfd9b8-4411-47f6-9639-df70d753c275"
             };
         }
 
