@@ -2,7 +2,6 @@
 {
     using NovelNest.Core.Enums;
     using NovelNest.Core.Models.QueryModels.Event;
-    using NovelNest.Core.Models.ViewModels.Article;
     using NovelNest.Core.Models.ViewModels.Event;
     using NovelNest.Infrastructure.Data.Models.Events;
 
@@ -10,7 +9,7 @@
     {
         Task<EventQueryServiceModel> AllAsync(
             string? searchTerm = null,
-            EventSorting sorting = EventSorting.Newest,
+            EventSorting sorting = EventSorting.All,
             EventStatus status = EventStatus.All,
             int currentPage = 1,
             int eventsPerPage = 4);

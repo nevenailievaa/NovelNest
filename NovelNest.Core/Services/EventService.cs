@@ -21,7 +21,7 @@
 
         public async Task<EventQueryServiceModel> AllAsync(
             string? searchTerm = null,
-            EventSorting sorting = EventSorting.Newest,
+            EventSorting sorting = EventSorting.All,
             EventStatus status = EventStatus.All,
             int currentPage = 1,
             int eventsPerPage = 4)
@@ -57,10 +57,9 @@
 
             eventsToShow = sorting switch
             {
-                EventSorting.Oldest => eventsToShow.OrderBy(e => e.Id),
                 EventSorting.PriceAscending => eventsToShow.OrderBy(e => e.TicketPrice).ThenByDescending(a => a.Id),
                 EventSorting.PriceDescending => eventsToShow.OrderByDescending(e => e.TicketPrice).ThenByDescending(a => a.Id),
-                _ => eventsToShow.OrderByDescending(e => e.Id)
+                _ => eventsToShow.OrderByDescending(e => e.StartDate).ThenBy(e => e.Id)
             };
 
             var events = await eventsToShow

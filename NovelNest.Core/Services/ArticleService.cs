@@ -21,7 +21,7 @@
             string? searchTerm = null,
             ArticleSorting sorting = ArticleSorting.Newest,
             int currentPage = 1,
-            int articlesPerPage = 8)
+            int articlesPerPage = 6)
         {
             var articlesToShow = repository.AllAsReadOnly<Article>();
 
