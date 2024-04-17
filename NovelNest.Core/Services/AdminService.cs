@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using NovelNest.Core.Contracts;
 using NovelNest.Core.Models.QueryModels.Admin;
-using NovelNest.Core.Models.ViewModels.Admin;
 using NovelNest.Infrastructure.Common;
 using NovelNest.Infrastructure.Data.Models.Roles;
 using static NovelNest.Core.Constants.AdminConstants;
