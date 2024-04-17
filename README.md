@@ -10,5 +10,14 @@ Welcome to **NovelNest**, your book-based application built on **ASP.NET Core MV
 
 Happy reading with NovelNest!
 
-# License
+# 💻 Technologies
+- C#
+- .NET 6
+- ASP.NET Core MVC
+- Entity Framework Core
+- CSS
+- HTML
+- JavaScript
+
+# 📄 License
 This project is licensed under the Apache-2.0 license - see the LICENSE.md file for details.
