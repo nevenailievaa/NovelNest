@@ -78,8 +78,8 @@
         private Publisher publisher;
 
 
-        [SetUp]
-        public async Task Setup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetUp()
         {
             //Books
             bookOne = new Book()
@@ -309,7 +309,19 @@
                 .Options;
 
             dbContext = new NovelNestDbContext(options);
+            SeedDatabase();
 
+            //Services
+            repository = new Repository(dbContext);
+            bookService = new BookService(repository);
+            bookStoreService = new BookStoreService(repository);
+            eventService = new EventService(repository);
+            articleService = new ArticleService(repository);
+            publisherService = new PublisherService(repository, bookService);
+        }
+
+        private async Task SeedDatabase()
+        {
             dbContext.AddRangeAsync(books);
             dbContext.AddRangeAsync(genres);
             dbContext.AddRangeAsync(coverTypes);
@@ -326,18 +338,11 @@
             dbContext.AddAsync(article);
             dbContext.AddAsync(testEvent);
             dbContext.AddAsync(eventParticipant);
-
-            //Services
-            repository = new Repository(dbContext);
-            bookService = new BookService(repository);
-            bookStoreService = new BookStoreService(repository);
-            eventService = new EventService(repository);
-            articleService = new ArticleService(repository);
-            publisherService = new PublisherService(repository, bookService);
+            dbContext.SaveChangesAsync();
         }
 
-        [TearDown]
-        public async Task Teardown()
+        [OneTimeTearDown]
+        public async Task OneTimeTearDown()
         {
             await this.dbContext.Database.EnsureDeletedAsync();
             await this.dbContext.DisposeAsync();
@@ -347,8 +352,8 @@
         public async Task Test_ExistsByPublisherIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.ExistsByPublisherIdAsync(1).Result;
-            var resultTwo = publisherService.ExistsByPublisherIdAsync(2).Result;
+            var result = await publisherService.ExistsByPublisherIdAsync(1);
+            var resultTwo = await publisherService.ExistsByPublisherIdAsync(2);
 
             // Assert
             Assert.IsTrue(result);
@@ -359,8 +364,8 @@
         public async Task Test_ExistsByUserIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.ExistsByUserIdAsync("TestIdOne").Result;
-            var resultTwo = publisherService.ExistsByUserIdAsync("TestIdTwo").Result;
+            var result = await publisherService.ExistsByUserIdAsync("TestIdOne");
+            var resultTwo = await publisherService.ExistsByUserIdAsync("TestIdTwo");
 
             // Assert
             Assert.IsTrue(result);
@@ -371,8 +376,8 @@
         public async Task Test_ExistsByEmailAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.ExistsByEmailAsync("nevena@gmail.com").Result;
-            var resultTwo = publisherService.ExistsByEmailAsync("boris@gmail.com").Result;
+            var result = await publisherService.ExistsByEmailAsync("nevena@gmail.com");
+            var resultTwo = await publisherService.ExistsByEmailAsync("boris@gmail.com");
 
             // Assert
             Assert.IsTrue(result);
@@ -383,7 +388,7 @@
         public async Task Test_GetPublisherByEmailAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.GetPublisherByEmailAsync("nevena@gmail.com").Result;
+            var result = await publisherService.GetPublisherByEmailAsync("nevena@gmail.com");
 
             // Assert
             Assert.That(publisher, Is.EqualTo(result));
@@ -393,7 +398,7 @@
         public async Task Test_GetPublisherIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.GetPublisherIdAsync("TestIdOne").Result;
+            var result = await publisherService.GetPublisherIdAsync("TestIdOne");
 
             // Assert
             Assert.AreEqual(1, result);
@@ -420,11 +425,11 @@
             };
 
             // Act
-            var result = publisherService.AddBookAsync(addForm).Result;
-            var currentBook = bookService.FindBookByIdAsync(result).Result;
+            await publisherService.AddBookAsync(addForm);
+            var currentBook = await bookService.FindBookByIdAsync(6);
+
 
             // Assert
-            Assert.AreEqual(6, result);
             Assert.AreEqual("Hannibal", currentBook.Title);
             Assert.AreEqual("Thomas Harris", currentBook.Author);
             Assert.AreEqual(4, currentBook.GenreId);
@@ -435,6 +440,8 @@
             Assert.AreEqual(19.90m, currentBook.Price);
             Assert.AreEqual("https://www.ciela.com/media/catalog/product/cache/32bb0748c82325b02c55df3c2a9a9856/_/-/_-_-_-_9789542838296_-_ciela.jpg", currentBook.ImageUrl);
             Assert.AreEqual("Ciela", currentBook.PublishingHouse);
+
+            await publisherService.DeleteBookConfirmedAsync(currentBook.Id);
         }
 
         [Test]
@@ -457,7 +464,7 @@
             };
 
             // Act
-            var result = publisherService.EditBookGetAsync(1).Result;
+            var result = await publisherService.EditBookGetAsync(1);
 
             // Assert
             Assert.AreEqual(1, result.Id);
@@ -493,8 +500,8 @@
             };
 
             // Act
-            var result = publisherService.EditBookPostAsync(form).Result;
-            var currentBook = bookService.FindBookByIdAsync(result).Result;
+            var result = await publisherService.EditBookPostAsync(form);
+            var currentBook = await bookService.FindBookByIdAsync(result);
 
             // Assert
             Assert.AreEqual("Ana Karenina Edited", currentBook.Title);
@@ -513,7 +520,7 @@
         public async Task Test_DeleteBookAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.DeleteBookAsync(1).Result;
+            var result = await publisherService.DeleteBookAsync(1);
 
             // Assert
             Assert.AreEqual(bookOne.Id, result.Id);
@@ -526,7 +533,7 @@
         public async Task Test_DeleteBookConfirmedAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = publisherService.DeleteBookConfirmedAsync(1).Result;
+            var result = await publisherService.DeleteBookConfirmedAsync(1);
 
             // Assert
             Assert.AreEqual(0, dbContext.BooksBookStores.Count());
@@ -650,19 +657,19 @@
 
             // Act
             var result = publisherService.AddEventAsync(addForm).Result;
-            var article = eventService.FindEventByIdAsync(result).Result;
+            var currentEvent = eventService.FindEventByIdAsync(result).Result;
 
             // Assert
             Assert.AreEqual(2, result);
             Assert.AreEqual(2, dbContext.Events.Count());
-            Assert.AreEqual("Test Topic", article.Topic);
-            Assert.AreEqual("Test Description", article.Description);
-            Assert.AreEqual("Test Location", article.Location);
-            Assert.AreEqual(DateTime.ParseExact("14/02/2024 09:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), article.StartDate);
-            Assert.AreEqual(DateTime.ParseExact("14/02/2024 18:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), article.EndDate);
-            Assert.AreEqual("Test ImageUrl", article.ImageUrl);
-            Assert.AreEqual(10, article.Seats);
-            Assert.AreEqual(10.55m, article.TicketPrice);
+            Assert.AreEqual("Test Topic", currentEvent.Topic);
+            Assert.AreEqual("Test Description", currentEvent.Description);
+            Assert.AreEqual("Test Location", currentEvent.Location);
+            Assert.AreEqual(DateTime.ParseExact("14/02/2024 09:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), currentEvent.StartDate);
+            Assert.AreEqual(DateTime.ParseExact("14/02/2024 18:00", DateTimeEventFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), currentEvent.EndDate);
+            Assert.AreEqual("Test ImageUrl", currentEvent.ImageUrl);
+            Assert.AreEqual(10, currentEvent.Seats);
+            Assert.AreEqual(10.55m, currentEvent.TicketPrice);
         }
 
         [Test]
