@@ -1574,9 +1574,9 @@ namespace NovelNest.UnitTests
         public async Task Test_RemoveBookFromAllCollectionsAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var resultWantToRead = await service.RemoveBookFromAllCollectionsAsync(1, "testUser");
-            var resultCurrentlyReading = await service.RemoveBookFromAllCollectionsAsync(2, "testUser");
-            var resultRead = await service.RemoveBookFromAllCollectionsAsync(3, "testUser");
+            var resultWantToRead = service.RemoveBookFromAllCollectionsAsync(1, "testUser").Result;
+            var resultCurrentlyReading = service.RemoveBookFromAllCollectionsAsync(2, "testUser").Result;
+            var resultRead = service.RemoveBookFromAllCollectionsAsync(3, "testUser").Result;
 
             // Assert
             Assert.AreEqual(0, resultWantToRead);

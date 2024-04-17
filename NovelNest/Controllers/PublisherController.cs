@@ -9,7 +9,6 @@
     using NovelNest.Core.Models.ViewModels.Book;
     using NovelNest.Core.Models.ViewModels.BookStore;
     using NovelNest.Core.Models.ViewModels.Event;
-    using NovelNest.Core.Services;
     using System.Security.Claims;
 
     public class PublisherController : BaseController

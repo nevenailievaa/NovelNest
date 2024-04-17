@@ -152,7 +152,7 @@
         public async Task<int> DeleteBookConfirmedAsync(int bookId)
         {
             var book = await repository
-                .AllAsReadOnly<Book>().Where(b => b.Id == bookId)
+                .All<Book>().Where(b => b.Id == bookId)
                 .FirstOrDefaultAsync();
 
             var bookBookStores = await repository.All<BookBookStore>()
