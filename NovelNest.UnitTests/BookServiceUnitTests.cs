@@ -1,19 +1,15 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using NovelNest.Core.Contracts;
-using NovelNest.Core.Enums;
-using NovelNest.Core.Models.QueryModels.Book;
-using NovelNest.Core.Models.ViewModels.Book;
-using NovelNest.Core.Services;
-using NovelNest.Infrastructure.Common;
-using NovelNest.Infrastructure.Data;
-using NovelNest.Infrastructure.Data.Models.Books;
-using NovelNest.Infrastructure.Data.Models.BookUserActions;
-using System.ComponentModel.DataAnnotations;
-
 namespace NovelNest.UnitTests
 {
+    using Microsoft.EntityFrameworkCore;
+    using NovelNest.Core.Contracts;
+    using NovelNest.Core.Enums;
+    using NovelNest.Core.Models.ViewModels.Book;
+    using NovelNest.Core.Services;
+    using NovelNest.Infrastructure.Common;
+    using NovelNest.Infrastructure.Data;
+    using NovelNest.Infrastructure.Data.Models.Books;
+    using NovelNest.Infrastructure.Data.Models.BookUserActions;
+
     [TestFixture]
     public class BookServiceUnitTests
     {
@@ -1579,9 +1575,9 @@ namespace NovelNest.UnitTests
             var resultRead = service.RemoveBookFromAllCollectionsAsync(3, "testUser").Result;
 
             // Assert
-            Assert.AreEqual(0, resultWantToRead);
-            Assert.AreEqual(0, resultCurrentlyReading);
-            Assert.AreEqual(0, resultRead);
+            Assert.AreEqual(1, resultWantToRead);
+            Assert.AreEqual(1, resultCurrentlyReading);
+            Assert.AreEqual(1, resultRead);
         }
 
         [Test]

@@ -313,18 +313,19 @@
             dbContext.AddRangeAsync(books);
             dbContext.AddRangeAsync(genres);
             dbContext.AddRangeAsync(coverTypes);
+
             dbContext.AddAsync(bookStore);
             dbContext.AddAsync(bookReview);
             dbContext.AddAsync(bookBookStore);
             dbContext.AddAsync(bookUserWantToRead);
             dbContext.AddAsync(bookUserCurrentlyReading);
             dbContext.AddAsync(bookUserRead);
+
             dbContext.AddRangeAsync(users);
             dbContext.AddAsync(publisher);
             dbContext.AddAsync(article);
             dbContext.AddAsync(testEvent);
             dbContext.AddAsync(eventParticipant);
-            dbContext.SaveChanges();
 
             //Services
             repository = new Repository(dbContext);
@@ -346,8 +347,8 @@
         public async Task Test_ExistsByPublisherIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.ExistsByPublisherIdAsync(1);
-            var resultTwo = await publisherService.ExistsByPublisherIdAsync(2);
+            var result = publisherService.ExistsByPublisherIdAsync(1).Result;
+            var resultTwo = publisherService.ExistsByPublisherIdAsync(2).Result;
 
             // Assert
             Assert.IsTrue(result);
@@ -358,8 +359,8 @@
         public async Task Test_ExistsByUserIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.ExistsByUserIdAsync("TestIdOne");
-            var resultTwo = await publisherService.ExistsByUserIdAsync("TestIdTwo");
+            var result = publisherService.ExistsByUserIdAsync("TestIdOne").Result;
+            var resultTwo = publisherService.ExistsByUserIdAsync("TestIdTwo").Result;
 
             // Assert
             Assert.IsTrue(result);
@@ -370,8 +371,8 @@
         public async Task Test_ExistsByEmailAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.ExistsByEmailAsync("nevena@gmail.com");
-            var resultTwo = await publisherService.ExistsByEmailAsync("boris@gmail.com");
+            var result = publisherService.ExistsByEmailAsync("nevena@gmail.com").Result;
+            var resultTwo = publisherService.ExistsByEmailAsync("boris@gmail.com").Result;
 
             // Assert
             Assert.IsTrue(result);
@@ -382,7 +383,7 @@
         public async Task Test_GetPublisherByEmailAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.GetPublisherByEmailAsync("nevena@gmail.com");
+            var result = publisherService.GetPublisherByEmailAsync("nevena@gmail.com").Result;
 
             // Assert
             Assert.That(publisher, Is.EqualTo(result));
@@ -392,7 +393,7 @@
         public async Task Test_GetPublisherIdAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.GetPublisherIdAsync("TestIdOne");
+            var result = publisherService.GetPublisherIdAsync("TestIdOne").Result;
 
             // Assert
             Assert.AreEqual(1, result);
@@ -419,7 +420,7 @@
             };
 
             // Act
-            var result = await publisherService.AddBookAsync(addForm);
+            var result = publisherService.AddBookAsync(addForm).Result;
             var currentBook = bookService.FindBookByIdAsync(result).Result;
 
             // Assert
@@ -456,7 +457,7 @@
             };
 
             // Act
-            var result = await publisherService.EditBookGetAsync(1);
+            var result = publisherService.EditBookGetAsync(1).Result;
 
             // Assert
             Assert.AreEqual(1, result.Id);
@@ -492,7 +493,7 @@
             };
 
             // Act
-            var result = await publisherService.EditBookPostAsync(form);
+            var result = publisherService.EditBookPostAsync(form).Result;
             var currentBook = bookService.FindBookByIdAsync(result).Result;
 
             // Assert
@@ -551,7 +552,7 @@
             };
 
             // Act
-            var result = await publisherService.AddArticleAsync(addForm);
+            var result = publisherService.AddArticleAsync(addForm).Result;
             var article = articleService.FindArticleByIdAsync(result).Result;
 
             // Assert
@@ -571,7 +572,7 @@
         public async Task Test_EditArticleGetAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.EditArticleGetAsync(1);
+            var result = publisherService.EditArticleGetAsync(1).Result;
 
             // Assert
             Assert.AreEqual(1, result.Id);
@@ -593,7 +594,7 @@
             };
 
             // Act
-            var result = await publisherService.EditArticlePostAsync(editForm);
+            var result = publisherService.EditArticlePostAsync(editForm).Result;
             var article = articleService.FindArticleByIdAsync(result).Result;
 
             // Assert
@@ -607,7 +608,7 @@
         public async Task Test_DeleteArticleAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.DeleteArticleAsync(1);
+            var result = publisherService.DeleteArticleAsync(1).Result;
             var article = articleService.FindArticleByIdAsync(result.Id).Result;
 
             // Assert
@@ -648,7 +649,7 @@
             };
 
             // Act
-            var result = await publisherService.AddEventAsync(addForm);
+            var result = publisherService.AddEventAsync(addForm).Result;
             var article = eventService.FindEventByIdAsync(result).Result;
 
             // Assert
@@ -668,7 +669,7 @@
         public async Task Test_EditEventGetAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.EditEventGetAsync(1);
+            var result = publisherService.EditEventGetAsync(1).Result;
 
             // Assert
             Assert.AreEqual(testEvent.Id, result.Id);
@@ -700,7 +701,7 @@
             };
 
             // Act
-            var result = await publisherService.EditEventPostAsync(editForm);
+            var result = publisherService.EditEventPostAsync(editForm).Result;
             var editedEvent = eventService.FindEventByIdAsync(result).Result;
 
             // Assert
@@ -719,7 +720,7 @@
         public async Task Test_DeleteEventAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.DeleteEventAsync(1);
+            var result = publisherService.DeleteEventAsync(1).Result;
 
             // Assert
             Assert.AreEqual(testEvent.Id, result.Id);
@@ -757,7 +758,7 @@
             };
 
             // Act
-            var result = await publisherService.AddBookStoreAsync(addForm);
+            var result = publisherService.AddBookStoreAsync(addForm).Result;
             var bookStore = bookStoreService.FindBookStoreByIdAsync(result).Result;
 
             // Assert
@@ -777,7 +778,7 @@
         public async Task Test_EditBookStoreGetAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.EditBookStoreGetAsync(1);
+            var result = publisherService.EditBookStoreGetAsync(1).Result;
 
             // Assert
             Assert.AreEqual(bookStore.Id, result.Id);
@@ -807,7 +808,7 @@
             };
 
             // Act
-            var result = await publisherService.EditBookStorePostAsync(editForm);
+            var result = publisherService.EditBookStorePostAsync(editForm).Result;
             var editedBookStore = bookStoreService.FindBookStoreByIdAsync(result).Result;
 
             // Assert
@@ -826,7 +827,7 @@
         public async Task Test_DeleteBookStoreAsync_ReturnsTheCorrectResult()
         {
             // Act
-            var result = await publisherService.DeleteBookStoreAsync(1);
+            var result = publisherService.DeleteBookStoreAsync(1).Result;
 
             // Assert
             Assert.AreEqual(bookStore.Name, result.Name);
@@ -899,8 +900,8 @@
         public async Task Test_AllBooksToChooseAsync_FiltersByGenre()
         {
             // Act
-            var result = await publisherService.AllBooksToChooseAsync(1, "Romance");
-            var resultTwo = await publisherService.AllBooksToChooseAsync(1, "ClassicLiterature");
+            var result = publisherService.AllBooksToChooseAsync(1, "Romance").Result;
+            var resultTwo = publisherService.AllBooksToChooseAsync(1, "ClassicLiterature").Result;
 
             // Assert
             Assert.AreEqual(1, result.TotalBooksCount);
@@ -914,8 +915,8 @@
         public async Task Test_AllBooksToChooseAsync_FiltersByCoverType()
         {
             // Act
-            var result = await publisherService.AllBooksToChooseAsync(1, null, "Soft");
-            var resultTwo = await publisherService.AllBooksToChooseAsync(1, null, "NotAnExistingCoverType");
+            var result = publisherService.AllBooksToChooseAsync(1, null, "Soft").Result;
+            var resultTwo = publisherService.AllBooksToChooseAsync(1, null, "NotAnExistingCoverType").Result;
 
             // Assert
             Assert.AreEqual(3, result.TotalBooksCount);
@@ -931,8 +932,8 @@
         public async Task Test_AllBooksToChooseAsync_FiltersBySearchTerm()
         {
             // Act
-            var result = await publisherService.AllBooksToChooseAsync(1, null, null, "Hannibal");
-            var resultTwo = await publisherService.AllBooksToChooseAsync(1, null, null, "NotAValidSearchTerm");
+            var result = publisherService.AllBooksToChooseAsync(1, null, null, "Hannibal").Result;
+            var resultTwo = publisherService.AllBooksToChooseAsync(1, null, null, "NotAValidSearchTerm").Result;
 
             // Assert
             Assert.AreEqual(1, result.TotalBooksCount);
@@ -946,7 +947,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByNewest()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -965,7 +966,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByOldest()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.Oldest);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.Oldest).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -984,7 +985,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByTitleAscending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.TitleAscending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.TitleAscending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -1003,7 +1004,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByTitleDescending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.TitleDescending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.TitleDescending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -1022,7 +1023,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByAuthorAscending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.AuthorAscending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.AuthorAscending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -1041,7 +1042,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByAuthorDescending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.AuthorDescending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.AuthorDescending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -1060,7 +1061,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByPriceAscending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.PriceAscending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.PriceAscending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
@@ -1079,7 +1080,7 @@
         public async Task Test_AllBooksToChooseAsync_SortsByPriceDescending()
         {
             // Act
-            var booksNewestSorting = await publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.PriceDescending);
+            var booksNewestSorting = publisherService.AllBooksToChooseAsync(1, null, null, null, BookSorting.PriceDescending).Result;
             var booksIds = new List<int>()
             {
                 booksNewestSorting.Books.First().Id,
