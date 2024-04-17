@@ -211,10 +211,6 @@
                 return RedirectToAction(nameof(All));
             }
 
-            if (!await publisherService.ExistsByUserIdAsync(id))
-            {
-                await adminService.AddPublisherAsync(id);
-            }
             await adminService.AddAdminAsync(id);
             return RedirectToAction(nameof(All));
         }
