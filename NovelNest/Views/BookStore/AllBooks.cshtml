@@ -5,7 +5,7 @@
     ViewBag.Title = "Всички книги";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
+<h2 class="text-center mt-3">@ViewBag.Title</h2>
 <hr />
 
 @if (await publisherService.ExistsByUserIdAsync(User.Id()))

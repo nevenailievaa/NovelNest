@@ -17,7 +17,7 @@
                 <div class="card-footer d-flex justify-content-center">
                     <form asp-action="DeleteArticleConfirmed" method="post" class="col-12">
                         <input type="hidden" asp-for="Id" />
-                        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetArticleInformation()" class="btn btn-secondary mb-1 w-100 p-3 fw-bold">Обратно</a>
+                        <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" asp-route-information="@Model.GetArticleInformation()" class="btn btn-warning mb-1 w-100 p-3 fw-bold">Обратно</a>
                         <button type="submit" class="btn btn-danger mb-1 w-100 p-3 fw-bold">Изтрий</button>
                     </form>
                 </div>
@@ -25,32 +25,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .container {
-        margin-top: 50px;
-    }
-
-    .card {
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .text-danger {
-        color: #dc3545;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
-    }
-</style>
