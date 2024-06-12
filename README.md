@@ -21,3 +21,6 @@ Happy reading with NovelNest!
 
 # 📄 License
 This project is licensed under the Apache-2.0 license - see the LICENSE.md file for details.
+
+# :construction: THIS PROJECT IS STILL UNDER CONSTRUCTION :construction:
+The project is not finished yet.
